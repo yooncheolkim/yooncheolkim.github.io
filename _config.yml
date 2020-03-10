@@ -5,13 +5,14 @@ description: Software Developer
 
 # Url is currently only used only for the RSS feed in feed.xml
 url: https://yooncheolkim.github.io/
-#url: http://localhost:4000
+#url: http://localhost:5500
 
 # For a project page here should be a project name. Otherwise (for user's/organization's page leave it empty)
 baseurl: ""
+#baseurl: '/jekyll-clean-dark'
 
-author: Pavel Makhov
-copyright: 2015-2018
+author: yooncheolkim
+copyright: 2020
 
 share:
   facebook: true
@@ -22,11 +23,11 @@ share:
   email: true
 
 social:
-  github: streetturtle
-  stackoverflow: ''
-  linkedin:
-  instagram: ''
-  lastfm: ''
+  github: yooncheolkim
+  #stackoverflow: ''
+  #linkedin:
+  instagram: 'k.yooncheol'
+  #lastfm: ''
   rss: feed.xml
 
 # Google Analytics key, leave blank to ignore
