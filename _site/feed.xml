@@ -7,6 +7,24 @@
 		<atom:link href="/feed.xml" rel="self" type="application/rss+xml" />
 		
 			<item>
+				<title>first post</title>
+				<description>&lt;ul&gt;
+  &lt;li&gt;왠지는 모르겠지만,,&lt;br /&gt;
+jekyll serve 안될때,&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;source ~/.zshrc&lt;/p&gt;
+
+&lt;p&gt;해주고 하면 잘된다..&lt;/p&gt;
+
+&lt;p&gt;참고 &lt;a href=&quot;https://jojoldu.tistory.com/288&quot;&gt;https://jojoldu.tistory.com/288&lt;/a&gt;&lt;/p&gt;
+</description>
+				<pubDate>Wed, 11 Mar 2020 07:21:00 +0900</pubDate>
+				<link>/2020/03/jekyll/</link>
+				<guid isPermaLink="true">/2020/03/jekyll/</guid>
+			</item>
+		
+			<item>
 				<title>Table of content</title>
 				<description>&lt;p&gt;Above you can see how it looks like.&lt;/p&gt;
 
@@ -774,43 +792,6 @@ To turn them on in the header of your post add:&lt;/p&gt;
 				<pubDate>Sat, 02 Jul 2016 01:25:06 +0900</pubDate>
 				<link>/2016/07/images/</link>
 				<guid isPermaLink="true">/2016/07/images/</guid>
-			</item>
-		
-			<item>
-				<title>Installation</title>
-				<description>&lt;h2 id=&quot;installation&quot;&gt;Installation&lt;/h2&gt;
-
-&lt;p&gt;If you dont’t have your own blog you can clone this repository and put your articles in a &lt;code class=&quot;highlighter-rouge&quot;&gt;_posts&lt;/code&gt; folder.&lt;br /&gt;
-If you already have your own blog then I think you can clone this repository and copy-paste content keeping your &lt;code class=&quot;highlighter-rouge&quot;&gt;_posts&lt;/code&gt; folder.&lt;/p&gt;
-
-&lt;p&gt;After you will have to set up your &lt;code class=&quot;highlighter-rouge&quot;&gt;_config.yml&lt;/code&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;license&quot;&gt;License&lt;/h2&gt;
-
-&lt;p&gt;The content of this theme is distributed and licensed under a &lt;a href=&quot;https://creativecommons.org/licenses/by/4.0/legalcode&quot;&gt;Creative Commons Attribution 4.0 License&lt;/a&gt;&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;This license lets others distribute, remix, tweak, and build upon your work,&lt;br /&gt;
-even commercially, as long as they credit you for the original creation. This&lt;br /&gt;
-is the most accommodating of licenses offered. Recommended for maximum&lt;br /&gt;
-dissemination and use of licensed materials.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;In other words: you can do anything you want with this theme on any site, just please&lt;br /&gt;
-provide a link to the original theme on github.&lt;/p&gt;
-
-&lt;p&gt;This theme includes the following files which are the properties of their&lt;br /&gt;
-respective owners:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;js/bootstrap.min.js - &lt;a href=&quot;http://getbootstrap.com&quot;&gt;bootstrap&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;css/bootstrap.min.css - &lt;a href=&quot;http://getbootstrap.com&quot;&gt;bootstrap&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;js/jquery.min.js - &lt;a href=&quot;https://jquery.com&quot;&gt;jquery&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-</description>
-				<pubDate>Mon, 02 Nov 2015 01:25:06 +0900</pubDate>
-				<link>/2015/11/installation/</link>
-				<guid isPermaLink="true">/2015/11/installation/</guid>
 			</item>
 		
 	</channel>
