@@ -1,6 +1,6 @@
 ---
 layout: post
-title: ""
+title: "exif로 사진 똑바로하기"
 date: 2020-03-19 22:30:00
 tags: exif orientation js
 description: exif
