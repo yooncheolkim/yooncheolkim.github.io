@@ -1,4 +1,4 @@
-I"©<h1 id="social-icons">Social icons</h1>
+I"³<h1 id="social-icons">Social icons</h1>
 
 <p>You can have social icons which could lead to your social profile.<br />
 Out-of-the box it has:</p>
@@ -20,7 +20,7 @@ Out-of-the box it has:</p>
     <a title="Last.fm" href="http://lastfm.com/user/" target="_blank"><i class="fab fa-lastfm fa-2x"></i></a>
   </li>
   <li>
-    <a title="RSS" href="http://localhost:4000/feed.xml" target="_blank"><i class="fa fa-rss fa-2x"></i></a>
+    <a title="RSS" href="https://yooncheolkim.github.io//feed.xml" target="_blank"><i class="fa fa-rss fa-2x"></i></a>
   </li>
 </ul>
 
