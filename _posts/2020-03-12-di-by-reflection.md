@@ -2,7 +2,7 @@
 layout: post
 title: "리플렉션으로 DI 구현"
 date: 2020-03-12 21:52:00
-tags: reflection DI
+tags: java
 description: java DI 만들어보기
 ---
 
