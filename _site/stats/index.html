@@ -105,6 +105,13 @@
                 "t":"2020-3",
                 "year":"2020",
                 "x":1,
+                "y":144
+            },
+        
+            {
+                "t":"2020-3",
+                "year":"2020",
+                "x":1,
                 "y":342
             },
         
@@ -311,10 +318,19 @@
              "reflection", 
         
             
+             "orientation", 
+        
+            
+             "js", 
+        
+            
              "installation", 
         
             
              "images", 
+        
+            
+             "exif", 
         
             
              "customizations", 
@@ -343,6 +359,15 @@
         
             
              2, 
+        
+            
+             1, 
+        
+            
+             1, 
+        
+            
+             1, 
         
             
              1, 
@@ -398,6 +423,8 @@
 <script>
     var totalWords = [
         
+            144,
+        
             342,
         
             16,
@@ -423,7 +450,7 @@
             178,
         
     ].reduce((a, b) => a + b, 0);
-    var totalPosts = 12;
+    var totalPosts = 13;
 
     function concatBoldTextToELement(id, text) {
         var abvgd = document.createElement('b');
@@ -444,6 +471,8 @@
   <h2>Recent Posts</h2>
   <ul>
     
+    <li><a href="/2020/03/exif-orientation/">exif로 사진 똑바로하기</a></li>
+    
     <li><a href="/2020/03/di-by-reflection/">리플렉션으로 DI 구현</a></li>
     
     <li><a href="/2020/03/jekyll/">first post</a></li>
@@ -451,8 +480,6 @@
     <li><a href="/2018/08/table-of-content/">Table of content</a></li>
     
     <li><a href="/2018/02/table-styles/">Table styles</a></li>
-    
-    <li><a href="/2016/12/jekyll-clean-theme/">Jekyll Dark Clean Theme</a></li>
     
   </ul>
 </div>
@@ -483,6 +510,10 @@
         <span>customizations</span></a></li>
     
     <li>
+      <a href="/tag/exif" data-toggle="tooltip" data-placement="right" title="1">
+        <span>exif</span></a></li>
+    
+    <li>
       <a href="/tag/images" data-toggle="tooltip" data-placement="right" title="1">
         <span>images</span></a></li>
     
@@ -493,6 +524,14 @@
     <li>
       <a href="/tag/jekyll" data-toggle="tooltip" data-placement="right" title="7">
         <span>jekyll</span></a></li>
+    
+    <li>
+      <a href="/tag/js" data-toggle="tooltip" data-placement="right" title="1">
+        <span>js</span></a></li>
+    
+    <li>
+      <a href="/tag/orientation" data-toggle="tooltip" data-placement="right" title="1">
+        <span>orientation</span></a></li>
     
     <li>
       <a href="/tag/reflection" data-toggle="tooltip" data-placement="right" title="1">

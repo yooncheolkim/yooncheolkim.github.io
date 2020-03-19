@@ -1,4 +1,4 @@
-I"x<div class="page-content wc-container">
+I"	<div class="page-content wc-container">
 	<div class="post">
 		<h1>Tags</h1>  
 		<ul>
@@ -22,6 +22,12 @@
 			<li><a href="/tag/reflection">reflection</a></li>
 			
 			<li><a href="/tag/DI">DI</a></li>
+			
+			<li><a href="/tag/exif">exif</a></li>
+			
+			<li><a href="/tag/orientation">orientation</a></li>
+			
+			<li><a href="/tag/js">js</a></li>
 			
 		</ul>
 	</div>

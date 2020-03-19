@@ -11,7 +11,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>윤철이 블로그 | Images </title>
+    <title>윤철이 블로그 | exif로 사진 똑바로하기 </title>
     <meta name="theme-color" content="#222222"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="/assets/js/jquery.min.js"></script>
@@ -74,52 +74,51 @@
             <div class="col-md-8 offset-md-1">
               <div class="article">
                 <div class="card">
-                  <h1><a href="/2016/07/images/">Images</a></h1>
+                  <h1><a href="/2020/03/exif-orientation/">exif로 사진 똑바로하기</a></h1>
                   <div class="post-meta">
                     <div class="post-time">
                       <i class="fa fa-calendar-alt"></i>
-                      <time>02 Jul 2016</time>
+                      <time>20 Mar 2020</time>
                     </div>
                     <ul>
                       
-                        <li><a href="/tag/images">images</a></li>
+                        <li><a href="/tag/exif">exif</a></li>
                       
-                        <li><a href="/tag/jekyll">jekyll</a></li>
+                        <li><a href="/tag/orientation">orientation</a></li>
+                      
+                        <li><a href="/tag/js">js</a></li>
                       
                     </ul>
                   </div>
                   <div class="post-content">
                     
-                    <h2 id="introduction">Introduction</h2>
+                    <h2 id="자바스크립트-img-태그에서-blob-가져와서-exif-데이터로-사진-똑바로-나오게-하기">자바스크립트, img 태그에서 blob 가져와서 exif 데이터로 사진 똑바로 나오게 하기,</h2>
 
-<p>This theme supports two types of images:</p>
-
+<h3 id="exif-orientation">exif, orientation</h3>
 <ul>
-  <li>inline images: <img src="/assets/images/batWid1.png" alt="Battery Widget" /></li>
+  <li>이미지 파일에서, exif 값으로 orientation 값을 가져올수 있다.</li>
+  <li>보통 스마트폰으로 찍은 사진은 스마트폰 회전 정도에 따라 이 orientation 값이 달라진다.</li>
+  <li>https://github.com/blueimp/JavaScript-Load-Image</li>
 </ul>
 
-<figure class="highlight"><pre><code class="language-html" data-lang="html">![Battery Widget]({{ '/assets/images/batWid1.png' | relative_url }})</code></pre></figure>
+<blockquote>
+  <p>javascript</p>
+</blockquote>
 
-<ul>
-  <li>centered images with caption (optional):</li>
-</ul>
-
-<p><img src="/assets/images/deer.jpg" alt="img" class="center-image" /><em>(°0°)</em></p>
-
-<figure class="highlight"><pre><code class="language-html" data-lang="html">![img]({{ '/assets/images/deer.jpg' | relative_url }}){: .center-image }*(°0°)*</code></pre></figure>
-
-<p>You can apply your own styles to image by creating css class with style:</p>
-
-<figure class="highlight"><pre><code class="language-css" data-lang="css"><span class="nc">.custom-image-style</span>
-<span class="p">{</span>
-<span class="c">/* your style */</span>
-<span class="p">}</span></code></pre></figure>
-
-<p>And then applying your style just after the image in curly brackets with colon:</p>
-
-<figure class="highlight"><pre><code class="language-html" data-lang="html">[!image](path to image){:.custom-image-style}
- </code></pre></figure>
-
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="o">&lt;</span><span class="nx">script</span> <span class="nx">scr</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">https://cdnjs.cloudflare.com/ajax/libs/blueimp-load-image/2.24.0/load-image.all.min.js</span><span class="dl">"</span><span class="o">&gt;&lt;</span><span class="sr">/script</span><span class="err">&gt;
+</span>
+    <span class="kd">var</span> <span class="nx">srcLeft</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="dl">"</span><span class="s2">left_img</span><span class="dl">"</span><span class="p">).</span><span class="nx">src</span><span class="p">;</span>
+    <span class="nx">fetch</span><span class="p">(</span><span class="nx">srcLeft</span><span class="p">)</span>
+        <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">res</span><span class="o">=&gt;</span><span class="nx">res</span><span class="p">.</span><span class="nx">blob</span><span class="p">())</span>
+        <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">blob</span><span class="o">=&gt;</span><span class="p">{</span>
+            <span class="nx">loadImage</span><span class="p">(</span>
+                <span class="nx">blob</span><span class="p">,</span>
+                <span class="kd">function</span><span class="p">(</span><span class="nx">img</span><span class="p">,</span><span class="nx">data</span><span class="p">){</span>
+                    <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#left_img</span><span class="dl">"</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="dl">"</span><span class="s2">src</span><span class="dl">"</span><span class="p">,</span><span class="nx">img</span><span class="p">.</span><span class="nx">toDataURL</span><span class="p">(</span><span class="dl">"</span><span class="s2">image/jpeg</span><span class="dl">"</span><span class="p">));</span>
+                <span class="p">},</span>
+                <span class="p">{</span><span class="na">orientation</span><span class="p">:</span><span class="kc">true</span><span class="p">}</span>
+            <span class="p">)</span>
+        <span class="p">});</span></code></pre></figure>
 
                     
 

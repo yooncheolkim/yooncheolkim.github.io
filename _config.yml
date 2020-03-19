@@ -4,7 +4,7 @@ name: 윤철이 블로그
 description: Software Developer
 
 # Url is currently only used only for the RSS feed in feed.xml
-url: https://yooncheolkim.github.io/
+url: https://yooncheolkim.github.io
 #url: http://localhost:5500
 
 # For a project page here should be a project name. Otherwise (for user's/organization's page leave it empty)
@@ -55,3 +55,6 @@ kramdown:
   hard_wrap: true
 
 exclude: ['README.md', 'LICENSE']
+
+published: true
+future: true

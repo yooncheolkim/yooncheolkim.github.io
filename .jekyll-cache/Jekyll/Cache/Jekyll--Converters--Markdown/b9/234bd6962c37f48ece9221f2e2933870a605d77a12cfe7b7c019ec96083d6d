@@ -1,0 +1,28 @@
+I"&<h2 id="자바스크립트-img-태그에서-blob-가져와서-exif-데이터로-사진-똑바로-나오게-하기">자바스크립트, img 태그에서 blob 가져와서 exif 데이터로 사진 똑바로 나오게 하기,</h2>
+
+<h3 id="exif-orientation">exif, orientation</h3>
+<ul>
+  <li>이미지 파일에서, exif 값으로 orientation 값을 가져올수 있다.</li>
+  <li>보통 스마트폰으로 찍은 사진은 스마트폰 회전 정도에 따라 이 orientation 값이 달라진다.</li>
+  <li>https://github.com/blueimp/JavaScript-Load-Image</li>
+</ul>
+
+<blockquote>
+  <p>javascript</p>
+</blockquote>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="o">&lt;</span><span class="nx">script</span> <span class="nx">scr</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">https://cdnjs.cloudflare.com/ajax/libs/blueimp-load-image/2.24.0/load-image.all.min.js</span><span class="dl">"</span><span class="o">&gt;&lt;</span><span class="sr">/script</span><span class="err">&gt;
+</span>
+    <span class="kd">var</span> <span class="nx">srcLeft</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="dl">"</span><span class="s2">left_img</span><span class="dl">"</span><span class="p">).</span><span class="nx">src</span><span class="p">;</span>
+    <span class="nx">fetch</span><span class="p">(</span><span class="nx">srcLeft</span><span class="p">)</span>
+        <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">res</span><span class="o">=&gt;</span><span class="nx">res</span><span class="p">.</span><span class="nx">blob</span><span class="p">())</span>
+        <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">blob</span><span class="o">=&gt;</span><span class="p">{</span>
+            <span class="nx">loadImage</span><span class="p">(</span>
+                <span class="nx">blob</span><span class="p">,</span>
+                <span class="kd">function</span><span class="p">(</span><span class="nx">img</span><span class="p">,</span><span class="nx">data</span><span class="p">){</span>
+                    <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#left_img</span><span class="dl">"</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="dl">"</span><span class="s2">src</span><span class="dl">"</span><span class="p">,</span><span class="nx">img</span><span class="p">.</span><span class="nx">toDataURL</span><span class="p">(</span><span class="dl">"</span><span class="s2">image/jpeg</span><span class="dl">"</span><span class="p">));</span>
+                <span class="p">},</span>
+                <span class="p">{</span><span class="na">orientation</span><span class="p">:</span><span class="kc">true</span><span class="p">}</span>
+            <span class="p">)</span>
+        <span class="p">});</span></code></pre></figure>
+:ET

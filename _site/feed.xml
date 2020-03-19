@@ -7,6 +7,41 @@
 		<atom:link href="/feed.xml" rel="self" type="application/rss+xml" />
 		
 			<item>
+				<title>exif로 사진 똑바로하기</title>
+				<description>&lt;h2 id=&quot;자바스크립트-img-태그에서-blob-가져와서-exif-데이터로-사진-똑바로-나오게-하기&quot;&gt;자바스크립트, img 태그에서 blob 가져와서 exif 데이터로 사진 똑바로 나오게 하기,&lt;/h2&gt;
+
+&lt;h3 id=&quot;exif-orientation&quot;&gt;exif, orientation&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;이미지 파일에서, exif 값으로 orientation 값을 가져올수 있다.&lt;/li&gt;
+  &lt;li&gt;보통 스마트폰으로 찍은 사진은 스마트폰 회전 정도에 따라 이 orientation 값이 달라진다.&lt;/li&gt;
+  &lt;li&gt;https://github.com/blueimp/JavaScript-Load-Image&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;javascript&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-javascript&quot; data-lang=&quot;javascript&quot;&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;script&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;scr&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;https://cdnjs.cloudflare.com/ajax/libs/blueimp-load-image/2.24.0/load-image.all.min.js&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/script&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;gt;
+&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;srcLeft&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;document&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;getElementById&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;left_img&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;src&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;fetch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;srcLeft&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;then&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;blob&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;then&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;blob&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;nx&quot;&gt;loadImage&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+                &lt;span class=&quot;nx&quot;&gt;blob&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;img&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+                    &lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;#left_img&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;attr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;src&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;img&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;toDataURL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;image/jpeg&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
+                &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
+                &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;orientation&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+</description>
+				<pubDate>Fri, 20 Mar 2020 07:30:00 +0900</pubDate>
+				<link>/2020/03/exif-orientation/</link>
+				<guid isPermaLink="true">/2020/03/exif-orientation/</guid>
+			</item>
+		
+			<item>
 				<title>리플렉션으로 DI 구현</title>
 				<description>&lt;h2 id=&quot;리플렉션&quot;&gt;리플렉션&lt;/h2&gt;
 
@@ -746,7 +781,7 @@ Out-of-the box it has:&lt;/p&gt;
     &lt;a title=&quot;Last.fm&quot; href=&quot;http://lastfm.com/user/&quot; target=&quot;_blank&quot;&gt;&lt;i class=&quot;fab fa-lastfm fa-2x&quot;&gt;&lt;/i&gt;&lt;/a&gt;
   &lt;/li&gt;
   &lt;li&gt;
-    &lt;a title=&quot;RSS&quot; href=&quot;https://yooncheolkim.github.io//feed.xml&quot; target=&quot;_blank&quot;&gt;&lt;i class=&quot;fa fa-rss fa-2x&quot;&gt;&lt;/i&gt;&lt;/a&gt;
+    &lt;a title=&quot;RSS&quot; href=&quot;http://localhost:4000/feed.xml&quot; target=&quot;_blank&quot;&gt;&lt;i class=&quot;fa fa-rss fa-2x&quot;&gt;&lt;/i&gt;&lt;/a&gt;
   &lt;/li&gt;
 &lt;/ul&gt;
 
@@ -804,31 +839,6 @@ To turn them on in the header of your post add:&lt;/p&gt;
 				<pubDate>Fri, 16 Sep 2016 01:25:06 +0900</pubDate>
 				<link>/2016/09/be-social/</link>
 				<guid isPermaLink="true">/2016/09/be-social/</guid>
-			</item>
-		
-			<item>
-				<title>Analytics, tags and comments</title>
-				<description>&lt;h1 id=&quot;analytics&quot;&gt;Analytics&lt;/h1&gt;
-
-&lt;h4 id=&quot;google-analytics&quot;&gt;&lt;a href=&quot;http://www.google.com/analytics/&quot;&gt;Google Analytics&lt;/a&gt;&lt;/h4&gt;
-
-&lt;p&gt;To enable Google Analytics create an account &lt;a href=&quot;https://analytics.google.com&quot;&gt;here&lt;/a&gt;. Then add your tracking id in &lt;code class=&quot;highlighter-rouge&quot;&gt;config.xml&lt;/code&gt;, it should look something like &lt;code class=&quot;highlighter-rouge&quot;&gt;UA-********-1&lt;/code&gt;&lt;/p&gt;
-
-&lt;h4 id=&quot;yandex-metrica&quot;&gt;&lt;a href=&quot;http://metrica.yandex.com&quot;&gt;Yandex Metrica&lt;/a&gt;&lt;/h4&gt;
-
-&lt;p&gt;To enable Yandex Metrica you need to register, create a ‘counter’ and then copy-paste it’s code in &lt;code class=&quot;highlighter-rouge&quot;&gt;/_includes/yandex-metrica.html&lt;/code&gt; file.&lt;/p&gt;
-
-&lt;h1 id=&quot;tags&quot;&gt;Tags&lt;/h1&gt;
-
-&lt;p&gt;To use this feature you simply will need to create a markdown file for each tag which you are using in you site in &lt;strong&gt;tag&lt;/strong&gt; folder. To simplify this procedure there is an &lt;a href=&quot;http://pavelmakhov.com/jekyll-clean-dark/admin.html&quot;&gt;/admin&lt;/a&gt; page, which outputs the bash command which you just need to run inside &lt;strong&gt;tag&lt;/strong&gt; folder of your site. Also don’t forget to rerun it when you add a post with new tag.&lt;/p&gt;
-
-&lt;h1 id=&quot;comments&quot;&gt;Comments&lt;/h1&gt;
-
-&lt;p&gt;To enable &lt;a href=&quot;http://disqus.com&quot;&gt;Disqus&lt;/a&gt; register on the site and then just put your name in &lt;code class=&quot;highlighter-rouge&quot;&gt;_config.xml&lt;/code&gt;. Comments could be switched on and off on per post basis, just put &lt;code class=&quot;highlighter-rouge&quot;&gt;comments: true&lt;/code&gt; to enable them.&lt;/p&gt;
-</description>
-				<pubDate>Tue, 02 Aug 2016 01:25:06 +0900</pubDate>
-				<link>/2016/08/analytics-tags-comments/</link>
-				<guid isPermaLink="true">/2016/08/analytics-tags-comments/</guid>
 			</item>
 		
 	</channel>
