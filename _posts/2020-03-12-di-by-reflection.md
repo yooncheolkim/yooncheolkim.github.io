@@ -3,7 +3,7 @@ layout: post
 title: "리플렉션으로 DI 구현"
 date: 2020-03-12 21:52:00
 tags: reflection DI
-description: DI
+description: java DI 만들어보기
 ---
 
 ## 리플렉션
@@ -17,11 +17,13 @@ description: DI
 
 ### 어노테이션과 리플렉션
 - @Retention : 어노테이션 언제까지 유지할까요, 소스? 클래스? 런타임?
-~~~java
+
+{:.filename}
+{% highlight java %}
 @Retention(RetentionPolicy.RUNTIME)
 public @interface BookService{
 }
-~~~
+{% endhighlight %}
 
 - @Inherit : 해당 애노테이션을 하위 클래스에 전달할것인가?
 - @Target : 어디에 사용할 수 있는가?
@@ -66,8 +68,9 @@ public class ContainerService {
 {% endhighlight %}
 
 
-~~~java
+{:.filename}
+{% highlight java %}
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Inject {
 }
-~~~
+{% endhighlight %}
