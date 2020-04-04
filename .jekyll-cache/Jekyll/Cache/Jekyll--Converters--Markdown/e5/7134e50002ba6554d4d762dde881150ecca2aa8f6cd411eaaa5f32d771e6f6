@@ -1,0 +1,29 @@
+I"N<div class="page-content wc-container">
+	<div class="post">
+		<h1>Tags</h1>  
+		<ul>
+			
+			<li><a href="/tag/customizations">customizations</a></li>
+			
+			<li><a href="/tag/jekyll">jekyll</a></li>
+			
+			<li><a href="/tag/code">code</a></li>
+			
+			<li><a href="/tag/java">java</a></li>
+			
+			<li><a href="/tag/js">js</a></li>
+			
+			<li><a href="/tag/docker">docker</a></li>
+			
+			<li><a href="/tag/jenkins">jenkins</a></li>
+			
+			<li><a href="/tag/aws">aws</a></li>
+			
+			<li><a href="/tag/EC2">EC2</a></li>
+			
+			<li><a href="/tag/maven">maven</a></li>
+			
+		</ul>
+	</div>
+</div>
+:ET
