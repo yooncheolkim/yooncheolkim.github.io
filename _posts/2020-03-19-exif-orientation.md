@@ -3,7 +3,7 @@ layout: post
 title: "exif로 사진 똑바로하기"
 date: 2020-03-19 22:30:00
 tags: js
-description: exif
+description: exif orientation 값 가져와서 사진 똑바로 만들기
 ---
 
 ## 자바스크립트, img 태그에서 blob 가져와서 exif 데이터로 사진 똑바로 나오게 하기,

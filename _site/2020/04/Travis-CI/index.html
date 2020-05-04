@@ -11,7 +11,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>윤철이 블로그</title>
+    <title>윤철이 블로그 | Travis CI build 하기 </title>
     <meta name="theme-color" content="#222222"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="/assets/js/jquery.min.js"></script>
@@ -67,77 +67,71 @@
     </div>
 </nav>
 
-
     <div class="wrapper">
       <div class="content">
         <div class="container container-center">
           <div class="row">
             <div class="col-md-8 offset-md-1">
-              <div class="card">
-                <div class="page-content wc-container">
+              <div class="article">
+                <div class="card">
+                  <h1><a href="/2020/04/Travis-CI/">Travis CI build 하기</a></h1>
+                  <div class="post-meta">
+                    <div class="post-time">
+                      <i class="fa fa-calendar-alt"></i>
+                      <time>06 Apr 2020</time>
+                    </div>
+                    <ul>
+                      
+                        <li><a href="/tag/git">git</a></li>
+                      
+                        <li><a href="/tag/Travis">Travis</a></li>
+                      
+                    </ul>
+                  </div>
+                  <div class="post-content">
+                    
+                    <h1 id="travis-ci">Travis CI</h1>
+<ul>
+  <li>git에 public으로 등록되어있는 프로젝트는 공짜로 사용가능</li>
+  <li>jenkins랑 똑같은 건데,, host 서비스를 해줘서, 따로 서버 만들필요 없다.</li>
+  <li>내부적으로 사용하려면 돈내야함.</li>
+</ul>
 
-  <div class="post">
-    <h2 class="post_title"></h2>
-    <ul>
-      
-        
-          
-        
-      
-        
-          
-        
-          
-        
-      
-        
-          
-          <li class="archive_list">
-            <time>03 Apr 2020</time>
-            <a class="archive_list_article_link" href='/2020/04/EC2-deploy/'>EC2에 배포환경 세팅</a>
-            <p>EC2에 배포환경 세팅</p>
-          </li>
-          
-        
-          
-        
-          
-        
-      
-        
-          
-          <li class="archive_list">
-            <time>03 Apr 2020</time>
-            <a class="archive_list_article_link" href='/2020/04/aws-EC2/'>aws에 초기 세팅(spring boot)</a>
-            <p>aws 인스턴스 만들고 초기세팅</p>
-          </li>
-          
-        
-          
-        
-      
-        
-          
-        
-          
-        
-      
-        
-          
-        
-      
-        
-          
-        
-      
-        
-          
-        
-      
-    </ul>
-  </div>
-</div>
+<h2 id="초기-세팅">초기 세팅</h2>
+<ul>
+  <li>Travis 로그인 후, 계정 설정에서 원하는 프로젝트 활성화</li>
+  <li>프로젝트 root 디렉토리에 .travis.yml 파일 생성</li>
+</ul>
 
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#travisCI
+language: java
+jdk: openjdk8
+
+branches:
+ only: master
+
+#mvn build
+script: ./mvnw clean package -DskipTests=true
+
+
+notifications:
+email:
+recipients: yoonchul15@gmail.com
+</code></pre></div></div>
+
+<ul>
+  <li>yml 사용할줄 몰라서, 처음에 삽질함</li>
+  <li>yml 문법이 제대로 맞지 않으면, travis에서 build 실패한다.</li>
+  <li>yml 문법 확인하고, commit push 할것.</li>
+</ul>
+
+<image src="/images/스크린샷 2020-04-05 오후 5.06.17.png"></image>
+
+                    
+
+                  </div>
+                  
+                </div>
               </div>
             </div>
             <div class="col-md-3 hidden-xs">
@@ -213,6 +207,8 @@
             </div>
           </div>
         </div>
+        
+
       </div>
           <footer class="footer-distributed">
       <div class="container">

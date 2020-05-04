@@ -93,29 +93,37 @@
                   <div class="post-content">
                     
                     <h2 id="java-8-설치">java 8 설치</h2>
-<p>sudo yum install -y java-1.8.0-openjdk-devel.x86_64</p>
+<ul>
+  <li>sudo yum install -y java-1.8.0-openjdk-devel.x86_64</li>
+</ul>
 
 <h2 id="인스턴스-자바-버전-변경">인스턴스 자바 버전 변경</h2>
-<p>sudo /usr/sbin/alternatives –config java<br />
-sudo yum remove java-1.7.0-openjdk<br />
-java -version</p>
+<ul>
+  <li>sudo /usr/sbin/alternatives –config java</li>
+  <li>sudo yum remove java-1.7.0-openjdk</li>
+  <li>java -version</li>
+</ul>
 
 <h2 id="maven-설치">maven 설치</h2>
-<p>sudo wget http://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo -O /etc/yum.repos.d/epel-apache-maven.repo<br />
-sudo sed -i s/$releasever/6/g /etc/yum.repos.d/epel-apache-maven.repo<br />
-sudo yum install -y apache-maven<br />
-mvn –version</p>
+<ul>
+  <li>sudo wget http://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo -O /etc/yum.repos.d/epel-apache-maven.repo</li>
+  <li>sudo sed -i s/$releasever/6/g /etc/yum.repos.d/epel-apache-maven.repo</li>
+  <li>sudo yum install -y apache-maven</li>
+  <li>mvn –version</li>
+</ul>
 
 <h2 id="maven-package">maven package</h2>
 <ul>
-  <li>test 없이 package<br />
-mvn clean package -DskipTests=true</li>
+  <li>test 없이 package</li>
+  <li>mvn clean package -DskipTests=true</li>
 </ul>
 
 <h2 id="maven-build-시-out-of-memory-혹은-java-heap-space-부족">maven build 시 out of memory 혹은 java heap space 부족</h2>
-<p>set MAVEN_OPTS=”-Xmx512m”<br />
-Or<br />
-export MAVEN_OPTS=-Xmx512m</p>
+<ul>
+  <li>set MAVEN_OPTS=”-Xmx512m” <br />
+Or</li>
+  <li>export MAVEN_OPTS=-Xmx512m</li>
+</ul>
 
 
                     
@@ -130,15 +138,15 @@ export MAVEN_OPTS=-Xmx512m</p>
   <h2>Recent Posts</h2>
   <ul>
     
+    <li><a href="/2020/05/boj-5373/">boj 5373 큐빙</a></li>
+    
+    <li><a href="/2020/04/Travis-CI/">Travis CI build 하기</a></li>
+    
     <li><a href="/2020/04/EC2-deploy/">EC2에 배포환경 세팅</a></li>
     
     <li><a href="/2020/04/aws-EC2/">aws에 초기 세팅(spring boot)</a></li>
     
     <li><a href="/2020/03/docker-jenkins/">docker jenkins 구동</a></li>
-    
-    <li><a href="/2020/03/exif-orientation/">exif로 사진 똑바로하기</a></li>
-    
-    <li><a href="/2020/03/di-by-reflection/">리플렉션으로 DI 구현</a></li>
     
   </ul>
 </div>
@@ -153,12 +161,20 @@ export MAVEN_OPTS=-Xmx512m</p>
         <span>EC2</span></a></li>
     
     <li>
+      <a href="/tag/Travis" data-toggle="tooltip" data-placement="right" title="1">
+        <span>Travis</span></a></li>
+    
+    <li>
       <a href="/tag/aws" data-toggle="tooltip" data-placement="right" title="2">
         <span>aws</span></a></li>
     
     <li>
       <a href="/tag/docker" data-toggle="tooltip" data-placement="right" title="1">
         <span>docker</span></a></li>
+    
+    <li>
+      <a href="/tag/git" data-toggle="tooltip" data-placement="right" title="1">
+        <span>git</span></a></li>
     
     <li>
       <a href="/tag/java" data-toggle="tooltip" data-placement="right" title="1">
@@ -179,6 +195,10 @@ export MAVEN_OPTS=-Xmx512m</p>
     <li>
       <a href="/tag/maven" data-toggle="tooltip" data-placement="right" title="1">
         <span>maven</span></a></li>
+    
+    <li>
+      <a href="/tag/%EC%8B%9C%EB%AE%AC%EB%A0%88%EC%9D%B4%EC%85%98" data-toggle="tooltip" data-placement="right" title="1">
+        <span>시뮬레이션</span></a></li>
     
   </ul>
 </div>

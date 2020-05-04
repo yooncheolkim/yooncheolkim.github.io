@@ -3,7 +3,7 @@ layout: post
 title: "리플렉션으로 DI 구현"
 date: 2020-03-12 21:52:00
 tags: java
-description: java DI 만들어보기
+description: java Di 구현하기
 ---
 
 ## 리플렉션
