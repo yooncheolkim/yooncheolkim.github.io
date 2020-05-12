@@ -1,0 +1,37 @@
+I";<h1 id="travis-ci">Travis CI</h1>
+<ul>
+  <li>git에 public으로 등록되어있는 프로젝트는 공짜로 사용가능</li>
+  <li>jenkins랑 똑같은 건데,, host 서비스를 해줘서, 따로 서버 만들필요 없다.</li>
+  <li>내부적으로 사용하려면 돈내야함.</li>
+</ul>
+
+<h2 id="초기-세팅">초기 세팅</h2>
+<ul>
+  <li>Travis 로그인 후, 계정 설정에서 원하는 프로젝트 활성화</li>
+  <li>프로젝트 root 디렉토리에 .travis.yml 파일 생성</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#travisCI
+language: java
+jdk: openjdk8
+
+branches:
+ only: master
+
+#mvn build
+script: ./mvnw clean package -DskipTests=true
+
+
+notifications:
+email:
+recipients: yoonchul15@gmail.com
+</code></pre></div></div>
+
+<ul>
+  <li>yml 사용할줄 몰라서, 처음에 삽질함</li>
+  <li>yml 문법이 제대로 맞지 않으면, travis에서 build 실패한다.</li>
+  <li>yml 문법 확인하고, commit push 할것.</li>
+</ul>
+
+<image src="/images/스크린샷 2020-04-05 오후 5.06.17.png"></image>
+:ET
