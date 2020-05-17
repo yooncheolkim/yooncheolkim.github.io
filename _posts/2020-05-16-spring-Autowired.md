@@ -10,7 +10,7 @@ description: spring Autowired
 # spring Autowired
 
 
-#생성제에 위치 시키기
+## 생성자에,,
 
 {%highlight java%}
 @Service

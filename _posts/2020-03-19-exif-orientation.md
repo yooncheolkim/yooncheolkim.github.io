@@ -13,7 +13,7 @@ description: exif orientation 값 가져와서 사진 똑바로 만들기
 - 보통 스마트폰으로 찍은 사진은 스마트폰 회전 정도에 따라 이 orientation 값이 달라진다.
 - https://github.com/blueimp/JavaScript-Load-Image
 
->javascript
+
 {% highlight javascript %}
 <script scr = "https://cdnjs.cloudflare.com/ajax/libs/blueimp-load-image/2.24.0/load-image.all.min.js"></script>
 

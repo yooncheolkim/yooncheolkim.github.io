@@ -36,7 +36,7 @@
 				<title>spring Autowired</title>
 				<description>&lt;h1 id=&quot;spring-autowired&quot;&gt;spring Autowired&lt;/h1&gt;
 
-&lt;p&gt;#생성제에 위치 시키기&lt;/p&gt;
+&lt;h2 id=&quot;생성자에&quot;&gt;생성자에,,&lt;/h2&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;nd&quot;&gt;@Service&lt;/span&gt;
 &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;BookService&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
@@ -150,10 +150,6 @@
       &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;io.github.yooncheolkim.demospringioc.BookRepository&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
 &lt;span class=&quot;nt&quot;&gt;&amp;lt;/beans&amp;gt;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;java&lt;/p&gt;
-&lt;/blockquote&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;kn&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;io.github.yooncheolkim.demospringioc&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
 
@@ -300,8 +296,9 @@ public class BookService {
 			<item>
 				<title>spring 요약 정리</title>
 				<description>&lt;ol&gt;
-  &lt;li&gt;&lt;a href=&quot;https://yooncheolkim.github.io/2020/05/spring-bean-setting/&quot;&gt;spring 빈설정 방법&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://yooncheolkim.github.io/2020/05/spring-Autowired/&quot;&gt;spring autowired&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;/2020/05/spring-bean-setting/&quot;&gt;spring 빈설정 방법&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;/2020/05/spring-Autowired/&quot;&gt;spring autowired&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;/2020/05/spring-Component/&quot;&gt;spring component&lt;/a&gt;&lt;/li&gt;
 &lt;/ol&gt;
 </description>
 				<pubDate>Wed, 13 May 2020 07:00:00 +0900</pubDate>
@@ -365,10 +362,6 @@ public class BookService {
 &lt;/ul&gt;
 
 &lt;h1 id=&quot;코드&quot;&gt;코드&lt;/h1&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;java&lt;/p&gt;
-&lt;/blockquote&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;kn&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;P_5373&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
 

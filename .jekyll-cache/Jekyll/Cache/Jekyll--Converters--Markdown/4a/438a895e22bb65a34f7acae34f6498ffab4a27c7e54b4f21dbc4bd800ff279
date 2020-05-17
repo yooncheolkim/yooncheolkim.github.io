@@ -1,6 +1,6 @@
-I"><h1 id="spring-autowired">spring Autowired</h1>
+I"B<h1 id="spring-autowired">spring Autowired</h1>
 
-<p>#생성제에 위치 시키기</p>
+<h2 id="생성자에">생성자에,,</h2>
 
 <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nd">@Service</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">BookService</span> <span class="o">{</span>

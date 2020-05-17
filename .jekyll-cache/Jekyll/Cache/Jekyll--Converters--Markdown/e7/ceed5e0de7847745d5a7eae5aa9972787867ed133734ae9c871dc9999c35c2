@@ -1,4 +1,4 @@
-I"S<h1 id="문제">문제</h1>
+I")<h1 id="문제">문제</h1>
 <p><a href="https://www.acmicpc.net/problem/5373">https://www.acmicpc.net/problem/5373</a></p>
 
 <ul>
@@ -21,10 +21,6 @@
 </ul>
 
 <h1 id="코드">코드</h1>
-
-<blockquote>
-  <p>java</p>
-</blockquote>
 
 <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">P_5373</span><span class="o">;</span>
 

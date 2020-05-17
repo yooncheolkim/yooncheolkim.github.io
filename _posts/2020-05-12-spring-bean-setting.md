@@ -28,7 +28,6 @@ description: spring 빈 설정 방법
 </beans>
 ~~~
 
->java
 {% highlight java %}
 package io.github.yooncheolkim.demospringioc;
 
