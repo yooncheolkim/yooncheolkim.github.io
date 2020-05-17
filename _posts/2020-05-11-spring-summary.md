@@ -8,4 +8,4 @@ description: spring 요약 정리
 
 
 1. [spring 빈설정 방법](https://yooncheolkim.github.io/2020/05/spring-bean-setting/)
-2. [spring autowired](https://yooncheolkim.github.io/2020/05/spring-Autowirted/)
+2. [spring autowired](https://yooncheolkim.github.io/2020/05/spring-Autowired/)

@@ -301,7 +301,7 @@ public class BookService {
 				<title>spring 요약 정리</title>
 				<description>&lt;ol&gt;
   &lt;li&gt;&lt;a href=&quot;https://yooncheolkim.github.io/2020/05/spring-bean-setting/&quot;&gt;spring 빈설정 방법&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://yooncheolkim.github.io/2020/05/spring-Autowirted/&quot;&gt;spring autowired&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://yooncheolkim.github.io/2020/05/spring-Autowired/&quot;&gt;spring autowired&lt;/a&gt;&lt;/li&gt;
 &lt;/ol&gt;
 </description>
 				<pubDate>Wed, 13 May 2020 07:00:00 +0900</pubDate>
