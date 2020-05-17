@@ -83,8 +83,10 @@ true
 
 
 
-## java class 로 빈 등록하기
+# java class로 빈 등록하기
 
+
+## @Configuration, @Bean
 >java
 {% highlight java %}
 @Configuration

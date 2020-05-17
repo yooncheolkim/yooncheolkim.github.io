@@ -80,8 +80,9 @@ true
   &lt;li&gt;spring 2.5 부터 나왔음…&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h2 id=&quot;java-class-로-빈-등록하기&quot;&gt;java class 로 빈 등록하기&lt;/h2&gt;
+&lt;h1 id=&quot;java-class로-빈-등록하기&quot;&gt;java class로 빈 등록하기&lt;/h1&gt;
 
+&lt;h2 id=&quot;configuration-bean&quot;&gt;@Configuration, @Bean&lt;/h2&gt;
 &lt;blockquote&gt;
   &lt;p&gt;java&lt;/p&gt;
 &lt;/blockquote&gt;
