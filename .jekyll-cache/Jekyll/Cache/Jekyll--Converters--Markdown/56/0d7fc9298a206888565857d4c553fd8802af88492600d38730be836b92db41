@@ -1,0 +1,90 @@
+I"><h1 id="spring-autowired">spring Autowired</h1>
+
+<p>#생성제에 위치 시키기</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nd">@Service</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">BookService</span> <span class="o">{</span>
+
+    <span class="nc">BookRepository</span> <span class="n">bookRepository</span><span class="o">;</span>
+
+    <span class="nd">@Autowired</span>
+    <span class="kd">public</span> <span class="nf">BookService</span><span class="o">(</span><span class="nc">BookRepository</span> <span class="n">bookRepository</span><span class="o">){</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">bookRepository</span> <span class="o">=</span> <span class="n">bookRepository</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+
+<span class="nd">@Repository</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">BookRepository</span> <span class="o">{</span>
+<span class="o">}</span></code></pre></figure>
+
+<ul>
+  <li>잘 동작한다…</li>
+  <li>만약 BookRepository에 @Repository 를 하지 않아 bean등록이 되어 있지 않다면, BookService 빈 등록시 Inject 할수 없기 때문에 오류 발생,,</li>
+</ul>
+
+<h2 id="setter에">setter에..</h2>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nd">@Service</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">BookService</span> <span class="o">{</span>
+
+    <span class="nc">BookRepository</span> <span class="n">bookRepository</span><span class="o">;</span>
+    
+    <span class="nd">@Autowired</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setBookRepository</span><span class="o">(</span><span class="nc">BookRepository</span> <span class="n">bookRepository</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">bookRepository</span> <span class="o">=</span> <span class="n">bookRepository</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">BookRepository</span> <span class="o">{</span>
+<span class="o">}</span></code></pre></figure>
+
+<ul>
+  <li>위 코드 처럼, BookRepository에 bean등록 annotation이 없어도, BookService 만드는데는 문제 없어야 하는거 아닌가?</li>
+  <li>에러 발생함. Autowired(required = false)  로 하면, 오류 없이 잘 동작함.</li>
+  <li>기본적으로 @Autowired(required = true)기 때문,,,</li>
+</ul>
+
+<h2 id="필드에-위치-시키기">필드에 위치 시키기</h2>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nd">@Service</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">BookService</span> <span class="o">{</span>
+
+    <span class="nd">@Autowired</span>
+    <span class="nc">BookRepository</span> <span class="n">bookRepository</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="nd">@Repository</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">BookRepository</span> <span class="o">{</span>
+<span class="o">}</span></code></pre></figure>
+
+<h1 id="해당-타입의-빈이-여러개인-경우">해당 타입의 빈이 여러개인 경우…</h1>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nd">@Service</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">BookService</span> <span class="o">{</span>
+
+    <span class="nd">@Autowired</span>
+    <span class="nc">BookRepository</span> <span class="n">bookRepository</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="nd">@Repository</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyBookRepository</span> <span class="kd">implements</span> <span class="nc">BookRepository</span><span class="o">{</span>
+<span class="o">}</span>
+
+<span class="nd">@Repository</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">YourBookRepository</span> <span class="kd">implements</span> <span class="nc">BookRepository</span><span class="o">{</span>
+<span class="o">}</span>
+
+<span class="err">@</span></code></pre></figure>
+
+<ul>
+  <li>빈이 두개 일 경우, 주입 하지 못한다.. 둘중 어떤걸 주입 받을지 모름
+    <ol>
+      <li>@Primary : 여러가지 BookRepository 중에 한가지를 주입 받도록 해줌</li>
+      <li>@Qualifier(“MyBookRepository”) : 주입 받는쪽에 설정,</li>
+      <li>List<BookRepository> bookRepositories : 여러개를 다 받아라</BookRepository></li>
+    </ol>
+  </li>
+</ul>
+
+:ET

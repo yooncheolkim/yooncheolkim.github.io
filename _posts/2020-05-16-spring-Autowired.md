@@ -12,7 +12,7 @@ description: spring Autowired
 
 #생성제에 위치 시키기
 
-{%highlignt java%}
+{%highlight java%}
 @Service
 public class BookService {
 
@@ -35,7 +35,7 @@ public class BookRepository {
 
 
 ## setter에..
-{%highlignt java%}
+{%highlight java%}
 @Service
 public class BookService {
 
@@ -57,7 +57,7 @@ public class BookRepository {
 
 
 ## 필드에 위치 시키기
-{%highlignt java%}
+{%highlight java%}
 @Service
 public class BookService {
 
@@ -74,7 +74,7 @@ public class BookRepository {
 
 # 해당 타입의 빈이 여러개인 경우...
 
-{%highlignt java%}
+{%highlight java%}
 @Service
 public class BookService {
 

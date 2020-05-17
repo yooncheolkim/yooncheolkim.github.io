@@ -105,6 +105,20 @@
                 "t":"2020-5",
                 "year":"2020",
                 "x":1,
+                "y":29
+            },
+        
+            {
+                "t":"2020-5",
+                "year":"2020",
+                "x":1,
+                "y":307
+            },
+        
+            {
+                "t":"2020-5",
+                "year":"2020",
+                "x":1,
                 "y":599
             },
         
@@ -112,7 +126,7 @@
                 "t":"2020-5",
                 "year":"2020",
                 "x":1,
-                "y":6
+                "y":9
             },
         
             {
@@ -341,7 +355,7 @@
     var pieData = [
         
             
-             2, 
+             4, 
         
             
              2, 
@@ -409,9 +423,13 @@
 <script>
     var totalWords = [
         
+            29,
+        
+            307,
+        
             599,
         
-            6,
+            9,
         
             49,
         
@@ -432,7 +450,7 @@
             16,
         
     ].reduce((a, b) => a + b, 0);
-    var totalPosts = 11;
+    var totalPosts = 13;
 
     function concatBoldTextToELement(id, text) {
         var abvgd = document.createElement('b');
@@ -453,15 +471,15 @@
   <h2>Recent Posts</h2>
   <ul>
     
+    <li><a href="/2020/05/spring-Component/">spring component</a></li>
+    
+    <li><a href="/2020/05/spring-Autowired/">spring Autowired</a></li>
+    
     <li><a href="/2020/05/spring-bean-setting/">spring 빈 설정 방법</a></li>
     
     <li><a href="/2020/05/spring-summary/">spring 요약 정리</a></li>
     
     <li><a href="/2020/05/lombok-summary/">롬복 기본 annotation 정리</a></li>
-    
-    <li><a href="/2020/05/boj-5373/">boj 5373 큐빙</a></li>
-    
-    <li><a href="/2020/04/Travis-CI/">Travis CI build 하기</a></li>
     
   </ul>
 </div>
@@ -516,7 +534,7 @@
         <span>maven</span></a></li>
     
     <li>
-      <a href="/tag/spring" data-toggle="tooltip" data-placement="right" title="2">
+      <a href="/tag/spring" data-toggle="tooltip" data-placement="right" title="4">
         <span>spring</span></a></li>
     
     <li>

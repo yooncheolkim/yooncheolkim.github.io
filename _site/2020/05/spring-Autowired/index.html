@@ -11,7 +11,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>윤철이 블로그 | exif로 사진 똑바로하기 </title>
+    <title>윤철이 블로그 | spring Autowired </title>
     <meta name="theme-color" content="#222222"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="/assets/js/jquery.min.js"></script>
@@ -74,47 +74,109 @@
             <div class="col-md-8 offset-md-1">
               <div class="article">
                 <div class="card">
-                  <h1><a href="/2020/03/exif-orientation/">exif로 사진 똑바로하기</a></h1>
+                  <h1><a href="/2020/05/spring-Autowired/">spring Autowired</a></h1>
                   <div class="post-meta">
                     <div class="post-time">
                       <i class="fa fa-calendar-alt"></i>
-                      <time>20 Mar 2020</time>
+                      <time>16 May 2020</time>
                     </div>
                     <ul>
                       
-                        <li><a href="/tag/js">js</a></li>
+                        <li><a href="/tag/spring">spring</a></li>
                       
                     </ul>
                   </div>
                   <div class="post-content">
                     
-                    <h2 id="자바스크립트-img-태그에서-blob-가져와서-exif-데이터로-사진-똑바로-나오게-하기">자바스크립트, img 태그에서 blob 가져와서 exif 데이터로 사진 똑바로 나오게 하기,</h2>
+                    <h1 id="spring-autowired">spring Autowired</h1>
 
-<h3 id="exif-orientation">exif, orientation</h3>
+<p>#생성제에 위치 시키기</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nd">@Service</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">BookService</span> <span class="o">{</span>
+
+    <span class="nc">BookRepository</span> <span class="n">bookRepository</span><span class="o">;</span>
+
+    <span class="nd">@Autowired</span>
+    <span class="kd">public</span> <span class="nf">BookService</span><span class="o">(</span><span class="nc">BookRepository</span> <span class="n">bookRepository</span><span class="o">){</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">bookRepository</span> <span class="o">=</span> <span class="n">bookRepository</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+
+<span class="nd">@Repository</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">BookRepository</span> <span class="o">{</span>
+<span class="o">}</span></code></pre></figure>
+
 <ul>
-  <li>이미지 파일에서, exif 값으로 orientation 값을 가져올수 있다.</li>
-  <li>보통 스마트폰으로 찍은 사진은 스마트폰 회전 정도에 따라 이 orientation 값이 달라진다.</li>
-  <li>https://github.com/blueimp/JavaScript-Load-Image</li>
+  <li>잘 동작한다…</li>
+  <li>만약 BookRepository에 @Repository 를 하지 않아 bean등록이 되어 있지 않다면, BookService 빈 등록시 Inject 할수 없기 때문에 오류 발생,,</li>
 </ul>
 
-<blockquote>
-  <p>javascript</p>
-</blockquote>
+<h2 id="setter에">setter에..</h2>
 
-<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="o">&lt;</span><span class="nx">script</span> <span class="nx">scr</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">https://cdnjs.cloudflare.com/ajax/libs/blueimp-load-image/2.24.0/load-image.all.min.js</span><span class="dl">"</span><span class="o">&gt;&lt;</span><span class="sr">/script</span><span class="err">&gt;
-</span>
-    <span class="kd">var</span> <span class="nx">srcLeft</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="dl">"</span><span class="s2">left_img</span><span class="dl">"</span><span class="p">).</span><span class="nx">src</span><span class="p">;</span>
-    <span class="nx">fetch</span><span class="p">(</span><span class="nx">srcLeft</span><span class="p">)</span>
-        <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">res</span><span class="o">=&gt;</span><span class="nx">res</span><span class="p">.</span><span class="nx">blob</span><span class="p">())</span>
-        <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">blob</span><span class="o">=&gt;</span><span class="p">{</span>
-            <span class="nx">loadImage</span><span class="p">(</span>
-                <span class="nx">blob</span><span class="p">,</span>
-                <span class="kd">function</span><span class="p">(</span><span class="nx">img</span><span class="p">,</span><span class="nx">data</span><span class="p">){</span>
-                    <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#left_img</span><span class="dl">"</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="dl">"</span><span class="s2">src</span><span class="dl">"</span><span class="p">,</span><span class="nx">img</span><span class="p">.</span><span class="nx">toDataURL</span><span class="p">(</span><span class="dl">"</span><span class="s2">image/jpeg</span><span class="dl">"</span><span class="p">));</span>
-                <span class="p">},</span>
-                <span class="p">{</span><span class="na">orientation</span><span class="p">:</span><span class="kc">true</span><span class="p">}</span>
-            <span class="p">)</span>
-        <span class="p">});</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nd">@Service</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">BookService</span> <span class="o">{</span>
+
+    <span class="nc">BookRepository</span> <span class="n">bookRepository</span><span class="o">;</span>
+    
+    <span class="nd">@Autowired</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setBookRepository</span><span class="o">(</span><span class="nc">BookRepository</span> <span class="n">bookRepository</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">bookRepository</span> <span class="o">=</span> <span class="n">bookRepository</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">BookRepository</span> <span class="o">{</span>
+<span class="o">}</span></code></pre></figure>
+
+<ul>
+  <li>위 코드 처럼, BookRepository에 bean등록 annotation이 없어도, BookService 만드는데는 문제 없어야 하는거 아닌가?</li>
+  <li>에러 발생함. Autowired(required = false)  로 하면, 오류 없이 잘 동작함.</li>
+  <li>기본적으로 @Autowired(required = true)기 때문,,,</li>
+</ul>
+
+<h2 id="필드에-위치-시키기">필드에 위치 시키기</h2>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nd">@Service</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">BookService</span> <span class="o">{</span>
+
+    <span class="nd">@Autowired</span>
+    <span class="nc">BookRepository</span> <span class="n">bookRepository</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="nd">@Repository</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">BookRepository</span> <span class="o">{</span>
+<span class="o">}</span></code></pre></figure>
+
+<h1 id="해당-타입의-빈이-여러개인-경우">해당 타입의 빈이 여러개인 경우…</h1>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nd">@Service</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">BookService</span> <span class="o">{</span>
+
+    <span class="nd">@Autowired</span>
+    <span class="nc">BookRepository</span> <span class="n">bookRepository</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="nd">@Repository</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyBookRepository</span> <span class="kd">implements</span> <span class="nc">BookRepository</span><span class="o">{</span>
+<span class="o">}</span>
+
+<span class="nd">@Repository</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">YourBookRepository</span> <span class="kd">implements</span> <span class="nc">BookRepository</span><span class="o">{</span>
+<span class="o">}</span>
+
+<span class="err">@</span></code></pre></figure>
+
+<ul>
+  <li>빈이 두개 일 경우, 주입 하지 못한다.. 둘중 어떤걸 주입 받을지 모름
+    <ol>
+      <li>@Primary : 여러가지 BookRepository 중에 한가지를 주입 받도록 해줌</li>
+      <li>@Qualifier(“MyBookRepository”) : 주입 받는쪽에 설정,</li>
+      <li>List<BookRepository> bookRepositories : 여러개를 다 받아라</BookRepository></li>
+    </ol>
+  </li>
+</ul>
+
 
                     
 
