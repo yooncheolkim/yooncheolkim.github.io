@@ -10,7 +10,7 @@ description: spring Autowired
 # spring Autowired
 
 
-## 생성자에,,
+## 생성자에 위치 시키기
 
 {%highlight java%}
 @Service
@@ -34,7 +34,7 @@ public class BookRepository {
 - 만약 BookRepository에 @Repository 를 하지 않아 bean등록이 되어 있지 않다면, BookService 빈 등록시 Inject 할수 없기 때문에 오류 발생,,
 
 
-## setter에..
+## setter에 위치시키기
 {%highlight java%}
 @Service
 public class BookService {
