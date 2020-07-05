@@ -1,0 +1,19 @@
+I"�<h1 id="component-scan">component scan</h1>
+<ul>
+  <li>@SpringBootApplication -&gt; @ComponentScan</li>
+  <li>
+    <p>@ComponentScan의 패키지 부터 scan 한다.</p>
+  </li>
+  <li>
+    <p>@Filter : scan중 걸러낼것들</p>
+  </li>
+  <li>@Component
+    <ul>
+      <li>@Repository</li>
+      <li>@Service</li>
+      <li>@Controller</li>
+      <li>@Configuration</li>
+    </ul>
+  </li>
+</ul>
+:ET

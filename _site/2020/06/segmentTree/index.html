@@ -1,0 +1,394 @@
+
+
+
+
+
+
+
+
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>윤철이 블로그 | segmentTree </title>
+    <meta name="theme-color" content="#222222"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/popper.min.js"></script>
+    <script src="/assets/js/bootstrap4.min.js"></script>
+    <script src="/assets/js/header.js"></script>
+    <script src="/assets/css/svg-with-js/js/fontawesome-all.js"></script>
+    <link href="/assets/css/bootstrap4.min.css" rel="stylesheet">
+    <link href="/assets/css/theme.css" rel="stylesheet">
+    <link href="/assets/css/syntax.css" rel="stylesheet">
+ </head>
+
+<body>
+
+
+
+
+
+
+<script type="text/javascript">
+    WebFontConfig = {
+        google: {
+            families: ['Ubuntu::latin']
+        }
+    };
+    (function () {
+        var wf = document.createElement('script');
+        wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
+            '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+        wf.type = 'text/javascript';
+        wf.async = 'true';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(wf, s);
+    })();
+</script>
+
+<nav class="navbar navbar-expand-lg fixed-top navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">윤철이 블로그</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse"
+                data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <a class="nav-item nav-link" href="/">/home</a>
+                <a class="nav-item nav-link" href="/archive">/archive</a>
+                <a class="nav-item nav-link" href="/tags">/tags</a>
+                <a class="nav-item nav-link" href="/about">/about</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+    <div class="wrapper">
+      <div class="content">
+        <div class="container container-center">
+          <div class="row">
+            <div class="col-md-8 offset-md-1">
+              <div class="article">
+                <div class="card">
+                  <h1><a href="/2020/06/segmentTree/">segmentTree</a></h1>
+                  <div class="post-meta">
+                    <div class="post-time">
+                      <i class="fa fa-calendar-alt"></i>
+                      <time>22 Jun 2020</time>
+                    </div>
+                    <ul>
+                      
+                        <li><a href="/tag/segmentTree">segmentTree</a></li>
+                      
+                        <li><a href="/tag/%EC%84%B8%EA%B7%B8%EB%A8%BC%ED%8A%B8%ED%8A%B8%EB%A6%AC">세그먼트트리</a></li>
+                      
+                    </ul>
+                  </div>
+                  <div class="post-content">
+                    
+                    <h1 id="구간-트리--구간에-대한-질문-대답하기">구간 트리 : 구간에 대한 질문 대답하기</h1>
+<ul>
+  <li>저장된 자료들을 적절히 전처리해 그들에 대한 질의를 빠르게 대답할수 있는것</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>A = {1,2,1,2,3,1,2,3,4}
+에서 구간이 주어졌을때, 최소 값을 구한다고 했을때,
+
+[2.4] 라면, 최소치는 1이다.
+계산하기 위해서는 O(n)
+해당 배열을 전처리 하여, 구간 트리를 생성하면 같은 연산을 빠르게 구현할 수 있다.
+</code></pre></div></div>
+
+<ul>
+  <li>기본 Idea : 주어진 배열의 구간들을 표현하는 이진트리를 만드는 것. 이대 구간 트리의 루트는 항상 전체 구간을 표현해야한다.</li>
+  <li>루트의 자식 두개는, 왼쪽 반, 오른쪽 반을 표현한다.</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[0                                                14]
+[0                       7][8                     14]
+[0          3][4         7][8         11][12      14]
+[0   1][2   3][4   5][6  7][8   9][10 11][12  13][14]
+[0][1][2][3][4][5][6][7][8][9][10][11][12][13][14]
+
+이렇게 되어있을때, [6 12] 구간의 질의를 구하려면, [6 7] [8 11] [12 12] 의 합으로 구할 수 잇다.
+- 순차적으로 구할 때 : 7
+- 구간을 이용할 때 : 3
+-&gt; O(n) -&gt; O(log n)
+</code></pre></div></div>
+
+<h2 id="구간-트리의-표현">구간 트리의 표현</h2>
+<ul>
+  <li>구간 트리는 꽉찬 이진 트리 이기 때문에, 노드를 사용하는것 보다 배열을 사용하는것이 메모리상 이득,</li>
+  <li>루트 노드를 1번</li>
+  <li>i 노드의 left = 2*i</li>
+  <li>i 노드의 right= 2*i+1</li>
+  <li>
+    <p>일차원 배열로 표현 가능하다.</p>
+  </li>
+  <li>배열의 길이 : n 이상의 2의 거듭제곱 *2</li>
+  <li>ex) n = 6 -&gt; 8*2 = 16</li>
+  <li>귀찮은 경우, 4n으로 하면 된다.</li>
+</ul>
+
+<h2 id="구간-트리의-초기화">구간 트리의 초기화</h2>
+<ul>
+  <li>배열의 구간 최소 값 문제를 해결하는 초기화</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">class</span> <span class="nc">RMQ</span><span class="o">{</span>
+    <span class="c1">//배열의 길이</span>
+    <span class="kt">int</span> <span class="n">n</span><span class="o">;</span>
+
+    <span class="kt">int</span> <span class="n">rangeMin</span><span class="o">[];</span>
+
+    <span class="kd">public</span> <span class="nf">RMQ</span><span class="o">(</span><span class="kt">int</span> <span class="o">[]</span><span class="n">array</span><span class="o">){</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">array</span><span class="o">.</span><span class="na">size</span><span class="o">();</span>
+        <span class="n">rangeMin</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">array</span><span class="o">.</span><span class="na">length</span> <span class="o">*</span> <span class="mi">4</span><span class="o">];</span>
+        <span class="n">init</span><span class="o">(</span><span class="n">array</span><span class="o">,</span><span class="mi">0</span><span class="o">,</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="o">,</span><span class="mi">1</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="c1">//array  : 구간의 원래 값,</span>
+<span class="c1">//left : 왼쪽 인덱스</span>
+<span class="c1">//right : 오른쪽 인덱스</span>
+<span class="c1">//node : left ~ right의 질의 값을 저장할 노드</span>
+    <span class="kt">int</span> <span class="nf">init</span><span class="o">(</span><span class="kt">int</span> <span class="o">[]</span><span class="n">array</span><span class="o">,</span> <span class="kt">int</span> <span class="n">left</span><span class="o">,</span><span class="kt">int</span> <span class="n">right</span><span class="o">,</span> <span class="kt">int</span> <span class="n">node</span><span class="o">){</span>
+
+        <span class="k">if</span><span class="o">(</span><span class="n">left</span> <span class="o">==</span> <span class="n">right</span><span class="o">)</span> <span class="k">return</span> <span class="n">rangMin</span><span class="o">[</span><span class="n">node</span><span class="o">]</span>  <span class="o">=</span> <span class="n">array</span><span class="o">[</span><span class="n">left</span><span class="o">];</span>
+
+        <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="o">(</span><span class="n">left</span> <span class="o">+</span> <span class="n">right</span><span class="o">)</span> <span class="o">/</span><span class="mi">2</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">leftMin</span> <span class="o">=</span> <span class="n">init</span><span class="o">(</span><span class="n">array</span><span class="o">,</span> <span class="n">left</span><span class="o">,</span> <span class="n">mid</span><span class="o">,</span> <span class="n">node</span> <span class="o">*</span><span class="mi">2</span><span class="o">);</span>
+        <span class="kt">int</span> <span class="n">rightMin</span> <span class="o">=</span> <span class="n">init</span><span class="o">(</span><span class="n">array</span><span class="o">,</span> <span class="n">mid</span><span class="o">+</span><span class="mi">1</span><span class="o">,</span> <span class="n">right</span><span class="o">,</span> <span class="n">node</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span><span class="mi">1</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">rangeMin</span><span class="o">[</span><span class="n">node</span><span class="o">]</span> <span class="o">=</span> <span class="n">min</span><span class="o">(</span><span class="n">leftMin</span><span class="o">,</span> <span class="n">rightMin</span><span class="o">);</span>
+    <span class="o">}</span>
+
+<span class="o">}</span></code></pre></figure>
+
+<ul>
+  <li>초기화 과정의 시간 복잡도 O(n)</li>
+</ul>
+
+<h2 id="구간-트리의-질의-처리">구간 트리의 질의 처리</h2>
+<ul>
+  <li>구간 트리의 순회를 응용해 간단하게 구현할 수 있습니다.</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>query(left, right, node, nodeLeft, nodeRight)
+    = node가 표혆하는 [nodeLeft, nodeRight]에서 내가 원하는 left~right의 교집합의 최소 원소
+</code></pre></div></div>
+
+<ul>
+  <li>교집합이 공집합인 경우: 찾을 수 없음</li>
+  <li>교집합이 [nodeLeft, nodeRight] 인 경우 : 그대로 미리 계산해둔 값 리턴</li>
+  <li>이외의 경우 : 두개의 자손 노드를 탐색하며, 더 작은 값을 택해 반환</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kt">int</span> <span class="nf">query</span><span class="o">(</span><span class="kt">int</span> <span class="n">left</span><span class="o">,</span> <span class="kt">int</span> <span class="n">right</span><span class="o">,</span> <span class="kt">int</span> <span class="n">node</span><span class="o">,</span> <span class="kt">int</span> <span class="n">nodeLeft</span><span class="o">,</span> <span class="kt">int</span> <span class="n">nodeRight</span><span class="o">){</span>
+    <span class="c1">//구간이 겹치지 않은 경우 무시</span>
+    <span class="k">if</span><span class="o">(</span><span class="n">right</span> <span class="o">&lt;</span> <span class="n">nodeLeft</span> <span class="o">||</span> <span class="n">nodeRight</span> <span class="o">&lt;</span> <span class="n">left</span><span class="o">)</span> <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+
+    <span class="c1">//left, right를 완전히 포함하는 경우</span>
+    <span class="k">if</span><span class="o">(</span><span class="n">nodeLeft</span> <span class="o">&lt;=</span> <span class="n">left</span> <span class="o">&amp;&amp;</span> <span class="n">right</span> <span class="o">&lt;=</span> <span class="n">nodeRight</span><span class="o">)</span>
+        <span class="k">return</span> <span class="n">rangeMin</span><span class="o">[</span><span class="n">node</span><span class="o">];</span>
+
+    <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="o">(</span><span class="n">nodeLeft</span> <span class="o">+</span> <span class="n">nodeRight</span><span class="o">)</span> <span class="o">/</span><span class="mi">2</span><span class="o">;</span>
+    <span class="k">return</span> <span class="nf">min</span><span class="o">(</span><span class="n">query</span><span class="o">(</span><span class="n">left</span><span class="o">,</span> <span class="n">right</span><span class="o">,</span> <span class="n">node</span><span class="o">*</span><span class="mi">2</span><span class="o">,</span> <span class="n">nodeLeft</span><span class="o">,</span> <span class="n">mid</span><span class="o">),</span>
+                <span class="n">query</span><span class="o">(</span><span class="n">left</span><span class="o">,</span><span class="n">right</span><span class="o">,</span> <span class="n">node</span><span class="o">*</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span><span class="o">,</span> <span class="n">mid</span><span class="o">,</span><span class="n">nodeRight</span><span class="o">));</span>
+<span class="o">}</span>
+
+<span class="c1">//외부에서 호출한다고 했을때, 전체 구간에서 left, right 의 값을 구함</span>
+<span class="kt">int</span> <span class="nf">query</span><span class="o">(</span><span class="kt">int</span> <span class="n">left</span><span class="o">,</span> <span class="kt">int</span> <span class="n">right</span><span class="o">){</span>
+    <span class="k">return</span> <span class="nf">query</span><span class="o">(</span><span class="n">left</span><span class="o">,</span> <span class="n">right</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="o">);</span>
+<span class="o">}</span></code></pre></figure>
+
+<h2 id="구간-트리의-갱신">구간 트리의 갱신</h2>
+<ul>
+  <li>값이 하나 바뀔 때는 빠르게 갱신 가능</li>
+  <li>i 번째 값만 바뀌었다고 했을때, 이 위치를 포함하는 트리는 O(log n),</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kt">int</span> <span class="nf">update</span><span class="o">(</span><span class="kt">int</span> <span class="n">index</span><span class="o">,</span> <span class="kt">int</span> <span class="n">newValue</span><span class="o">,</span> <span class="kt">int</span> <span class="n">node</span><span class="o">,</span> <span class="kt">int</span> <span class="n">nodeLeft</span><span class="o">,</span> <span class="kt">int</span> <span class="n">nodeRight</span><span class="o">){</span>
+    <span class="c1">// index 가 노드가 표현하는 구간과 상관 없는 경우 무시</span>
+    <span class="k">if</span><span class="o">(</span><span class="n">index</span><span class="o">&lt;</span> <span class="n">nodeLeft</span> <span class="o">||</span> <span class="n">nodeRight</span> <span class="o">&lt;</span> <span class="n">index</span><span class="o">){</span>
+        <span class="k">return</span> <span class="n">rangeMin</span><span class="o">[</span><span class="n">node</span><span class="o">];</span>
+    <span class="o">}</span>
+    <span class="c1">//트리의 리프까지 온 경우, 갱신</span>
+    <span class="k">if</span><span class="o">(</span><span class="n">nodeLeft</span> <span class="o">==</span> <span class="n">nodeRight</span><span class="o">)</span> <span class="n">retrun</span> <span class="n">rangeMin</span><span class="o">[</span><span class="n">node</span><span class="o">]</span> <span class="o">=</span> <span class="n">newValue</span><span class="o">;</span>
+    
+    <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="o">(</span><span class="n">nodeLeft</span> <span class="o">+</span> <span class="n">nodeRight</span><span class="o">)</span> <span class="o">/</span><span class="mi">2</span><span class="o">;</span>
+
+    <span class="k">return</span> <span class="n">rangeMin</span><span class="o">[</span><span class="n">node</span><span class="o">]</span> <span class="o">=</span> <span class="n">min</span> <span class="o">(</span><span class="n">update</span><span class="o">(</span><span class="n">index</span><span class="o">,</span> <span class="n">newValue</span><span class="o">,</span> <span class="n">node</span><span class="o">*</span><span class="mi">2</span><span class="o">,</span> <span class="n">nodeLeft</span><span class="o">,</span> <span class="n">mid</span><span class="o">),</span>
+                                <span class="n">update</span><span class="o">(</span><span class="n">index</span><span class="o">,</span> <span class="n">newValue</span><span class="o">,</span> <span class="n">node</span><span class="o">*</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span><span class="o">,</span> <span class="n">mid</span><span class="o">+</span><span class="mi">1</span><span class="o">,</span> <span class="n">nodeRight</span><span class="o">));</span>
+<span class="o">}</span>
+
+<span class="kt">int</span> <span class="nf">update</span><span class="o">(</span><span class="kt">int</span> <span class="n">index</span><span class="o">,</span> <span class="kt">int</span> <span class="n">newValue</span><span class="o">){</span>
+    <span class="k">return</span> <span class="nf">update</span><span class="o">(</span><span class="n">index</span><span class="o">,</span> <span class="n">newValue</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="o">);</span>
+<span class="o">}</span></code></pre></figure>
+
+
+                    
+
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3 hidden-xs">
+              <div class="sidebar ">
+  <h2>Recent Posts</h2>
+  <ul>
+    
+    <li><a href="/2020/07/effectivejava-summary/">effective java 요약 정리</a></li>
+    
+    <li><a href="/2020/07/effective-java-1/">이펙티브 자바 팩터리 메서드</a></li>
+    
+    <li><a href="/2020/06/js-scope/">자바스크립트 스코프체인</a></li>
+    
+    <li><a href="/2020/06/js-property/">자바스크립트 프로퍼티</a></li>
+    
+    <li><a href="/2020/06/segmentTree/">segmentTree</a></li>
+    
+  </ul>
+</div>
+
+<div class="sidebar">
+  <h2>Tags</h2>
+  <ul class="sideBarTags">
+    
+    
+    <li>
+      <a href="/tag/EC2" data-toggle="tooltip" data-placement="right" title="2">
+        <span>EC2</span></a></li>
+    
+    <li>
+      <a href="/tag/Resource" data-toggle="tooltip" data-placement="right" title="1">
+        <span>Resource</span></a></li>
+    
+    <li>
+      <a href="/tag/Travis" data-toggle="tooltip" data-placement="right" title="1">
+        <span>Travis</span></a></li>
+    
+    <li>
+      <a href="/tag/Validation" data-toggle="tooltip" data-placement="right" title="1">
+        <span>Validation</span></a></li>
+    
+    <li>
+      <a href="/tag/aws" data-toggle="tooltip" data-placement="right" title="2">
+        <span>aws</span></a></li>
+    
+    <li>
+      <a href="/tag/docker" data-toggle="tooltip" data-placement="right" title="1">
+        <span>docker</span></a></li>
+    
+    <li>
+      <a href="/tag/git" data-toggle="tooltip" data-placement="right" title="1">
+        <span>git</span></a></li>
+    
+    <li>
+      <a href="/tag/java" data-toggle="tooltip" data-placement="right" title="4">
+        <span>java</span></a></li>
+    
+    <li>
+      <a href="/tag/javascript" data-toggle="tooltip" data-placement="right" title="2">
+        <span>javascript</span></a></li>
+    
+    <li>
+      <a href="/tag/jekyll" data-toggle="tooltip" data-placement="right" title="1">
+        <span>jekyll</span></a></li>
+    
+    <li>
+      <a href="/tag/jenkins" data-toggle="tooltip" data-placement="right" title="1">
+        <span>jenkins</span></a></li>
+    
+    <li>
+      <a href="/tag/js" data-toggle="tooltip" data-placement="right" title="1">
+        <span>js</span></a></li>
+    
+    <li>
+      <a href="/tag/lombok" data-toggle="tooltip" data-placement="right" title="1">
+        <span>lombok</span></a></li>
+    
+    <li>
+      <a href="/tag/maven" data-toggle="tooltip" data-placement="right" title="1">
+        <span>maven</span></a></li>
+    
+    <li>
+      <a href="/tag/property" data-toggle="tooltip" data-placement="right" title="1">
+        <span>property</span></a></li>
+    
+    <li>
+      <a href="/tag/prototype" data-toggle="tooltip" data-placement="right" title="1">
+        <span>prototype</span></a></li>
+    
+    <li>
+      <a href="/tag/scope" data-toggle="tooltip" data-placement="right" title="1">
+        <span>scope</span></a></li>
+    
+    <li>
+      <a href="/tag/segmentTree" data-toggle="tooltip" data-placement="right" title="1">
+        <span>segmentTree</span></a></li>
+    
+    <li>
+      <a href="/tag/spring" data-toggle="tooltip" data-placement="right" title="10">
+        <span>spring</span></a></li>
+    
+    <li>
+      <a href="/tag/%EC%84%B8%EA%B7%B8%EB%A8%BC%ED%8A%B8%ED%8A%B8%EB%A6%AC" data-toggle="tooltip" data-placement="right" title="1">
+        <span>세그먼트트리</span></a></li>
+    
+    <li>
+      <a href="/tag/%EC%8B%9C%EB%AE%AC%EB%A0%88%EC%9D%B4%EC%85%98" data-toggle="tooltip" data-placement="right" title="1">
+        <span>시뮬레이션</span></a></li>
+    
+  </ul>
+</div>
+
+            </div>
+          </div>
+        </div>
+        
+
+      </div>
+          <footer class="footer-distributed">
+      <div class="container">
+        <div class="footer">
+          <p>yooncheolkim &copy; 2020</p>
+          <h6>Follow me</h6>
+
+<ul class="social-media">
+
+  
+    <li>
+      <a title="yooncheolkim on Github" href="https://github.com/yooncheolkim" target="_blank"><i class="fab fa-github fa-2x"></i></a>
+    </li>
+  
+
+  
+
+  
+
+  
+    <li>
+      <a title="k.yooncheol on Instagram" href="https://instagram.com/k.yooncheol" target="_blank"><i class="fab fa-instagram fa-2x"></i></a>
+    </li>
+  
+
+  
+
+  
+    <li>
+      <a title="feed.xml RSS" href="/feed.xml" target="_blank"><i class="fas fa-rss fa-2x"></i></a>
+    </li>
+  
+
+</ul>
+
+        </div>
+      </div>
+    </footer>
+
+    </div>
+  </body>
+</html>

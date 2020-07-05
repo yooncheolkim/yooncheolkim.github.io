@@ -57,7 +57,7 @@ class RMQ{
 
     public RMQ(int []array){
         n = array.size();
-        rangeMin = new int[array.length];
+        rangeMin = new int[array.length * 4];
         init(array,0,n-1,1);
     }
 //array  : 구간의 원래 값,
@@ -126,9 +126,9 @@ int update(int index, int newValue, int node, int nodeLeft, int nodeRight){
     if(index< nodeLeft || nodeRight < index){
         return rangeMin[node];
     }
-
+    //트리의 리프까지 온 경우, 갱신
     if(nodeLeft == nodeRight) retrun rangeMin[node] = newValue;
-
+    
     int mid = (nodeLeft + nodeRight) /2;
 
     return rangeMin[node] = min (update(index, newValue, node*2, nodeLeft, mid),
@@ -140,3 +140,4 @@ int update(int index, int newValue){
 }
 
 {% endhighlight %}
+

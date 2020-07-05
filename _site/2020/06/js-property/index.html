@@ -1,0 +1,383 @@
+
+
+
+
+
+
+
+
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>윤철이 블로그 | 자바스크립트 프로퍼티 </title>
+    <meta name="theme-color" content="#222222"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/popper.min.js"></script>
+    <script src="/assets/js/bootstrap4.min.js"></script>
+    <script src="/assets/js/header.js"></script>
+    <script src="/assets/css/svg-with-js/js/fontawesome-all.js"></script>
+    <link href="/assets/css/bootstrap4.min.css" rel="stylesheet">
+    <link href="/assets/css/theme.css" rel="stylesheet">
+    <link href="/assets/css/syntax.css" rel="stylesheet">
+ </head>
+
+<body>
+
+
+
+
+
+
+<script type="text/javascript">
+    WebFontConfig = {
+        google: {
+            families: ['Ubuntu::latin']
+        }
+    };
+    (function () {
+        var wf = document.createElement('script');
+        wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
+            '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+        wf.type = 'text/javascript';
+        wf.async = 'true';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(wf, s);
+    })();
+</script>
+
+<nav class="navbar navbar-expand-lg fixed-top navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">윤철이 블로그</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse"
+                data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <a class="nav-item nav-link" href="/">/home</a>
+                <a class="nav-item nav-link" href="/archive">/archive</a>
+                <a class="nav-item nav-link" href="/tags">/tags</a>
+                <a class="nav-item nav-link" href="/about">/about</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+    <div class="wrapper">
+      <div class="content">
+        <div class="container container-center">
+          <div class="row">
+            <div class="col-md-8 offset-md-1">
+              <div class="article">
+                <div class="card">
+                  <h1><a href="/2020/06/js-property/">자바스크립트 프로퍼티</a></h1>
+                  <div class="post-meta">
+                    <div class="post-time">
+                      <i class="fa fa-calendar-alt"></i>
+                      <time>26 Jun 2020</time>
+                    </div>
+                    <ul>
+                      
+                        <li><a href="/tag/javascript">javascript</a></li>
+                      
+                        <li><a href="/tag/property">property</a></li>
+                      
+                        <li><a href="/tag/prototype">prototype</a></li>
+                      
+                    </ul>
+                  </div>
+                  <div class="post-content">
+                    
+                    <h1 id="자바스크립트-프로퍼티">자바스크립트 프로퍼티</h1>
+<ul>
+  <li>자바스크립트 함수 역시 객체다.</li>
+  <li>일반 객체와는 다르게 함수는 함수 객체만의 표준 프로퍼티를 가지고 있다.</li>
+</ul>
+
+<h2 id="length-name-caller-arguments-프로퍼티">length, name, caller, arguments 프로퍼티</h2>
+<ul>
+  <li>length : 인자 갯수</li>
+  <li>name : 함수 이름</li>
+  <li>caller : 호출한 함수</li>
+  <li>arguments : 전달된 인자값</li>
+</ul>
+
+<h2 id="proto-프로퍼티"><em>proto</em> 프로퍼티</h2>
+<ul>
+  <li>모든 자바스크립트 객체는 자신의 프로토타입을 가리키는 Prototype 이라는 내부 프로퍼티를 가진다.</li>
+  <li>여기서 말하는 프로토타입은 부모 객체를 의미한다.</li>
+  <li>이 Prototype 프로퍼티가 바로 <em>proto</em> 프로퍼티 이다.</li>
+  <li>이를 통해 자신의 부모 역할을 하는 프로토타입 객체를 가리킨다.</li>
+  <li>ECMA에서는 함수 객체의 부모 역할을 하는 프로토타입 객체를 Function.prototype 객체라고 명명한다.</li>
+</ul>
+
+<h2 id="prototype-프로퍼티">prototype 프로퍼티</h2>
+<ul>
+  <li>prototype 프로퍼티와 <em>proto</em> 프로퍼티를 혼동하면 안된다.</li>
+  <li>prototype 프로퍼티는 함수가 만들어질때 만들어지고, constructor 프로퍼티 하나만 있는 객체를 가리킨다.</li>
+  <li>그리고 prototype 프로퍼티가 가리키는 프로토타입 객체의 유일한 프로퍼티인 constructor 프로퍼티는 자신과 연결된 함수를 가리킨다.</li>
+  <li>즉, add 함수의 prototype 프로퍼티 -&gt; 프로토타입 객체</li>
+  <li>프로토타입 객체의 constructor -&gt; add 함수</li>
+</ul>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">fucntion</span> <span class="nx">myFunction</span><span class="p">(){</span>
+    <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">dir</span><span class="p">(</span><span class="nx">myFunction</span><span class="p">.</span><span class="nx">prototype</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">dir</span><span class="p">(</span><span class="nx">myFunction</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="kd">constructor</span><span class="p">);</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Object
+    constructor: ƒ myFunction()
+    __proto__: Object
+ƒ myFunction()
+</code></pre></div></div>
+<ul>
+  <li>myFunction이라는 함수가 만들어지면서, myFucntion 함수의 prototype 프로퍼티에는 함수와 연결된 프로토타입 객체가 생성된다.(myFucntion.prototype 객체)</li>
+  <li>myFunction.prototype 은 myFunction() 함수의 프로토타입 객체를 의미한다.</li>
+  <li>myFUnction.prototype의 constructor 는 myFunction을 가리키고 있다.</li>
+</ul>
+
+<h1 id="생성자-함수를-호출할때">생성자 함수를 호출할때,,,</h1>
+<ul>
+  <li>기존함수에 new 연산자를 붙여서 호출하면 해당 함수는 생성자 함수로 동작한다.</li>
+  <li>자바스크립트에서는 특정 함수를 생성자 함수로 사용하고 싶으면, 대문자로 시작하는 관례가 있다.</li>
+  <li>생성자 함수 코드 내부에서 this는 일반 메서드의 this 바인딩과 다르게 동작한다.</li>
+</ul>
+
+<h2 id="생성자-함수가-동작하는-방식">생성자 함수가 동작하는 방식</h2>
+<ol>
+  <li>빈 객체 생성 및 this 바인딩
+    <ul>
+      <li>생성자 함수가 실행되기전 빈 객체가 생성된다. 이 객체가 this로 바인딩 된다. 생성자 함수 내부에서 사용된 this는 이 빈 객체를 가리킨다.</li>
+      <li>생성된 빈 객체는 자신을 생성한 생성자 함수의 prototype 프로퍼티가 가리키는 객체를 자신의 프로토타입 객체로 설정한다.</li>
+    </ul>
+  </li>
+  <li>this를 통한 프로퍼티 생성
+    <ul>
+      <li>이후에는 함수 코드 내부에서 this를 사용하여, 동적으로 프로퍼티 나 메서드 생성이 가능하다.</li>
+    </ul>
+  </li>
+  <li>생성된 객체 리턴
+    <ul>
+      <li>this로 바인딩된 객체가 리턴된다.</li>
+    </ul>
+  </li>
+</ol>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">Person</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">){</span>
+    <span class="c1">//함수 코드 실행 전</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">name</span><span class="p">;</span>
+    <span class="c1">//함수리턴</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">foo</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Person</span><span class="p">(</span><span class="dl">'</span><span class="s1">foo</span><span class="dl">'</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">foo</span><span class="p">.</span><span class="nx">name</span><span class="p">);</span>
+</code></pre></div></div>
+
+<ul>
+  <li>Person() 함수가 생성자로 호출되면, 함수 코드가 실행되기 전에 빈 객체가 생성되고, 빈 객체는 Person.prototype 객체를 <strong>proto</strong> 가 Person.prototype을 가리키게 한다.</li>
+  <li>즉 Person.prototype 객체는 Person() 생성자를 사용하여 생성된 객체 모두가 <strong>proto</strong> 으로 링크되어있다.</li>
+</ul>
+
+<h2 id="객체-리터럴-방식과-생성자-함수를-통한-객체-생성-방식의-차이">객체 리터럴 방식과 생성자 함수를 통한 객체 생성 방식의 차이</h2>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">foo</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">name</span><span class="p">:</span><span class="dl">'</span><span class="s1">foo</span><span class="dl">'</span><span class="p">,</span>
+    <span class="na">age</span> <span class="p">:</span> <span class="mi">35</span><span class="p">,</span>
+    <span class="na">gender</span><span class="p">:</span> <span class="dl">'</span><span class="s1">man</span><span class="dl">'</span>
+<span class="p">};</span>
+
+<span class="kd">var</span> <span class="nx">bar</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Person</span><span class="p">();</span>
+</code></pre></div></div>
+
+<ul>
+  <li>위 두방식의 차이는, <strong>proto</strong>(프로토타입 객체) 에 있다.</li>
+  <li>객체 리터럴 방식은 <strong>proto</strong> 가 Object.Protytype 이고, 생성자 함수 방식은 Person.Protytype 이다.</li>
+</ul>
+
+<h1 id="프로토타입-체이닝">프로토타입 체이닝</h1>
+<h2 id="프로토-타입의-두가지-의미">프로토 타입의 두가지 의미</h2>
+<ul>
+  <li>자바스크립트는 클래스 개념이 없다.</li>
+  <li>생상된 객체의 부모 객체가 바로 프로토타입 객체다</li>
+  <li>
+    <p>상속 개념과 마찬가지로 자식 객체는 부모객체가 가진 프로퍼티 접근이나 메서드를 상속받아 호출하는것이 가능하다.</p>
+  </li>
+  <li>부모인 프로토타입 객체를 가리키는 참조링크 형태의 프로퍼티 : [[Prototype]] 프로퍼티 , <strong>proto</strong></li>
+  <li>자바스크립트의 모든 객체는 자신을 생성한 생성자 함수의 prototype 프로퍼티가 가리키는 프로토타입 객체를 자신의 부모 객체로 설저하는 [[Prototype]] 링크로 연결한다.</li>
+</ul>
+
+<h2 id="프로토-타입-체이닝">프로토 타입 체이닝</h2>
+<ul>
+  <li>해당 객체에 접근하려는 프로퍼티 또는 메서드가 없다면, [[Prototype]]링크(<strong>proto</strong>)를 따라 자신의 부모 역할을 하는 프로토타입 객체의 프로퍼티를 차례대로 검색한다.</li>
+</ul>
+
+                    
+
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3 hidden-xs">
+              <div class="sidebar ">
+  <h2>Recent Posts</h2>
+  <ul>
+    
+    <li><a href="/2020/07/effectivejava-summary/">effective java 요약 정리</a></li>
+    
+    <li><a href="/2020/07/effective-java-1/">이펙티브 자바 팩터리 메서드</a></li>
+    
+    <li><a href="/2020/06/js-scope/">자바스크립트 스코프체인</a></li>
+    
+    <li><a href="/2020/06/js-property/">자바스크립트 프로퍼티</a></li>
+    
+    <li><a href="/2020/06/segmentTree/">segmentTree</a></li>
+    
+  </ul>
+</div>
+
+<div class="sidebar">
+  <h2>Tags</h2>
+  <ul class="sideBarTags">
+    
+    
+    <li>
+      <a href="/tag/EC2" data-toggle="tooltip" data-placement="right" title="2">
+        <span>EC2</span></a></li>
+    
+    <li>
+      <a href="/tag/Resource" data-toggle="tooltip" data-placement="right" title="1">
+        <span>Resource</span></a></li>
+    
+    <li>
+      <a href="/tag/Travis" data-toggle="tooltip" data-placement="right" title="1">
+        <span>Travis</span></a></li>
+    
+    <li>
+      <a href="/tag/Validation" data-toggle="tooltip" data-placement="right" title="1">
+        <span>Validation</span></a></li>
+    
+    <li>
+      <a href="/tag/aws" data-toggle="tooltip" data-placement="right" title="2">
+        <span>aws</span></a></li>
+    
+    <li>
+      <a href="/tag/docker" data-toggle="tooltip" data-placement="right" title="1">
+        <span>docker</span></a></li>
+    
+    <li>
+      <a href="/tag/git" data-toggle="tooltip" data-placement="right" title="1">
+        <span>git</span></a></li>
+    
+    <li>
+      <a href="/tag/java" data-toggle="tooltip" data-placement="right" title="4">
+        <span>java</span></a></li>
+    
+    <li>
+      <a href="/tag/javascript" data-toggle="tooltip" data-placement="right" title="2">
+        <span>javascript</span></a></li>
+    
+    <li>
+      <a href="/tag/jekyll" data-toggle="tooltip" data-placement="right" title="1">
+        <span>jekyll</span></a></li>
+    
+    <li>
+      <a href="/tag/jenkins" data-toggle="tooltip" data-placement="right" title="1">
+        <span>jenkins</span></a></li>
+    
+    <li>
+      <a href="/tag/js" data-toggle="tooltip" data-placement="right" title="1">
+        <span>js</span></a></li>
+    
+    <li>
+      <a href="/tag/lombok" data-toggle="tooltip" data-placement="right" title="1">
+        <span>lombok</span></a></li>
+    
+    <li>
+      <a href="/tag/maven" data-toggle="tooltip" data-placement="right" title="1">
+        <span>maven</span></a></li>
+    
+    <li>
+      <a href="/tag/property" data-toggle="tooltip" data-placement="right" title="1">
+        <span>property</span></a></li>
+    
+    <li>
+      <a href="/tag/prototype" data-toggle="tooltip" data-placement="right" title="1">
+        <span>prototype</span></a></li>
+    
+    <li>
+      <a href="/tag/scope" data-toggle="tooltip" data-placement="right" title="1">
+        <span>scope</span></a></li>
+    
+    <li>
+      <a href="/tag/segmentTree" data-toggle="tooltip" data-placement="right" title="1">
+        <span>segmentTree</span></a></li>
+    
+    <li>
+      <a href="/tag/spring" data-toggle="tooltip" data-placement="right" title="10">
+        <span>spring</span></a></li>
+    
+    <li>
+      <a href="/tag/%EC%84%B8%EA%B7%B8%EB%A8%BC%ED%8A%B8%ED%8A%B8%EB%A6%AC" data-toggle="tooltip" data-placement="right" title="1">
+        <span>세그먼트트리</span></a></li>
+    
+    <li>
+      <a href="/tag/%EC%8B%9C%EB%AE%AC%EB%A0%88%EC%9D%B4%EC%85%98" data-toggle="tooltip" data-placement="right" title="1">
+        <span>시뮬레이션</span></a></li>
+    
+  </ul>
+</div>
+
+            </div>
+          </div>
+        </div>
+        
+
+      </div>
+          <footer class="footer-distributed">
+      <div class="container">
+        <div class="footer">
+          <p>yooncheolkim &copy; 2020</p>
+          <h6>Follow me</h6>
+
+<ul class="social-media">
+
+  
+    <li>
+      <a title="yooncheolkim on Github" href="https://github.com/yooncheolkim" target="_blank"><i class="fab fa-github fa-2x"></i></a>
+    </li>
+  
+
+  
+
+  
+
+  
+    <li>
+      <a title="k.yooncheol on Instagram" href="https://instagram.com/k.yooncheol" target="_blank"><i class="fab fa-instagram fa-2x"></i></a>
+    </li>
+  
+
+  
+
+  
+    <li>
+      <a title="feed.xml RSS" href="/feed.xml" target="_blank"><i class="fas fa-rss fa-2x"></i></a>
+    </li>
+  
+
+</ul>
+
+        </div>
+      </div>
+    </footer>
+
+    </div>
+  </body>
+</html>
