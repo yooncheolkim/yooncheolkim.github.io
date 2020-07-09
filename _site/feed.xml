@@ -7,6 +7,68 @@
 		<atom:link href="/feed.xml" rel="self" type="application/rss+xml" />
 		
 			<item>
+				<title>이펙티브 자바 싱글턴 직렬화</title>
+				<description>&lt;h1 id=&quot;private-생성자나-열거-타입으로-싱글턴임을-보증하라&quot;&gt;private 생성자나 열거 타입으로 싱글턴임을 보증하라&lt;/h1&gt;
+&lt;ul&gt;
+  &lt;li&gt;클래스를 싱글턴으로 만들면 이를 사용하는 클라이언트를 테스트하기가 어려워질 수 있다.&lt;/li&gt;
+  &lt;li&gt;인터페이스를 구현해서 만든 싱글턴이 아니라면, mock 만들수 없기 때문이다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;첫번째-방법&quot;&gt;첫번째 방법&lt;/h2&gt;
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Elvis&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Elvis&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;INSTANCE&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Elvis&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Elvis&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(){}&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;leaveTheBuilding&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(){}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;ul&gt;
+  &lt;li&gt;위 싱글턴 클래스는 딱한번 인스턴스 생성된다.&lt;/li&gt;
+  &lt;li&gt;리플렉션을 사용하여 private 생성자를 호출할 수 있지만, 하나를 더 만드려고 할때 예외를 던지면 된다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;두번째-방법&quot;&gt;두번째 방법&lt;/h2&gt;
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Elvis&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Elvis&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;INSTANCE&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Elvis&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Elvis&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(){}&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Elvis&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getInstance&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(){&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;INSTANCE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;무조건 getInstance를 사용하여, 접근하야여한다.
+    &lt;h3 id=&quot;두번재-방법의-장점&quot;&gt;두번재 방법의 장점&lt;/h3&gt;
+  &lt;/li&gt;
+  &lt;li&gt;마음이 바뀌면 API를 변경하지 않고 싱글턴이 아니게 변경할 수 있다.&lt;/li&gt;
+  &lt;li&gt;유일한 인스턴스를 반환하던 팩터리 메서드가 스레드 별로 다른 인스턴스를 넘겨주게 할 수 있다.&lt;/li&gt;
+  &lt;li&gt;정적 팩터리 메소드를 제네릭 싱글턴 팩터리로 만들수 있다.&lt;/li&gt;
+  &lt;li&gt;정적 팩터리의 메서드 참조를 공급자로 사용할 수 있다. (Elvis::getInstance -&amp;gt; Supplier&lt;Elvis&gt;)&lt;/Elvis&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;직렬화-한다면&quot;&gt;직렬화 한다면?&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;위 방식으로 만든 싱글턴을 직렬화 할때, Serializable을 구현하는건만으로는 안된다.&lt;/li&gt;
+  &lt;li&gt;역직렬화 하는 순간, 초기화 해둔 인스턴스가 아닌 다른 인스턴스가 반환된다.&lt;/li&gt;
+  &lt;li&gt;모든 인스턴스 필드를 transient로 선언하고 readResolve() 메서드를 제공해야한다.&lt;/li&gt;
+  &lt;li&gt;readResolve 메서드를 제공하여, 역직렬화 과정에서 만들어진 인스턴스를 반환하도록 한다.&lt;/li&gt;
+  &lt;li&gt;이렇게 하지 않으면, 역직렬화할 때 마다 새로운 인스턴스가 생성된다.
+    &lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;readResolve&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(){&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;INSTANCE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;가장-간결한-싱글턴-방법---enum&quot;&gt;가장 간결한 싱글턴 방법 - enum&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;간결하지만, 부자연스러워서,, 잘 사용안하는듯…&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+				<pubDate>Fri, 10 Jul 2020 06:00:00 +0900</pubDate>
+				<link>/2020/07/effective-java-3/</link>
+				<guid isPermaLink="true">/2020/07/effective-java-3/</guid>
+			</item>
+		
+			<item>
 				<title>이펙티브 자바 빌더 패턴</title>
 				<description>&lt;h1 id=&quot;생성자에-매개변수가-많다면-빌더를-고려하라&quot;&gt;생성자에 매개변수가 많다면 빌더를 고려하라&lt;/h1&gt;
 
@@ -139,6 +201,7 @@
 				<description>&lt;h1 id=&quot;1-객체-생성과-파괴&quot;&gt;1. 객체 생성과 파괴&lt;/h1&gt;
 &lt;h2 id=&quot;1-생성자-대신-정적-팩터리-메서드를-고려하라&quot;&gt;1. &lt;a href=&quot;/2020/07/effective-java-1/&quot;&gt;생성자 대신 정적 팩터리 메서드를 고려하라&lt;/a&gt;&lt;/h2&gt;
 &lt;h2 id=&quot;2-생성자에-매개변수가-많다면-빌더를-고려하라&quot;&gt;2. &lt;a href=&quot;/2020/07/effective-java-2/&quot;&gt;생성자에 매개변수가 많다면 빌더를 고려하라&lt;/a&gt;&lt;/h2&gt;
+&lt;h2 id=&quot;3-private-생성자나-열거-타입으로-싱글턴임을-보증하라&quot;&gt;3. &lt;a href=&quot;/2020/07/effective-java-3/&quot;&gt;private 생성자나 열거 타입으로 싱글턴임을 보증하라&lt;/a&gt;&lt;/h2&gt;
 </description>
 				<pubDate>Mon, 06 Jul 2020 08:00:00 +0900</pubDate>
 				<link>/2020/07/effectivejava-summary/</link>
@@ -921,30 +984,6 @@ class path resource [test.txt]
 				<pubDate>Thu, 21 May 2020 07:00:00 +0900</pubDate>
 				<link>/2020/05/spring-ApplicationEventPublisher/</link>
 				<guid isPermaLink="true">/2020/05/spring-ApplicationEventPublisher/</guid>
-			</item>
-		
-			<item>
-				<title>spring MessageSource</title>
-				<description>&lt;h1 id=&quot;messagesource&quot;&gt;MessageSource&lt;/h1&gt;
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;국제화(i18n)기능을 제공하는 인터페이스&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;ApplicationContext extends messageSource&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;스프링-부트를-사용한다면-설정-필요없이-messagesproperties-사용가능&quot;&gt;스프링 부트를 사용한다면 설정 필요없이 messages.properties 사용가능&lt;/h2&gt;
-&lt;ul&gt;
-  &lt;li&gt;messages.properties&lt;/li&gt;
-  &lt;li&gt;messages_ko_ko.properties&lt;/li&gt;
-&lt;/ul&gt;
-
-</description>
-				<pubDate>Tue, 19 May 2020 07:00:00 +0900</pubDate>
-				<link>/2020/05/spring-MessageSource/</link>
-				<guid isPermaLink="true">/2020/05/spring-MessageSource/</guid>
 			</item>
 		
 	</channel>

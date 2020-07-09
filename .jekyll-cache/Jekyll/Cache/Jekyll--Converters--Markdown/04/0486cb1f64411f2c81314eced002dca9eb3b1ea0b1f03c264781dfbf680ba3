@@ -1,0 +1,55 @@
+I"v<h1 id="private-생성자나-열거-타입으로-싱글턴임을-보증하라">private 생성자나 열거 타입으로 싱글턴임을 보증하라</h1>
+<ul>
+  <li>클래스를 싱글턴으로 만들면 이를 사용하는 클라이언트를 테스트하기가 어려워질 수 있다.</li>
+  <li>인터페이스를 구현해서 만든 싱글턴이 아니라면, mock 만들수 없기 때문이다.</li>
+</ul>
+
+<h2 id="첫번째-방법">첫번째 방법</h2>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Elvis</span><span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">Elvis</span> <span class="no">INSTANCE</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Elvis</span><span class="o">();</span>
+    <span class="kd">private</span> <span class="nf">Elvis</span><span class="o">(){}</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">leaveTheBuilding</span><span class="o">(){}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<ul>
+  <li>위 싱글턴 클래스는 딱한번 인스턴스 생성된다.</li>
+  <li>리플렉션을 사용하여 private 생성자를 호출할 수 있지만, 하나를 더 만드려고 할때 예외를 던지면 된다.</li>
+</ul>
+
+<h2 id="두번째-방법">두번째 방법</h2>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Elvis</span><span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">Elvis</span> <span class="no">INSTANCE</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Elvis</span><span class="o">();</span>
+    <span class="kd">private</span> <span class="nf">Elvis</span><span class="o">(){}</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="nc">Elvis</span> <span class="nf">getInstance</span><span class="o">(){</span><span class="k">return</span> <span class="no">INSTANCE</span><span class="o">;}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>무조건 getInstance를 사용하여, 접근하야여한다.
+    <h3 id="두번재-방법의-장점">두번재 방법의 장점</h3>
+  </li>
+  <li>마음이 바뀌면 API를 변경하지 않고 싱글턴이 아니게 변경할 수 있다.</li>
+  <li>유일한 인스턴스를 반환하던 팩터리 메서드가 스레드 별로 다른 인스턴스를 넘겨주게 할 수 있다.</li>
+  <li>정적 팩터리 메소드를 제네릭 싱글턴 팩터리로 만들수 있다.</li>
+  <li>정적 팩터리의 메서드 참조를 공급자로 사용할 수 있다. (Elvis::getInstance -&gt; Supplier<Elvis>)</Elvis></li>
+</ul>
+
+<h2 id="직렬화-한다면">직렬화 한다면?</h2>
+<ul>
+  <li>위 방식으로 만든 싱글턴을 직렬화 할때, Serializable을 구현하는건만으로는 안된다.</li>
+  <li>역직렬화 하는 순간, 초기화 해둔 인스턴스가 아닌 다른 인스턴스가 반환된다.</li>
+  <li>모든 인스턴스 필드를 transient로 선언하고 readResolve() 메서드를 제공해야한다.</li>
+  <li>readResolve 메서드를 제공하여, 역직렬화 과정에서 만들어진 인스턴스를 반환하도록 한다.</li>
+  <li>이렇게 하지 않으면, 역직렬화할 때 마다 새로운 인스턴스가 생성된다.
+    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">private</span> <span class="nc">Object</span> <span class="nf">readResolve</span><span class="o">(){</span>
+  <span class="k">return</span> <span class="no">INSTANCE</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h2 id="가장-간결한-싱글턴-방법---enum">가장 간결한 싱글턴 방법 - enum</h2>
+<ul>
+  <li>간결하지만, 부자연 스러워서,, 잘 사용안하는듯…</li>
+</ul>
+:ET
