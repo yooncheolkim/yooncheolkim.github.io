@@ -1,4 +1,4 @@
-I"é<div class="page-content wc-container">
+I"G<div class="page-content wc-container">
 	<div class="post">
 		<h1>Tags</h1>  
 		<ul>
@@ -44,6 +44,10 @@
 			<li><a href="/tag/prototype">prototype</a></li>
 			
 			<li><a href="/tag/scope">scope</a></li>
+			
+			<li><a href="/tag/react">react</a></li>
+			
+			<li><a href="/tag/hooks">hooks</a></li>
 			
 		</ul>
 	</div>

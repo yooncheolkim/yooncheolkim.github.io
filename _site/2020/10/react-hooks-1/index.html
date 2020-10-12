@@ -1,0 +1,474 @@
+
+
+
+
+
+
+
+
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>윤철이 블로그 | react hooks 1 </title>
+    <meta name="theme-color" content="#222222"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/popper.min.js"></script>
+    <script src="/assets/js/bootstrap4.min.js"></script>
+    <script src="/assets/js/header.js"></script>
+    <script src="/assets/css/svg-with-js/js/fontawesome-all.js"></script>
+    <link href="/assets/css/bootstrap4.min.css" rel="stylesheet">
+    <link href="/assets/css/theme.css" rel="stylesheet">
+    <link href="/assets/css/syntax.css" rel="stylesheet">
+ </head>
+
+<body>
+
+
+
+
+
+
+<script type="text/javascript">
+    WebFontConfig = {
+        google: {
+            families: ['Ubuntu::latin']
+        }
+    };
+    (function () {
+        var wf = document.createElement('script');
+        wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
+            '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+        wf.type = 'text/javascript';
+        wf.async = 'true';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(wf, s);
+    })();
+</script>
+
+<nav class="navbar navbar-expand-lg fixed-top navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">윤철이 블로그</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse"
+                data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <a class="nav-item nav-link" href="/">/home</a>
+                <a class="nav-item nav-link" href="/archive">/archive</a>
+                <a class="nav-item nav-link" href="/tags">/tags</a>
+                <a class="nav-item nav-link" href="/about">/about</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+    <div class="wrapper">
+      <div class="content">
+        <div class="container container-center">
+          <div class="row">
+            <div class="col-md-8 offset-md-1">
+              <div class="article">
+                <div class="card">
+                  <h1><a href="/2020/10/react-hooks-1/">react hooks 1</a></h1>
+                  <div class="post-meta">
+                    <div class="post-time">
+                      <i class="fa fa-calendar-alt"></i>
+                      <time>11 Oct 2020</time>
+                    </div>
+                    <ul>
+                      
+                        <li><a href="/tag/react">react</a></li>
+                      
+                        <li><a href="/tag/hooks">hooks</a></li>
+                      
+                    </ul>
+                  </div>
+                  <div class="post-content">
+                    
+                    <h1 id="hooks">Hooks</h1>
+
+<ul>
+  <li>v16.8에 새로 도입된 함수형 컴포넌트에서도 state 관리 가능하도록 다양한 작업을 할수 있도록 해줌.</li>
+  <li>클래스형 컴포넌트의 라이프사이플 느낌?</li>
+</ul>
+
+<h2 id="usestate">useState</h2>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="p">[</span><span class="nx">value</span><span class="p">,</span> <span class="nx">setValue</span><span class="p">]</span> <span class="o">=</span> <span class="nx">useState</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</code></pre></div></div>
+
+<h2 id="useeffect">useEffect</h2>
+
+<ul>
+  <li>컴포넌트가 렌더링될 때마다 특정 작업을 수행하도록 설정하는 hooks</li>
+  <li>클래스형 컴포넌트의 componentDidMount, componentDidUpdate를 합친 형태</li>
+</ul>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">function</span> <span class="nx">useEffect</span><span class="p">(</span><span class="nx">effect</span><span class="p">:</span> <span class="nx">EffectCallback</span><span class="p">,</span> <span class="nx">deps</span><span class="p">?:</span> <span class="nx">DependencyList</span><span class="p">):</span> <span class="k">void</span><span class="p">;</span>
+</code></pre></div></div>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="p">[</span><span class="nx">value</span><span class="p">,</span> <span class="nx">setValue</span><span class="p">]</span> <span class="o">=</span> <span class="nx">useState</span><span class="p">(</span><span class="dl">""</span><span class="p">);</span>
+<span class="kd">const</span> <span class="p">[</span><span class="nx">nickname</span><span class="p">,</span> <span class="nx">setNickname</span><span class="p">]</span> <span class="o">=</span> <span class="nx">useState</span><span class="p">(</span><span class="dl">""</span><span class="p">);</span>
+
+<span class="nx">useEffect</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">렌더링이 완료되었습니다!</span><span class="dl">"</span><span class="p">);</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">({</span>
+    <span class="nx">name</span><span class="p">,</span>
+    <span class="nx">nickname</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<h3 id="useeffect---마운트-될때만-실행">useEffect - 마운트 될때만 실행</h3>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">useEffect</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">마운트될 때만 실행합니다.</span><span class="dl">"</span><span class="p">);</span>
+<span class="p">},</span> <span class="p">[]);</span>
+</code></pre></div></div>
+
+<ul>
+  <li>컴포넌트가 처음 나타날때만 실행됨</li>
+</ul>
+
+<h3 id="useeffect---특정-값이-업데이트될때-실행">useEffect - 특정 값이 업데이트될때 실행</h3>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">useEffect</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">name</span><span class="p">);</span>
+<span class="p">},</span> <span class="p">[</span><span class="nx">name</span><span class="p">]);</span>
+</code></pre></div></div>
+
+<ul>
+  <li>[] 배열안에 useState 상태를 넣어주어도 되고, props로 전달받은것을 넣어줘도 된다.</li>
+</ul>
+
+<h3 id="useeffect---뒷정리하기">useEffect - 뒷정리하기</h3>
+
+<ul>
+  <li>useEffect 는 기본적으로 렌더링되고 난 직후 실행되며, 두 번째 파라미터에 따라 달라진다.</li>
+  <li>언마운트 혹은 업데이트되기 직전에 어떠한 작업을 수행하고 싶다면 cleanup 함수를 반환해 주어야 한다.</li>
+</ul>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">useEffect</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">effect</span><span class="dl">"</span><span class="p">);</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">name</span><span class="p">);</span>
+  <span class="k">return</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">cleanup</span><span class="dl">"</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">name</span><span class="p">);</span>
+  <span class="p">};</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<ul>
+  <li>위 처럼 하면, 컴포넌트가 나타날때 ‘effect’ 사라질때 ‘cleanup’</li>
+  <li>언마운트 될때만 함수를 호출하고 싶다면 ,[]); 두번째 파라미넡에 비어있는 배열을 넣으면 된다.</li>
+</ul>
+
+<h2 id="usereducer">useReducer</h2>
+
+<ul>
+  <li>리덕스 보고 다시 보기.</li>
+</ul>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nx">React</span><span class="p">,</span> <span class="p">{</span> <span class="nx">useReducer</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">react</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="kd">function</span> <span class="nx">reducer</span><span class="p">(</span><span class="nx">state</span><span class="p">,</span> <span class="nx">action</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">switch</span> <span class="p">(</span><span class="nx">action</span><span class="p">.</span><span class="nx">type</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="dl">"</span><span class="s2">INCREMENT</span><span class="dl">"</span><span class="p">:</span>
+      <span class="k">return</span> <span class="p">{</span> <span class="na">value</span><span class="p">:</span> <span class="nx">state</span><span class="p">.</span><span class="nx">value</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">};</span>
+    <span class="k">case</span> <span class="dl">"</span><span class="s2">DECREMENT</span><span class="dl">"</span><span class="p">:</span>
+      <span class="k">return</span> <span class="p">{</span> <span class="na">value</span><span class="p">:</span> <span class="nx">state</span><span class="p">.</span><span class="nx">value</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">};</span>
+    <span class="nl">default</span><span class="p">:</span>
+      <span class="k">return</span> <span class="nx">state</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">const</span> <span class="nx">Counter</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="p">[</span><span class="nx">state</span><span class="p">,</span> <span class="nx">dispatch</span><span class="p">]</span> <span class="o">=</span> <span class="nx">useReducer</span><span class="p">(</span><span class="nx">reducer</span><span class="p">,</span> <span class="p">{</span> <span class="na">value</span><span class="p">:</span> <span class="mi">0</span> <span class="p">});</span>
+
+  <span class="k">return</span> <span class="p">(</span>
+    <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>
+        <span class="err">현재</span> <span class="err">카운터</span> <span class="err">값은</span><span class="o">&lt;</span><span class="nx">b</span><span class="o">&gt;</span><span class="p">{</span><span class="nx">state</span><span class="p">.</span><span class="nx">value</span><span class="p">}</span><span class="o">&lt;</span><span class="sr">/b&gt;입니다</span><span class="err">.
+</span>      <span class="o">&lt;</span><span class="sr">/p</span><span class="err">&gt;
+</span>      <span class="o">&lt;</span><span class="nx">button</span> <span class="nx">onClick</span><span class="o">=</span><span class="p">{()</span> <span class="o">=&gt;</span> <span class="nx">dispatch</span><span class="p">({</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">INCREMENT</span><span class="dl">"</span> <span class="p">})}</span><span class="o">&gt;</span> <span class="o">+</span><span class="mi">1</span><span class="o">&lt;</span><span class="sr">/button</span><span class="err">&gt;
+</span>      <span class="o">&lt;</span><span class="nx">button</span> <span class="nx">onClick</span><span class="o">=</span><span class="p">{()</span> <span class="o">=&gt;</span> <span class="nx">dispatch</span><span class="p">({</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">DECREMENT</span><span class="dl">"</span> <span class="p">})}</span><span class="o">&gt;-</span><span class="mi">1</span><span class="o">&lt;</span><span class="sr">/button</span><span class="err">&gt;
+</span>    <span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>  <span class="p">);</span>
+<span class="p">};</span>
+
+<span class="k">export</span> <span class="k">default</span> <span class="nx">Counter</span><span class="p">;</span>
+</code></pre></div></div>
+
+<h2 id="usememo">useMemo</h2>
+
+<ul>
+  <li>컴포넌트 내부의 연산을 최적화할 수 있다.</li>
+  <li>렌더링 하는 과정에서 특정 값이 바뀌었을 때만 연산을 실행하고, 원하는 값이 바뀌지 않았다면 이전 결과를 다시 사용.</li>
+</ul>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nx">React</span><span class="p">,</span> <span class="p">{</span> <span class="nx">useMemo</span><span class="p">,</span> <span class="nx">useState</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">react</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="kd">const</span> <span class="nx">getAverage</span> <span class="o">=</span> <span class="nx">numbers</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">평균값 계산 중..</span><span class="dl">"</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">numbers</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="kd">const</span> <span class="nx">sum</span> <span class="o">=</span> <span class="nx">numbers</span><span class="p">.</span><span class="nx">reduce</span><span class="p">((</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">a</span> <span class="o">+</span> <span class="nx">b</span><span class="p">);</span>
+  <span class="k">return</span> <span class="nx">sum</span> <span class="o">/</span> <span class="nx">numbers</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="kd">const</span> <span class="nx">Average</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="p">[</span><span class="nx">list</span><span class="p">,</span> <span class="nx">setList</span><span class="p">]</span> <span class="o">=</span> <span class="nx">useState</span><span class="p">([]);</span>
+  <span class="kd">const</span> <span class="p">[</span><span class="nx">number</span><span class="p">,</span> <span class="nx">setNumber</span><span class="p">]</span> <span class="o">=</span> <span class="nx">useState</span><span class="p">(</span><span class="dl">""</span><span class="p">);</span>
+
+  <span class="kd">const</span> <span class="nx">onChange</span> <span class="o">=</span> <span class="nx">e</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">setNumber</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">value</span><span class="p">);</span>
+  <span class="p">};</span>
+
+  <span class="kd">const</span> <span class="nx">onInsert</span> <span class="o">=</span> <span class="nx">e</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">nextList</span> <span class="o">=</span> <span class="nx">list</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nb">parseInt</span><span class="p">(</span><span class="nx">number</span><span class="p">));</span>
+    <span class="nx">setList</span><span class="p">(</span><span class="nx">nextList</span><span class="p">);</span>
+    <span class="nx">setNumber</span><span class="p">(</span><span class="dl">""</span><span class="p">);</span>
+  <span class="p">};</span>
+
+  <span class="kd">const</span> <span class="nx">avg</span> <span class="o">=</span> <span class="nx">useMemo</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="nx">getAverage</span><span class="p">(</span><span class="nx">list</span><span class="p">),</span> <span class="p">[</span><span class="nx">list</span><span class="p">]);</span>
+
+  <span class="k">return</span> <span class="p">(</span>
+    <span class="o">&lt;&gt;</span>
+      <span class="o">&lt;</span><span class="nx">input</span> <span class="nx">value</span><span class="o">=</span><span class="p">{</span><span class="nx">number</span><span class="p">}</span> <span class="nx">onChange</span><span class="o">=</span><span class="p">{</span><span class="nx">onChange</span><span class="p">}</span><span class="o">&gt;&lt;</span><span class="sr">/input</span><span class="err">&gt;
+</span>      <span class="o">&lt;</span><span class="nx">button</span> <span class="nx">onClick</span><span class="o">=</span><span class="p">{</span><span class="nx">onInsert</span><span class="p">}</span><span class="o">&gt;</span><span class="err">등록</span><span class="o">&lt;</span><span class="sr">/button</span><span class="err">&gt;
+</span>      <span class="o">&lt;</span><span class="nx">ul</span><span class="o">&gt;</span>
+        <span class="p">{</span><span class="nx">list</span><span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="nx">value</span><span class="p">,</span> <span class="nx">index</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">(</span>
+          <span class="o">&lt;</span><span class="nx">li</span> <span class="nx">key</span><span class="o">=</span><span class="p">{</span><span class="nx">index</span><span class="p">}</span><span class="o">&gt;</span><span class="p">{</span><span class="nx">value</span><span class="p">}</span><span class="o">&lt;</span><span class="sr">/li</span><span class="err">&gt;
+</span>        <span class="p">))}</span>
+      <span class="o">&lt;</span><span class="sr">/ul</span><span class="err">&gt;
+</span>      <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="nx">b</span><span class="o">&gt;</span><span class="err">평균값</span><span class="p">:</span> <span class="o">&lt;</span><span class="sr">/b</span><span class="err">&gt;
+</span>        <span class="p">{</span><span class="nx">avg</span><span class="p">}</span>
+      <span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>    <span class="o">&lt;</span><span class="sr">/</span><span class="err">&gt;
+</span>  <span class="p">);</span>
+<span class="p">};</span>
+
+<span class="k">export</span> <span class="k">default</span> <span class="nx">Average</span><span class="p">;</span>
+</code></pre></div></div>
+
+<h2 id="usecallback">useCallback</h2>
+
+<ul>
+  <li>컴포넌트가 리렌더링 될때마다, 새로 만들어진 함수를 사용하게 된다.</li>
+  <li>최적화 해주는것</li>
+</ul>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">onChange</span> <span class="o">=</span> <span class="nx">useCallback</span><span class="p">(</span><span class="nx">e</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">setNumber</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">value</span><span class="p">);</span>
+<span class="p">},</span> <span class="p">[]);</span> <span class="c1">//컴포넌트가 처음 렌더링 될때만 함수 생성</span>
+
+<span class="kd">const</span> <span class="nx">onInsert</span> <span class="o">=</span> <span class="nx">useCallback</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">nextList</span> <span class="o">=</span> <span class="nx">list</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nb">parseInt</span><span class="p">(</span><span class="nx">number</span><span class="p">));</span>
+  <span class="nx">setList</span><span class="p">(</span><span class="nx">nextList</span><span class="p">);</span>
+  <span class="nx">setNumber</span><span class="p">(</span><span class="dl">""</span><span class="p">);</span>
+<span class="p">},</span> <span class="p">[</span><span class="nx">number</span><span class="p">,</span> <span class="nx">list</span><span class="p">]);</span> <span class="c1">// number, list가 바뀌었을 때만 함수 생성</span>
+</code></pre></div></div>
+
+<ul>
+  <li>함수에서 상태 값을 사용할때 무조건 두번째 인자에 넣어줘야함.</li>
+</ul>
+
+<h2 id="useref">useRef</h2>
+
+<ul>
+  <li>함수형 컴포넌트에서 ref 사용할 수 있도록 해줌.</li>
+</ul>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">inputEl</span> <span class="o">=</span> <span class="nx">useRef</span><span class="p">(</span><span class="kc">null</span><span class="p">);</span>
+
+<span class="kd">const</span> <span class="nx">onInsert</span> <span class="o">=</span> <span class="nx">useCallback</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">nextList</span> <span class="o">=</span> <span class="nx">list</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nb">parseInt</span><span class="p">(</span><span class="nx">number</span><span class="p">));</span>
+  <span class="nx">setList</span><span class="p">(</span><span class="nx">nextList</span><span class="p">);</span>
+  <span class="nx">setNumber</span><span class="p">(</span><span class="dl">""</span><span class="p">);</span>
+  <span class="nx">inputEl</span><span class="p">.</span><span class="nx">current</span><span class="p">.</span><span class="nx">focuse</span><span class="p">();</span>
+<span class="p">},</span> <span class="p">[</span><span class="nx">number</span><span class="p">,</span> <span class="nx">list</span><span class="p">]);</span>
+
+<span class="o">&lt;</span><span class="nx">input</span> <span class="nx">value</span><span class="o">=</span><span class="p">{</span><span class="nx">number</span><span class="p">}</span> <span class="nx">onChange</span><span class="o">=</span><span class="p">{</span><span class="nx">onChange</span><span class="p">}</span> <span class="nx">ref</span><span class="o">=</span><span class="p">{</span><span class="nx">inputEl</span><span class="p">}</span><span class="o">&gt;&lt;</span><span class="sr">/input&gt;</span><span class="err">;
+</span></code></pre></div></div>
+
+<ul>
+  <li>current 값이 실제 엘리먼트를 가리킨다.</li>
+</ul>
+
+                    
+
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3 hidden-xs">
+              <div class="sidebar ">
+  <h2>Recent Posts</h2>
+  <ul>
+    
+    <li><a href="/2020/10/react-hooks-1/">react hooks 1</a></li>
+    
+    <li><a href="/2020/07/effective-java-3/">이펙티브 자바 싱글턴 직렬화</a></li>
+    
+    <li><a href="/2020/07/effective-java-2/">이펙티브 자바 빌더 패턴</a></li>
+    
+    <li><a href="/2020/07/effectivejava-summary/">effective java 요약 정리</a></li>
+    
+    <li><a href="/2020/07/effective-java-1/">이펙티브 자바 팩터리 메서드</a></li>
+    
+  </ul>
+</div>
+
+<div class="sidebar">
+  <h2>Tags</h2>
+  <ul class="sideBarTags">
+    
+    
+    <li>
+      <a href="/tag/EC2" data-toggle="tooltip" data-placement="right" title="2">
+        <span>EC2</span></a></li>
+    
+    <li>
+      <a href="/tag/Resource" data-toggle="tooltip" data-placement="right" title="1">
+        <span>Resource</span></a></li>
+    
+    <li>
+      <a href="/tag/Travis" data-toggle="tooltip" data-placement="right" title="1">
+        <span>Travis</span></a></li>
+    
+    <li>
+      <a href="/tag/Validation" data-toggle="tooltip" data-placement="right" title="1">
+        <span>Validation</span></a></li>
+    
+    <li>
+      <a href="/tag/aws" data-toggle="tooltip" data-placement="right" title="2">
+        <span>aws</span></a></li>
+    
+    <li>
+      <a href="/tag/docker" data-toggle="tooltip" data-placement="right" title="1">
+        <span>docker</span></a></li>
+    
+    <li>
+      <a href="/tag/git" data-toggle="tooltip" data-placement="right" title="1">
+        <span>git</span></a></li>
+    
+    <li>
+      <a href="/tag/hooks" data-toggle="tooltip" data-placement="right" title="1">
+        <span>hooks</span></a></li>
+    
+    <li>
+      <a href="/tag/java" data-toggle="tooltip" data-placement="right" title="6">
+        <span>java</span></a></li>
+    
+    <li>
+      <a href="/tag/javascript" data-toggle="tooltip" data-placement="right" title="2">
+        <span>javascript</span></a></li>
+    
+    <li>
+      <a href="/tag/jekyll" data-toggle="tooltip" data-placement="right" title="1">
+        <span>jekyll</span></a></li>
+    
+    <li>
+      <a href="/tag/jenkins" data-toggle="tooltip" data-placement="right" title="1">
+        <span>jenkins</span></a></li>
+    
+    <li>
+      <a href="/tag/js" data-toggle="tooltip" data-placement="right" title="1">
+        <span>js</span></a></li>
+    
+    <li>
+      <a href="/tag/lombok" data-toggle="tooltip" data-placement="right" title="1">
+        <span>lombok</span></a></li>
+    
+    <li>
+      <a href="/tag/maven" data-toggle="tooltip" data-placement="right" title="1">
+        <span>maven</span></a></li>
+    
+    <li>
+      <a href="/tag/property" data-toggle="tooltip" data-placement="right" title="1">
+        <span>property</span></a></li>
+    
+    <li>
+      <a href="/tag/prototype" data-toggle="tooltip" data-placement="right" title="1">
+        <span>prototype</span></a></li>
+    
+    <li>
+      <a href="/tag/react" data-toggle="tooltip" data-placement="right" title="1">
+        <span>react</span></a></li>
+    
+    <li>
+      <a href="/tag/scope" data-toggle="tooltip" data-placement="right" title="1">
+        <span>scope</span></a></li>
+    
+    <li>
+      <a href="/tag/segmentTree" data-toggle="tooltip" data-placement="right" title="1">
+        <span>segmentTree</span></a></li>
+    
+    <li>
+      <a href="/tag/spring" data-toggle="tooltip" data-placement="right" title="10">
+        <span>spring</span></a></li>
+    
+    <li>
+      <a href="/tag/%EC%84%B8%EA%B7%B8%EB%A8%BC%ED%8A%B8%ED%8A%B8%EB%A6%AC" data-toggle="tooltip" data-placement="right" title="1">
+        <span>세그먼트트리</span></a></li>
+    
+    <li>
+      <a href="/tag/%EC%8B%9C%EB%AE%AC%EB%A0%88%EC%9D%B4%EC%85%98" data-toggle="tooltip" data-placement="right" title="1">
+        <span>시뮬레이션</span></a></li>
+    
+  </ul>
+</div>
+
+            </div>
+          </div>
+        </div>
+        
+
+      </div>
+          <footer class="footer-distributed">
+      <div class="container">
+        <div class="footer">
+          <p>yooncheolkim &copy; 2020</p>
+          <h6>Follow me</h6>
+
+<ul class="social-media">
+
+  
+    <li>
+      <a title="yooncheolkim on Github" href="https://github.com/yooncheolkim" target="_blank"><i class="fab fa-github fa-2x"></i></a>
+    </li>
+  
+
+  
+
+  
+
+  
+    <li>
+      <a title="k.yooncheol on Instagram" href="https://instagram.com/k.yooncheol" target="_blank"><i class="fab fa-instagram fa-2x"></i></a>
+    </li>
+  
+
+  
+
+  
+    <li>
+      <a title="feed.xml RSS" href="/feed.xml" target="_blank"><i class="fas fa-rss fa-2x"></i></a>
+    </li>
+  
+
+</ul>
+
+        </div>
+      </div>
+    </footer>
+
+    </div>
+  </body>
+</html>
