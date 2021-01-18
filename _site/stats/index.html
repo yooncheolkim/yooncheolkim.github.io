@@ -102,6 +102,20 @@
     var datePostsWords = [
         
             {
+                "t":"2021-1",
+                "year":"2021",
+                "x":1,
+                "y":3
+            },
+        
+            {
+                "t":"2021-1",
+                "year":"2021",
+                "x":1,
+                "y":259
+            },
+        
+            {
                 "t":"2020-10",
                 "year":"2020",
                 "x":1,
@@ -293,7 +307,7 @@
     ];
 
     var sy = "2020",
-        ey = "2020";
+        ey = "2021";
 
     var datePostsWordsZeros = [];
     for (var i = parseInt(sy); i <= parseInt(ey); i++) {
@@ -416,6 +430,12 @@
              "javascript", 
         
             
+             "prototype", 
+        
+            
+             "property", 
+        
+            
              "aws", 
         
             
@@ -435,12 +455,6 @@
         
             
              "react", 
-        
-            
-             "prototype", 
-        
-            
-             "property", 
         
             
              "maven", 
@@ -467,6 +481,12 @@
              "docker", 
         
             
+             "call", 
+        
+            
+             "apply", 
+        
+            
              "Validation", 
         
             
@@ -487,6 +507,12 @@
         
             
              6, 
+        
+            
+             4, 
+        
+            
+             2, 
         
             
              2, 
@@ -581,6 +607,10 @@
 <script>
     var totalWords = [
         
+            3,
+        
+            259,
+        
             1212,
         
             285,
@@ -636,7 +666,7 @@
             16,
         
     ].reduce((a, b) => a + b, 0);
-    var totalPosts = 27;
+    var totalPosts = 29;
 
     function concatBoldTextToELement(id, text) {
         var abvgd = document.createElement('b');
@@ -657,15 +687,15 @@
   <h2>Recent Posts</h2>
   <ul>
     
+    <li><a href="/2021/01/js-call-apply/">자바스크립트 call apply</a></li>
+    
+    <li><a href="/2021/01/js-property/">자바스크립트 프로퍼티</a></li>
+    
     <li><a href="/2020/10/react-hooks-1/">react hooks 1</a></li>
     
     <li><a href="/2020/07/effective-java-3/">이펙티브 자바 싱글턴 직렬화</a></li>
     
     <li><a href="/2020/07/effective-java-2/">이펙티브 자바 빌더 패턴</a></li>
-    
-    <li><a href="/2020/07/effectivejava-summary/">effective java 요약 정리</a></li>
-    
-    <li><a href="/2020/07/effective-java-1/">이펙티브 자바 팩터리 메서드</a></li>
     
   </ul>
 </div>
@@ -692,8 +722,16 @@
         <span>Validation</span></a></li>
     
     <li>
+      <a href="/tag/apply" data-toggle="tooltip" data-placement="right" title="1">
+        <span>apply</span></a></li>
+    
+    <li>
       <a href="/tag/aws" data-toggle="tooltip" data-placement="right" title="2">
         <span>aws</span></a></li>
+    
+    <li>
+      <a href="/tag/call" data-toggle="tooltip" data-placement="right" title="1">
+        <span>call</span></a></li>
     
     <li>
       <a href="/tag/docker" data-toggle="tooltip" data-placement="right" title="1">
@@ -712,7 +750,7 @@
         <span>java</span></a></li>
     
     <li>
-      <a href="/tag/javascript" data-toggle="tooltip" data-placement="right" title="2">
+      <a href="/tag/javascript" data-toggle="tooltip" data-placement="right" title="4">
         <span>javascript</span></a></li>
     
     <li>
@@ -736,11 +774,11 @@
         <span>maven</span></a></li>
     
     <li>
-      <a href="/tag/property" data-toggle="tooltip" data-placement="right" title="1">
+      <a href="/tag/property" data-toggle="tooltip" data-placement="right" title="2">
         <span>property</span></a></li>
     
     <li>
-      <a href="/tag/prototype" data-toggle="tooltip" data-placement="right" title="1">
+      <a href="/tag/prototype" data-toggle="tooltip" data-placement="right" title="2">
         <span>prototype</span></a></li>
     
     <li>
