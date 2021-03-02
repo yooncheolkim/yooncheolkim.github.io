@@ -11,7 +11,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>윤철이 블로그 | 자바스크립트 call apply </title>
+    <title>윤철이 블로그 | 자바스크립트 this 주의점 </title>
     <meta name="theme-color" content="#222222"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="/assets/js/jquery.min.js"></script>
@@ -74,27 +74,79 @@
             <div class="col-md-8 offset-md-1">
               <div class="article">
                 <div class="card">
-                  <h1><a href="/2021/01/js-call-apply/">자바스크립트 call apply</a></h1>
+                  <h1><a href="/2021/03/js-this/">자바스크립트 this 주의점</a></h1>
                   <div class="post-meta">
                     <div class="post-time">
                       <i class="fa fa-calendar-alt"></i>
-                      <time>19 Jan 2021</time>
+                      <time>01 Mar 2021</time>
                     </div>
                     <ul>
                       
                         <li><a href="/tag/javascript">javascript</a></li>
                       
-                        <li><a href="/tag/call">call</a></li>
+                        <li><a href="/tag/arrow">arrow</a></li>
                       
-                        <li><a href="/tag/apply">apply</a></li>
+                        <li><a href="/tag/function">function</a></li>
+                      
+                        <li><a href="/tag/this">this</a></li>
                       
                     </ul>
                   </div>
                   <div class="post-content">
                     
-                    <h1 id="call">call</h1>
+                    <h1 id="arrow-function-과-그냥-function-의-this">arrow function 과 그냥 function 의 this</h1>
 
-<p>-</p>
+<ul>
+  <li>this는 function 실행 시점의 해당 function의 객체를 의미한다.</li>
+  <li>람다 function의 경우, this는 선언된 곳에서의 this를 지정해보린다.</li>
+</ul>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">param</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">global param</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="kd">function</span> <span class="nx">printParam</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">param</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kd">let</span> <span class="nx">object</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">param</span><span class="p">:</span> <span class="dl">"</span><span class="s2">object param</span><span class="dl">"</span><span class="p">,</span>
+  <span class="na">func</span><span class="p">:</span> <span class="nx">printParam</span>
+<span class="p">};</span>
+<span class="kd">let</span> <span class="nx">object2</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">param</span><span class="p">:</span> <span class="dl">"</span><span class="s2">object2 param</span><span class="dl">"</span><span class="p">,</span>
+  <span class="na">func</span><span class="p">:</span> <span class="nx">printParam</span>
+<span class="p">};</span>
+
+<span class="nx">object</span><span class="p">.</span><span class="nx">func</span><span class="p">();</span> <span class="c1">//object param</span>
+<span class="nx">object2</span><span class="p">.</span><span class="nx">func</span><span class="p">();</span> <span class="c1">//object2 param</span>
+</code></pre></div></div>
+
+<ul>
+  <li>printParm은 정의가 되고, object로 인해 실행되기 때문에 this는 각 object</li>
+</ul>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">param</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">global param</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="kd">let</span> <span class="nx">printParam</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">param</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="kd">let</span> <span class="nx">object</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">param</span><span class="p">:</span> <span class="dl">"</span><span class="s2">object param</span><span class="dl">"</span><span class="p">,</span>
+  <span class="na">func</span><span class="p">:</span> <span class="nx">printParam</span>
+<span class="p">};</span>
+<span class="kd">let</span> <span class="nx">object2</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">param</span><span class="p">:</span> <span class="dl">"</span><span class="s2">object2 param</span><span class="dl">"</span><span class="p">,</span>
+  <span class="na">func</span><span class="p">:</span> <span class="nx">printParam</span>
+<span class="p">};</span>
+
+<span class="nx">object</span><span class="p">.</span><span class="nx">func</span><span class="p">();</span> <span class="c1">//global param</span>
+<span class="nx">object2</span><span class="p">.</span><span class="nx">func</span><span class="p">();</span> <span class="c1">//global param</span>
+</code></pre></div></div>
+
+<ul>
+  <li>printParam은 람다식으로 정의 됨.</li>
+  <li>printParam의 this는 global을 지정하고 있다.</li>
+</ul>
 
                     
 
@@ -108,15 +160,15 @@
   <h2>Recent Posts</h2>
   <ul>
     
-    <li><a href="/2021/01/js-call-apply/">자바스크립트 call apply</a></li>
+    <li><a href="/2021/03/js-promise-await-async/">자바스크립트 promise await async</a></li>
+    
+    <li><a href="/2021/03/js-this/">자바스크립트 this 주의점</a></li>
     
     <li><a href="/2021/01/js-property/">자바스크립트 프로퍼티</a></li>
     
     <li><a href="/2020/10/react-hooks-1/">react hooks 1</a></li>
     
     <li><a href="/2020/07/effective-java-3/">이펙티브 자바 싱글턴 직렬화</a></li>
-    
-    <li><a href="/2020/07/effective-java-2/">이펙티브 자바 빌더 패턴</a></li>
     
   </ul>
 </div>
@@ -143,20 +195,28 @@
         <span>Validation</span></a></li>
     
     <li>
-      <a href="/tag/apply" data-toggle="tooltip" data-placement="right" title="1">
-        <span>apply</span></a></li>
+      <a href="/tag/arrow" data-toggle="tooltip" data-placement="right" title="1">
+        <span>arrow</span></a></li>
+    
+    <li>
+      <a href="/tag/async" data-toggle="tooltip" data-placement="right" title="1">
+        <span>async</span></a></li>
+    
+    <li>
+      <a href="/tag/await" data-toggle="tooltip" data-placement="right" title="1">
+        <span>await</span></a></li>
     
     <li>
       <a href="/tag/aws" data-toggle="tooltip" data-placement="right" title="2">
         <span>aws</span></a></li>
     
     <li>
-      <a href="/tag/call" data-toggle="tooltip" data-placement="right" title="1">
-        <span>call</span></a></li>
-    
-    <li>
       <a href="/tag/docker" data-toggle="tooltip" data-placement="right" title="1">
         <span>docker</span></a></li>
+    
+    <li>
+      <a href="/tag/function" data-toggle="tooltip" data-placement="right" title="1">
+        <span>function</span></a></li>
     
     <li>
       <a href="/tag/git" data-toggle="tooltip" data-placement="right" title="1">
@@ -171,7 +231,7 @@
         <span>java</span></a></li>
     
     <li>
-      <a href="/tag/javascript" data-toggle="tooltip" data-placement="right" title="4">
+      <a href="/tag/javascript" data-toggle="tooltip" data-placement="right" title="5">
         <span>javascript</span></a></li>
     
     <li>
@@ -193,6 +253,10 @@
     <li>
       <a href="/tag/maven" data-toggle="tooltip" data-placement="right" title="1">
         <span>maven</span></a></li>
+    
+    <li>
+      <a href="/tag/promise" data-toggle="tooltip" data-placement="right" title="1">
+        <span>promise</span></a></li>
     
     <li>
       <a href="/tag/property" data-toggle="tooltip" data-placement="right" title="2">
@@ -217,6 +281,10 @@
     <li>
       <a href="/tag/spring" data-toggle="tooltip" data-placement="right" title="10">
         <span>spring</span></a></li>
+    
+    <li>
+      <a href="/tag/this" data-toggle="tooltip" data-placement="right" title="1">
+        <span>this</span></a></li>
     
     <li>
       <a href="/tag/%EC%84%B8%EA%B7%B8%EB%A8%BC%ED%8A%B8%ED%8A%B8%EB%A6%AC" data-toggle="tooltip" data-placement="right" title="1">

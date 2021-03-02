@@ -1,0 +1,54 @@
+I"�<h1 id="arrow-function-과-그냥-function-의-this">arrow function 과 그냥 function 의 this</h1>
+
+<ul>
+  <li>this는 function 실행 시점의 해당 function의 객체를 의미한다.</li>
+  <li>람다 function의 경우, this는 선언된 곳에서의 this를 지정해보린다.</li>
+</ul>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">param</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">global param</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="kd">function</span> <span class="nx">printParam</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">param</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kd">let</span> <span class="nx">object</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">param</span><span class="p">:</span> <span class="dl">"</span><span class="s2">object param</span><span class="dl">"</span><span class="p">,</span>
+  <span class="na">func</span><span class="p">:</span> <span class="nx">printParam</span>
+<span class="p">};</span>
+<span class="kd">let</span> <span class="nx">object2</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">param</span><span class="p">:</span> <span class="dl">"</span><span class="s2">object2 param</span><span class="dl">"</span><span class="p">,</span>
+  <span class="na">func</span><span class="p">:</span> <span class="nx">printParam</span>
+<span class="p">};</span>
+
+<span class="nx">object</span><span class="p">.</span><span class="nx">func</span><span class="p">();</span> <span class="c1">//object param</span>
+<span class="nx">object2</span><span class="p">.</span><span class="nx">func</span><span class="p">();</span> <span class="c1">//object2 param</span>
+</code></pre></div></div>
+
+<ul>
+  <li>printParm은 정의가 되고, object로 인해 실행되기 때문에 this는 각 object</li>
+</ul>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">param</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">global param</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="kd">let</span> <span class="nx">printParam</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">param</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="kd">let</span> <span class="nx">object</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">param</span><span class="p">:</span> <span class="dl">"</span><span class="s2">object param</span><span class="dl">"</span><span class="p">,</span>
+  <span class="na">func</span><span class="p">:</span> <span class="nx">printParam</span>
+<span class="p">};</span>
+<span class="kd">let</span> <span class="nx">object2</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">param</span><span class="p">:</span> <span class="dl">"</span><span class="s2">object2 param</span><span class="dl">"</span><span class="p">,</span>
+  <span class="na">func</span><span class="p">:</span> <span class="nx">printParam</span>
+<span class="p">};</span>
+
+<span class="nx">object</span><span class="p">.</span><span class="nx">func</span><span class="p">();</span> <span class="c1">//global param</span>
+<span class="nx">object2</span><span class="p">.</span><span class="nx">func</span><span class="p">();</span> <span class="c1">//global param</span>
+</code></pre></div></div>
+
+<ul>
+  <li>printParam은 람다식으로 정의 됨.</li>
+  <li>printParam의 this는 global을 지정하고 있다.</li>
+</ul>
+:ET

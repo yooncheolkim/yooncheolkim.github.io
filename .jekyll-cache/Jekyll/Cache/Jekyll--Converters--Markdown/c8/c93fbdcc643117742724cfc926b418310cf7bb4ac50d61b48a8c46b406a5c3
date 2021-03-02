@@ -1,0 +1,146 @@
+I"N1<h1 id="promise">promise</h1>
+
+<h3 id="콜백-예제">콜백 예제</h3>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">setTimeout</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">3초 걸림!</span><span class="dl">"</span><span class="p">);</span>
+<span class="p">},</span> <span class="mi">3000</span><span class="p">);</span>
+</code></pre></div></div>
+
+<ul>
+  <li>콜백함수 : 함수 인자로 넣어 해당 함수 안에서 실행되는 콜백(사용자가 넣어주는).</li>
+  <li>만약, 시작 시점으로 부터 1초후에 do something, 함수 끝나고 1초후에 do something, 함수끝나고 1초후에 do something 하고 싶다면?</li>
+</ul>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">setTimeout</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">1초 걸림!</span><span class="dl">"</span><span class="p">);</span>
+<span class="p">},</span> <span class="mi">1000</span><span class="p">);</span>
+
+<span class="nx">setTimeout</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">2초 걸림!</span><span class="dl">"</span><span class="p">);</span>
+<span class="p">},</span> <span class="mi">1000</span><span class="p">);</span>
+
+<span class="nx">setTimeout</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">3초 걸림!</span><span class="dl">"</span><span class="p">);</span>
+<span class="p">},</span> <span class="mi">1000</span><span class="p">);</span>
+</code></pre></div></div>
+
+<ul>
+  <li>이렇게 하면, setTimeout은 모두 비동기이기 때문에 1초후 모든 함수가 찍힌다.</li>
+</ul>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">setTimeout</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="c1">//1</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">1초 걸림!</span><span class="dl">"</span><span class="p">);</span>
+<span class="p">},</span> <span class="mi">1000</span><span class="p">);</span>
+
+<span class="nx">setTimeout</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="c1">//2</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">2초 걸림!</span><span class="dl">"</span><span class="p">);</span>
+<span class="p">},</span> <span class="mi">2000</span><span class="p">);</span>
+
+<span class="nx">setTimeout</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="c1">//3</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">3초 걸림!</span><span class="dl">"</span><span class="p">);</span>
+<span class="p">},</span> <span class="mi">3000</span><span class="p">);</span>
+</code></pre></div></div>
+
+<ul>
+  <li>이렇게 setTimeout의 시간을 바꿔서 할수도 있지만, 1번 후에 2번이 실행된다는 것을 보장하지 못한다.</li>
+</ul>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">setTimeout</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">setTimeout</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">setTimeout</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">3초 걸림!</span><span class="dl">"</span><span class="p">);</span>
+    <span class="p">},</span> <span class="mi">1000</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">2초 걸림!</span><span class="dl">"</span><span class="p">);</span>
+  <span class="p">},</span> <span class="mi">1000</span><span class="p">);</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">1초 걸림!</span><span class="dl">"</span><span class="p">);</span>
+<span class="p">},</span> <span class="mi">1000</span><span class="p">);</span>
+</code></pre></div></div>
+
+<ul>
+  <li>이렇게 하면 각 콜백이 끝날때 마다 setTimeout을 호출해서 비동기 콜백을 등록하기 때문에, 문제없이 동작한다.</li>
+  <li>하지만, 이런 동작이 10개있다고 생각하면, 들여쓰기는 계속 들어가고, 코드 읽기도 굉장히 힘들어 진다. - callback hell</li>
+</ul>
+
+<h3 id="promise로-문제해결">promise로 문제해결</h3>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">///promise 를 return 하는 함수</span>
+<span class="kd">function</span> <span class="nx">delayP</span><span class="p">(</span><span class="nx">sec</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="k">new</span> <span class="nb">Promise</span><span class="p">((</span><span class="nx">resolve</span><span class="p">,</span> <span class="nx">reject</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">setTimeout</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">resolve</span><span class="p">();</span> <span class="c1">// resolve를 return 하여 정상적으로 끝남.</span>
+    <span class="p">},</span> <span class="nx">sec</span> <span class="o">*</span> <span class="mi">1</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">}</span>
+
+<span class="nx">delayP</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="c1">// promise를 리턴하는 함수 실행.</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">result</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="c1">//.then으로 실행한 결과를 가지고, 어떤일을 함.</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">1초 걸림!</span><span class="dl">"</span><span class="p">);</span>
+    <span class="c1">//다시 promise를 리턴</span>
+    <span class="k">return</span> <span class="nx">delayP</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+  <span class="p">})</span>
+  <span class="c1">//위에서 return 한 promise를 다시 받음.</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">result</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">2초 걸림!</span><span class="dl">"</span><span class="p">);</span>
+  <span class="p">});</span>
+</code></pre></div></div>
+
+<ul>
+  <li>promise.then을 사용하여, 비동기 연산을 순차적으로 진행하게 할수 있다.</li>
+</ul>
+
+<h3 id="async-await">async await</h3>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">myFunc</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="dl">"</span><span class="s2">func</span><span class="dl">"</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="k">async</span> <span class="kd">function</span> <span class="nx">myAsync</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="dl">"</span><span class="s2">async</span><span class="dl">"</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">myFunc</span><span class="p">());</span> <span class="c1">// func</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">myAsync</span><span class="p">());</span> <span class="c1">//promise(fulfilled:"async")</span>
+</code></pre></div></div>
+
+<ul>
+  <li>functino 앞에 async를 붙여주면, promise를 리턴하는 함수로 바꿔준다.</li>
+  <li>then을 사용할수 있는 promise를 리턴한다.</li>
+  <li>new Promise 하서 resolve, reject처리할 필요 , return throw만으로 굉장히 편하게 Promise를 만들어낼 수 있다.</li>
+</ul>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">myAsync</span><span class="p">().</span><span class="nx">then</span><span class="p">(</span><span class="nx">result</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span> <span class="c1">// async</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">async</span> <span class="kd">function</span> <span class="nx">myAsync</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">delayP</span><span class="p">(</span><span class="mi">3</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="nx">time</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">time</span><span class="p">);</span>
+  <span class="p">});</span>
+  <span class="k">return</span> <span class="dl">"</span><span class="s2">async</span><span class="dl">"</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>이렇게 하면 delayP 함수 호출과 동시에 비동기 이기 때문에 바로 return “async” 된다.</li>
+  <li>만약, 3초 기다렸다가 return 하고 싶다면?</li>
+</ul>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">async</span> <span class="kd">function</span> <span class="nx">myAsync</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">await</span> <span class="nx">delayP</span><span class="p">(</span><span class="mi">3</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="nx">time</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">time</span><span class="p">);</span>
+  <span class="p">});</span>
+  <span class="k">return</span> <span class="dl">"</span><span class="s2">async</span><span class="dl">"</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>async 함수에서는 await 사용할 수 있다.</li>
+  <li>await를 기다렸다가 다음 return 을 실행한다.</li>
+  <li>일반 함수앞에 await를 붙여도 상관없다!</li>
+</ul>
+:ET

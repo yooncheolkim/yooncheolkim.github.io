@@ -1,4 +1,4 @@
-I"G<div class="page-content wc-container">
+I"i<div class="page-content wc-container">
 	<div class="post">
 		<h1>Tags</h1>  
 		<ul>
@@ -48,6 +48,18 @@
 			<li><a href="/tag/react">react</a></li>
 			
 			<li><a href="/tag/hooks">hooks</a></li>
+			
+			<li><a href="/tag/arrow">arrow</a></li>
+			
+			<li><a href="/tag/function">function</a></li>
+			
+			<li><a href="/tag/this">this</a></li>
+			
+			<li><a href="/tag/promise">promise</a></li>
+			
+			<li><a href="/tag/await">await</a></li>
+			
+			<li><a href="/tag/async">async</a></li>
 			
 		</ul>
 	</div>
