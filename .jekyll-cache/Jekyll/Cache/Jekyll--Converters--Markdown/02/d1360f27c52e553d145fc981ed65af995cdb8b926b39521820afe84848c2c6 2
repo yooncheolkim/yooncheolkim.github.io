@@ -1,0 +1,17 @@
+I"�<h1 id="messagesource">MessageSource</h1>
+<ul>
+  <li>
+    <p>국제화(i18n)기능을 제공하는 인터페이스</p>
+  </li>
+  <li>
+    <p>ApplicationContext extends messageSource</p>
+  </li>
+</ul>
+
+<h2 id="스프링-부트를-사용한다면-설정-필요없이-messagesproperties-사용가능">스프링 부트를 사용한다면 설정 필요없이 messages.properties 사용가능</h2>
+<ul>
+  <li>messages.properties</li>
+  <li>messages_ko_ko.properties</li>
+</ul>
+
+:ET

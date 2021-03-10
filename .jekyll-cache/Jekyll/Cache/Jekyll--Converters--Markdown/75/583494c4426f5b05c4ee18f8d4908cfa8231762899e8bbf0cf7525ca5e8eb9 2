@@ -1,0 +1,100 @@
+I"x<h1 id="resource-추상화">Resource 추상화</h1>
+<ul>
+  <li>org.springframework.core.io.Resource</li>
+  <li>java.net.URL 를 추상화</li>
+  <li>추상화를 시킨 이유 :
+    <ul>
+      <li>java.net.URL 가 classpath기준으로 가져오는 기능이 없음., prefix를 제공,</li>
+      <li>resource 지칭, 가져오는것을 통일 시킴</li>
+      <li>SevletContext를 기준으로 상대 경로로 읽어오는 기능 부재</li>
+      <li>새로운 핸들러를 등록하여 특별한 URL 접미사를 만들어 사용할 수는 있지만 구현이 복잡하고 편의성 메소드가 부족하다.</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="인터페이스">인터페이스</h3>
+<ul>
+  <li>주요메소드
+    <ul>
+      <li>getInputStream()</li>
+      <li>existed</li>
+      <li>isOpen()</li>
+      <li>getDescription() : 전체 경로를 포함한 파일 이름 또는 실제 URL</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="구현체">구현체</h2>
+<ul>
+  <li>UrlResrouce : java.net.URL 참고, 기본으로 지원하는 프로토몰 http, https, ftp, file, jar.</li>
+  <li>ClassPathResource: 지원하는 접두어 classpath:</li>
+  <li>FIleSystemResource</li>
+  <li>ServletContextResource : 웹 애플리케이션 루트에서 상대 경로로 리소스 찾기 , 가장많이 씀</li>
+</ul>
+
+<p>##리소스 읽어오기<br />
+<strong>Resource의 타입은 location 문자열과 ApplicationContext의 타입에 따라 결정된다.</strong></p>
+<ul>
+  <li>예를 들어,</li>
+  <li>var ctx = FileSystemXmlApplicationContext(“xxx.xml”)</li>
+  <li>이렇게 하게 되면, FileSystemResource로 resolving 하게 된다.</li>
+</ul>
+
+<p><strong>ApplicationContext의 타입에 상관없이 리소스 타입을 강제하려면 java.net.URL, 접두어(+classpath:)중 하나를 사용할 수 있다.</strong></p>
+<ul>
+  <li><strong>classpath:</strong>io/github/yooncheolkim/config.xml -&gt; ClassPathResource</li>
+  <li>
+    <p><strong>file://</strong>some/resource/path/config.xml -&gt; FileSystemResource</p>
+  </li>
+  <li>이렇게 classpath, file 과 같은 접두어를 사용하면, 확실히 명시적이기 때문에, 리소스가 어디서 오는지 명확화할수 있다.</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java">    <span class="nd">@Autowired</span>
+    <span class="nc">ApplicationContext</span> <span class="n">resourceLoader</span><span class="o">;</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">(</span><span class="nc">ApplicationArguments</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">resourceLoader</span><span class="o">.</span><span class="na">getClass</span><span class="o">());</span>
+
+        <span class="nc">Resource</span> <span class="n">resource</span> <span class="o">=</span> <span class="n">resourceLoader</span><span class="o">.</span><span class="na">getResource</span><span class="o">(</span><span class="s">"classpath:test.txt"</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">resource</span><span class="o">.</span><span class="na">getClass</span><span class="o">());</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">resource</span><span class="o">.</span><span class="na">exists</span><span class="o">());</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">resource</span><span class="o">.</span><span class="na">getDescription</span><span class="o">());</span>
+    <span class="o">}</span></code></pre></figure>
+
+<ul>
+  <li>결과
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class org.springframework.context.annotation.AnnotationConfigApplicationContext
+class org.springframework.core.io.ClassPathResource
+true
+class path resource [test.txt]
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java">    <span class="nd">@Autowired</span>
+    <span class="nc">ApplicationContext</span> <span class="n">resourceLoader</span><span class="o">;</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">(</span><span class="nc">ApplicationArguments</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">resourceLoader</span><span class="o">.</span><span class="na">getClass</span><span class="o">());</span>
+
+        <span class="nc">Resource</span> <span class="n">resource</span> <span class="o">=</span> <span class="n">resourceLoader</span><span class="o">.</span><span class="na">getResource</span><span class="o">(</span><span class="s">"test.txt"</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">resource</span><span class="o">.</span><span class="na">getClass</span><span class="o">());</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">resource</span><span class="o">.</span><span class="na">exists</span><span class="o">());</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">resource</span><span class="o">.</span><span class="na">getDescription</span><span class="o">());</span>
+    <span class="o">}</span></code></pre></figure>
+
+<ul>
+  <li>결과
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class org.springframework.context.annotation.AnnotationConfigApplicationContext
+class org.springframework.core.io.DefaultResourceLoader$ClassPathContextResource
+true
+class path resource [test.txt]
+</code></pre></div>    </div>
+  </li>
+  <li>location 문자열이 변경되지 resource 구현체가 변경됨.</li>
+</ul>
+:ET
