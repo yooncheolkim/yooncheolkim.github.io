@@ -11,7 +11,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>윤철이 블로그</title>
+    <title>윤철이 블로그 | 자바스크립트 eventloop </title>
     <meta name="theme-color" content="#222222"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="/assets/js/jquery.min.js"></script>
@@ -67,203 +67,59 @@
     </div>
 </nav>
 
-
     <div class="wrapper">
       <div class="content">
         <div class="container container-center">
           <div class="row">
             <div class="col-md-8 offset-md-1">
-              <div class="card">
-                <div class="page-content wc-container">
+              <div class="article">
+                <div class="card">
+                  <h1><a href="/2021/03/javascript-eventloop/">자바스크립트 eventloop</a></h1>
+                  <div class="post-meta">
+                    <div class="post-time">
+                      <i class="fa fa-calendar-alt"></i>
+                      <time>09 Mar 2021</time>
+                    </div>
+                    <ul>
+                      
+                        <li><a href="/tag/javascript">javascript</a></li>
+                      
+                        <li><a href="/tag/eventloop">eventloop</a></li>
+                      
+                    </ul>
+                  </div>
+                  <div class="post-content">
+                    
+                    <h1 id="javascript는-실제로-어떻게-동작하지">javascript는 실제로 어떻게 동작하지?</h1>
 
-  <div class="post">
-    <h2 class="post_title"></h2>
-    <ul>
-      
-        
-          
-        
-          
-        
-      
-        
-          
-        
-          
-        
-      
-        
-          
-        
-          
-        
-          
-        
-          
-        
-      
-        
-          
-        
-          
-        
-          
-        
-          
-        
-      
-        
-          
-        
-          
-        
-          
-        
-      
-        
-          
-        
-          
-        
-      
-        
-          
-        
-      
-        
-          
-        
-      
-        
-          
-        
-      
-        
-          
-        
-      
-        
-          
-        
-          
-        
-      
-        
-          
-        
-          
-        
-          
-        
-      
-        
-          
-        
-          
-        
-      
-        
-          
-        
-          
-        
-      
-        
-          
-        
-          
-        
-      
-        
-          
-        
-      
-        
-          
-        
-      
-        
-          
-        
-      
-        
-          
-        
-      
-        
-          
-        
-      
-        
-          
-        
-      
-        
-          
-        
-      
-        
-          
-        
-      
-        
-          
-        
-          
-        
-      
-        
-          
-        
-      
-        
-          
-        
-          
-        
-      
-        
-          
-        
-          
-        
-          
-        
-      
-        
-          
-        
-          
-        
-      
-        
-          
-        
-          
-        
-      
-        
-          
-        
-      
-        
-          
-        
-      
-        
-          
-          <li class="archive_list">
-            <time>11 Mar 2020</time>
-            <a class="archive_list_article_link" href='/2020/03/jekyll/'>first post</a>
-            <p>jekyll</p>
-          </li>
-          
-        
-      
-    </ul>
-  </div>
-</div>
+<p>동영상 링크 : <a href="https://www.youtube.com/watch?v=8aGhZQkoFbQ&amp;ab_channel=JSConf">what the heck is the eventloop</a></p>
 
+<p><a href="https://evan-moon.github.io/2019/08/01/nodejs-event-loop-workflow/">로우 레벨로 살펴보는 Node.js 이벤트 루프</a></p>
+
+<ul>
+  <li>크롬의 자바스크립트 엔진(V8) 런타임이 어떻게 동작하는지</li>
+</ul>
+
+<h3 id="메모리와-eventloop">메모리와 eventloop</h3>
+
+<ul>
+  <li>eventloop 는 ECMA혹은 에 정의된 내용이 아니다.</li>
+  <li>eventloop 는 V8의 일부가 아니다.</li>
+  <li>eventloop는 node, 브라우저가 담당하고 있다.</li>
+  <li>event loop 덕분에, 자바스크립트는 싱글 스레드 event-driven 방식으로 동작하게 된다.</li>
+</ul>
+
+<h3 id="nodejs-이벤트-루프-설명">nodejs 이벤트 루프 설명</h3>
+
+<p><a href="https://nodejs.org/ko/docs/guides/event-loop-timers-and-nexttick/">Node Document</a></p>
+
+<p><a href="https://ko.javascript.info/event-loop">javascript info</a></p>
+
+                    
+
+                  </div>
+                  
+                </div>
               </div>
             </div>
             <div class="col-md-3 hidden-xs">
@@ -423,6 +279,8 @@
             </div>
           </div>
         </div>
+        
+
       </div>
           <footer class="footer-distributed">
       <div class="container">

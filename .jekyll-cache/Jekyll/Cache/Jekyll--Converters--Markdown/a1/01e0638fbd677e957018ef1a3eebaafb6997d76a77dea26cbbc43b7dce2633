@@ -1,4 +1,4 @@
-I"i<div class="page-content wc-container">
+I"ø<div class="page-content wc-container">
 	<div class="post">
 		<h1>Tags</h1>  
 		<ul>
@@ -60,6 +60,12 @@
 			<li><a href="/tag/await">await</a></li>
 			
 			<li><a href="/tag/async">async</a></li>
+			
+			<li><a href="/tag/eventloop">eventloop</a></li>
+			
+			<li><a href="/tag/web">web</a></li>
+			
+			<li><a href="/tag/cors">cors</a></li>
 			
 		</ul>
 	</div>
