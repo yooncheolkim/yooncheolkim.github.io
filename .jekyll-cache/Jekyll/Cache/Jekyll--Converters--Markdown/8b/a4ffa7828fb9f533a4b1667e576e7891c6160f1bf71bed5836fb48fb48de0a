@@ -1,4 +1,4 @@
-I"ø<div class="page-content wc-container">
+I"R<div class="page-content wc-container">
 	<div class="post">
 		<h1>Tags</h1>  
 		<ul>
@@ -66,6 +66,10 @@
 			<li><a href="/tag/web">web</a></li>
 			
 			<li><a href="/tag/cors">cors</a></li>
+			
+			<li><a href="/tag/put">put</a></li>
+			
+			<li><a href="/tag/patch">patch</a></li>
 			
 		</ul>
 	</div>
