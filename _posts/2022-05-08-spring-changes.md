@@ -1,6 +1,6 @@
 ---
 layout: post
-title: spring put vs patch
+title: spring only changes?
 date: 2022-05-08 20:30
 tags: spring put patch
 description: spring 변경점만 보내고 싶을때
