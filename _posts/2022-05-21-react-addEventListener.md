@@ -52,4 +52,8 @@ useEffect(() => {
 - 이 문제를 해결하려면, rerender 될때마다, 기존 등록된 event listener를 제거하고, 새로 생긴 event listener를 등록해주거나,
 - useRef를 사용하여, 해결가능하다.
 
+#### 결론
+
+- html element 의 이벤트 리스너 안에서는 상태값을 정상적으로 가져올수 없다. set은 가능하다.
+
 - 참고 : https://stackoverflow.com/questions/55265255/react-usestate-hook-event-handler-using-initial-state
