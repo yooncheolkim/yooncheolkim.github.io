@@ -11,7 +11,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>윤철이 블로그 | EC2에 배포환경 세팅 </title>
+    <title>윤철이 블로그 | react addEventListner 시 주의사항 </title>
     <meta name="theme-color" content="#222222"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="/assets/js/jquery.min.js"></script>
@@ -74,57 +74,75 @@
             <div class="col-md-8 offset-md-1">
               <div class="article">
                 <div class="card">
-                  <h1><a href="/2020/04/EC2-deploy/">EC2에 배포환경 세팅</a></h1>
+                  <h1><a href="/2022/05/react-addEventListener/">react addEventListner 시 주의사항</a></h1>
                   <div class="post-meta">
                     <div class="post-time">
                       <i class="fa fa-calendar-alt"></i>
-                      <time>03 Apr 2020</time>
+                      <time>21 May 2022</time>
                     </div>
                     <ul>
                       
-                        <li><a href="/tag/aws">aws</a></li>
+                        <li><a href="/tag/react">react</a></li>
                       
-                        <li><a href="/tag/EC2">EC2</a></li>
-                      
-                        <li><a href="/tag/maven">maven</a></li>
+                        <li><a href="/tag/addEventListener">addEventListener</a></li>
                       
                     </ul>
                   </div>
                   <div class="post-content">
                     
-                    <h2 id="java-8-설치">java 8 설치</h2>
+                    <h3 id="react-addeventlistener">react addEventListener</h3>
+
 <ul>
-  <li>sudo yum install -y java-1.8.0-openjdk-devel.x86_64</li>
+  <li>react에서 input 태그를 사용하여 파일 드래그앤드롭을 구현한다고 했을때 다음과 같이 작성할 수 있다.</li>
 </ul>
 
-<h2 id="인스턴스-자바-버전-변경">인스턴스 자바 버전 변경</h2>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">dragRef</span> <span class="o">=</span> <span class="p">(</span><span class="nx">useRef</span> <span class="o">&lt;</span> <span class="nx">HTMLDivElement</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="kc">null</span> <span class="o">&gt;</span> <span class="kc">null</span><span class="p">);</span>
+<span class="kd">const</span> <span class="p">[</span><span class="nx">files</span><span class="p">,</span> <span class="nx">setFiles</span><span class="p">]</span> <span class="o">=</span> <span class="nx">useState</span><span class="p">([]);</span>
+
+<span class="kd">const</span> <span class="nx">addFile</span> <span class="o">=</span> <span class="p">(</span><span class="nx">e</span><span class="p">:</span> <span class="nx">ChangeEvent</span><span class="o">&lt;</span><span class="nx">HTMLInputElement</span><span class="o">&gt;</span> <span class="o">|</span> <span class="nx">any</span><span class="p">):</span> <span class="k">void</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="na">newFiles</span><span class="p">:</span> <span class="nx">File</span><span class="p">[]</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="k">from</span><span class="p">(</span>
+    <span class="nx">e</span><span class="p">.</span><span class="nx">type</span> <span class="o">===</span> <span class="dl">"</span><span class="s2">drop</span><span class="dl">"</span> <span class="p">?</span> <span class="nx">e</span><span class="p">.</span><span class="nx">dataTransfer</span><span class="p">.</span><span class="nx">files</span> <span class="p">:</span> <span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">files</span>
+  <span class="p">);</span>
+
+  <span class="nx">setFiles</span><span class="p">([...</span><span class="nx">files</span><span class="p">,</span> <span class="nx">newFiles</span><span class="p">]);</span>
+<span class="p">};</span>
+
+<span class="kd">const</span> <span class="nx">handleDrop</span> <span class="o">=</span> <span class="p">(</span><span class="na">e</span><span class="p">:</span> <span class="nx">DragEvent</span><span class="p">):</span> <span class="k">void</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">addFile</span><span class="p">(</span><span class="nx">e</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="kd">const</span> <span class="nx">initDragEvent</span> <span class="o">=</span> <span class="p">():</span> <span class="k">void</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">dragRef</span><span class="p">.</span><span class="nx">current</span><span class="p">.</span><span class="nx">addEventlistener</span><span class="p">(</span><span class="dl">"</span><span class="s2">drag</span><span class="dl">"</span><span class="p">,</span> <span class="nx">handleDrop</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="nx">useEffect</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">initDragEvent</span><span class="p">();</span>
+<span class="p">},</span> <span class="p">[]);</span>
+
+<span class="o">&lt;</span><span class="nx">div</span> <span class="nx">ref</span><span class="o">=</span><span class="p">{</span><span class="nx">dragRef</span><span class="p">}</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="nx">input</span> <span class="nx">type</span><span class="o">=</span><span class="dl">"</span><span class="s2">file</span><span class="dl">"</span> <span class="nx">accept</span><span class="o">=</span><span class="p">{</span><span class="dl">"</span><span class="s2">.jpg,.txt</span><span class="dl">"</span><span class="p">}</span> <span class="nx">multiple</span> <span class="nx">onChange</span><span class="o">=</span><span class="p">{</span><span class="nx">onChangeFiles</span><span class="p">}</span> <span class="sr">/</span><span class="err">&gt;
+</span><span class="o">&lt;</span><span class="sr">/div&gt;</span><span class="err">;
+</span></code></pre></div></div>
+
 <ul>
-  <li>sudo /usr/sbin/alternatives –config java</li>
-  <li>sudo yum remove java-1.7.0-openjdk</li>
-  <li>java -version</li>
+  <li>이렇게 했을때, addFile 안에 files는 어떻게 나올까?</li>
+  <li>첫번째 file 드롭할때는, 문제 없다.</li>
+  <li>하지만, 두번째 file 드롭할때는 files는 첫번째에 추가된 file이 보이지 않는다…</li>
 </ul>
 
-<h2 id="maven-설치">maven 설치</h2>
-<ul>
-  <li>sudo wget http://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo -O /etc/yum.repos.d/epel-apache-maven.repo</li>
-  <li>sudo sed -i s/$releasever/6/g /etc/yum.repos.d/epel-apache-maven.repo</li>
-  <li>sudo yum install -y apache-maven</li>
-  <li>mvn –version</li>
-</ul>
+<h4 id="이유는">이유는?</h4>
 
-<h2 id="maven-package">maven package</h2>
 <ul>
-  <li>test 없이 package</li>
-  <li>mvn clean package -DskipTests=true</li>
+  <li>files 는 과거의 value를 가지고 있다. 이유는</li>
+  <li>컴포넌트 마운트(useEffect)하면서 등록된 handleDrop은 ref로 가져온 React component가 아닌, 실제 html element event로 등록이 되었다.</li>
+  <li>첫번째 file drop 후, 리렌더 될때는 새로운 메소드가 handleDrop에 할당되지만, 여전히, dragRef.current ‘drag’ 이벤트에는 기존 메소드가 등록되어있는 상태이다.</li>
+  <li>그러므로, 계속 old files를 바라보고 있게된다.</li>
+  <li>이 문제를 해결하려면, rerender 될때마다, 기존 등록된 event listener를 제거하고, 새로 생긴 event listener를 등록해주거나,</li>
+  <li>
+    <p>useRef를 사용하여, 해결가능하다.</p>
+  </li>
+  <li>참고 : https://stackoverflow.com/questions/55265255/react-usestate-hook-event-handler-using-initial-state</li>
 </ul>
-
-<h2 id="maven-build-시-out-of-memory-혹은-java-heap-space-부족">maven build 시 out of memory 혹은 java heap space 부족</h2>
-<ul>
-  <li>set MAVEN_OPTS=”-Xmx512m” <br />
-Or</li>
-  <li>export MAVEN_OPTS=-Xmx512m</li>
-</ul>
-
 
                     
 
