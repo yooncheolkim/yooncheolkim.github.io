@@ -135,13 +135,21 @@
 <ul>
   <li>files 는 과거의 value를 가지고 있다. 이유는</li>
   <li>컴포넌트 마운트(useEffect)하면서 등록된 handleDrop은 ref로 가져온 React component가 아닌, 실제 html element event로 등록이 되었다.</li>
-  <li>첫번째 file drop 후, 리렌더 될때는 새로운 메소드가 handleDrop에 할당되지만, 여전히, dragRef.current ‘drag’ 이벤트에는 기존 메소드가 등록되어있는 상태이다.</li>
+  <li>첫번째 file drop 후, 리렌더 될때는 새로운 메소드가 handleDrop에 할당되지만, 여전히, dragRef.current ‘drag’ 이벤트에는 기존 메소드가 등록되어있는 상태이다.ㅋ</li>
   <li>그러므로, 계속 old files를 바라보고 있게된다.</li>
   <li>이 문제를 해결하려면, rerender 될때마다, 기존 등록된 event listener를 제거하고, 새로 생긴 event listener를 등록해주거나,</li>
+  <li>useRef를 사용하여, 해결가능하다.</li>
+</ul>
+
+<h4 id="결론">결론</h4>
+
+<ul>
   <li>
-    <p>useRef를 사용하여, 해결가능하다.</p>
+    <p>html element 의 이벤트 리스너 안에서는 상태값을 정상적으로 가져올수 없다. set은 가능하다.</p>
   </li>
-  <li>참고 : https://stackoverflow.com/questions/55265255/react-usestate-hook-event-handler-using-initial-state</li>
+  <li>
+    <p>참고 : https://stackoverflow.com/questions/55265255/react-usestate-hook-event-handler-using-initial-state</p>
+  </li>
 </ul>
 
                     
@@ -156,6 +164,8 @@
   <h2>Recent Posts</h2>
   <ul>
     
+    <li><a href="/2022/05/browser-policy-mute/">browser media 자동재생 정책</a></li>
+    
     <li><a href="/2022/05/react-addEventListener/">react addEventListner 시 주의사항</a></li>
     
     <li><a href="/2022/05/spring-changes/">spring only changes?</a></li>
@@ -163,8 +173,6 @@
     <li><a href="/2021/04/web-cors/">web cors</a></li>
     
     <li><a href="/2021/03/javascript-eventloop/">자바스크립트 eventloop</a></li>
-    
-    <li><a href="/2021/03/js-promise-await-async/">자바스크립트 promise await async</a></li>
     
   </ul>
 </div>
@@ -203,12 +211,20 @@
         <span>async</span></a></li>
     
     <li>
+      <a href="/tag/autoplay" data-toggle="tooltip" data-placement="right" title="1">
+        <span>autoplay</span></a></li>
+    
+    <li>
       <a href="/tag/await" data-toggle="tooltip" data-placement="right" title="1">
         <span>await</span></a></li>
     
     <li>
       <a href="/tag/aws" data-toggle="tooltip" data-placement="right" title="2">
         <span>aws</span></a></li>
+    
+    <li>
+      <a href="/tag/browser" data-toggle="tooltip" data-placement="right" title="1">
+        <span>browser</span></a></li>
     
     <li>
       <a href="/tag/cors" data-toggle="tooltip" data-placement="right" title="1">
@@ -261,6 +277,10 @@
     <li>
       <a href="/tag/maven" data-toggle="tooltip" data-placement="right" title="1">
         <span>maven</span></a></li>
+    
+    <li>
+      <a href="/tag/media" data-toggle="tooltip" data-placement="right" title="1">
+        <span>media</span></a></li>
     
     <li>
       <a href="/tag/patch" data-toggle="tooltip" data-placement="right" title="1">

@@ -105,7 +105,14 @@
                 "t":"2022-5",
                 "year":"2022",
                 "x":1,
-                "y":349
+                "y":105
+            },
+        
+            {
+                "t":"2022-5",
+                "year":"2022",
+                "x":1,
+                "y":367
             },
         
             {
@@ -507,6 +514,9 @@
              "patch", 
         
             
+             "media", 
+        
+            
              "maven", 
         
             
@@ -540,7 +550,13 @@
              "cors", 
         
             
+             "browser", 
+        
+            
              "await", 
+        
+            
+             "autoplay", 
         
             
              "async", 
@@ -673,6 +689,15 @@
              1, 
         
             
+             1, 
+        
+            
+             1, 
+        
+            
+             1, 
+        
+            
              , 
         
     ];
@@ -702,7 +727,9 @@
 <script>
     var totalWords = [
         
-            349,
+            105,
+        
+            367,
         
             752,
         
@@ -771,7 +798,7 @@
             16,
         
     ].reduce((a, b) => a + b, 0);
-    var totalPosts = 34;
+    var totalPosts = 35;
 
     function concatBoldTextToELement(id, text) {
         var abvgd = document.createElement('b');
@@ -792,6 +819,8 @@
   <h2>Recent Posts</h2>
   <ul>
     
+    <li><a href="/2022/05/browser-policy-mute/">browser media 자동재생 정책</a></li>
+    
     <li><a href="/2022/05/react-addEventListener/">react addEventListner 시 주의사항</a></li>
     
     <li><a href="/2022/05/spring-changes/">spring only changes?</a></li>
@@ -799,8 +828,6 @@
     <li><a href="/2021/04/web-cors/">web cors</a></li>
     
     <li><a href="/2021/03/javascript-eventloop/">자바스크립트 eventloop</a></li>
-    
-    <li><a href="/2021/03/js-promise-await-async/">자바스크립트 promise await async</a></li>
     
   </ul>
 </div>
@@ -839,12 +866,20 @@
         <span>async</span></a></li>
     
     <li>
+      <a href="/tag/autoplay" data-toggle="tooltip" data-placement="right" title="1">
+        <span>autoplay</span></a></li>
+    
+    <li>
       <a href="/tag/await" data-toggle="tooltip" data-placement="right" title="1">
         <span>await</span></a></li>
     
     <li>
       <a href="/tag/aws" data-toggle="tooltip" data-placement="right" title="2">
         <span>aws</span></a></li>
+    
+    <li>
+      <a href="/tag/browser" data-toggle="tooltip" data-placement="right" title="1">
+        <span>browser</span></a></li>
     
     <li>
       <a href="/tag/cors" data-toggle="tooltip" data-placement="right" title="1">
@@ -897,6 +932,10 @@
     <li>
       <a href="/tag/maven" data-toggle="tooltip" data-placement="right" title="1">
         <span>maven</span></a></li>
+    
+    <li>
+      <a href="/tag/media" data-toggle="tooltip" data-placement="right" title="1">
+        <span>media</span></a></li>
     
     <li>
       <a href="/tag/patch" data-toggle="tooltip" data-placement="right" title="1">

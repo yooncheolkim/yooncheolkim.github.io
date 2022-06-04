@@ -47,7 +47,7 @@ useEffect(() => {
 
 - files 는 과거의 value를 가지고 있다. 이유는
 - 컴포넌트 마운트(useEffect)하면서 등록된 handleDrop은 ref로 가져온 React component가 아닌, 실제 html element event로 등록이 되었다.
-- 첫번째 file drop 후, 리렌더 될때는 새로운 메소드가 handleDrop에 할당되지만, 여전히, dragRef.current 'drag' 이벤트에는 기존 메소드가 등록되어있는 상태이다.
+- 첫번째 file drop 후, 리렌더 될때는 새로운 메소드가 handleDrop에 할당되지만, 여전히, dragRef.current 'drag' 이벤트에는 기존 메소드가 등록되어있는 상태이다.ㅋ
 - 그러므로, 계속 old files를 바라보고 있게된다.
 - 이 문제를 해결하려면, rerender 될때마다, 기존 등록된 event listener를 제거하고, 새로 생긴 event listener를 등록해주거나,
 - useRef를 사용하여, 해결가능하다.

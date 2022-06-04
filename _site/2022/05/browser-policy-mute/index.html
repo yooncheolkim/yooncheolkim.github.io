@@ -11,7 +11,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>윤철이 블로그 | spring MessageSource </title>
+    <title>윤철이 블로그 | browser media 자동재생 정책 </title>
     <meta name="theme-color" content="#222222"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="/assets/js/jquery.min.js"></script>
@@ -74,36 +74,47 @@
             <div class="col-md-8 offset-md-1">
               <div class="article">
                 <div class="card">
-                  <h1><a href="/2020/05/spring-MessageSource/">spring MessageSource</a></h1>
+                  <h1><a href="/2022/05/browser-policy-mute/">browser media 자동재생 정책</a></h1>
                   <div class="post-meta">
                     <div class="post-time">
                       <i class="fa fa-calendar-alt"></i>
-                      <time>19 May 2020</time>
+                      <time>28 May 2022</time>
                     </div>
                     <ul>
                       
-                        <li><a href="/tag/spring">spring</a></li>
+                        <li><a href="/tag/browser">browser</a></li>
+                      
+                        <li><a href="/tag/media">media</a></li>
+                      
+                        <li><a href="/tag/autoplay">autoplay</a></li>
                       
                     </ul>
                   </div>
                   <div class="post-content">
                     
-                    <h1 id="messagesource">MessageSource</h1>
+                    <h3 id="browser에서-media-자동재생-정책">browser에서 media 자동재생 정책</h3>
+
 <ul>
-  <li>
-    <p>국제화(i18n)기능을 제공하는 인터페이스</p>
-  </li>
-  <li>
-    <p>ApplicationContext extends messageSource</p>
-  </li>
+  <li>video/audio 태그에 autoplay 속성이 존재하여, 자동재생이 가능하도록 할 수 있다.</li>
+  <li>하지만, 많은 브라우저에서 autoplay 속성을 적용하면, 무조건 muted 속성도 같이 주어야 autoplay 가능하도록 정책상 막고 있다.</li>
+  <li>이유는 사용자가 특정 사이트에 들어왔을때, 사용자와의 interaction 없이 소리가 갑자기 나와 사용자를 깜짝 놀래키는것을 막기 위함이다.</li>
+  <li>크롬 : react에서 link를 타고 router 이동을 한다면, muted 속성 없이 autoplay가 동작한다. (해당 사이트에서 사용자의 interaction이 있다면, 자동재생을 허용하는듯)</li>
+  <li>사파리 : 사용자의 interaction이 있다 하더라도, muted 없이 autoplay는 불가능</li>
+  <li>엣지 : 크롬과 같다.</li>
 </ul>
 
-<h2 id="스프링-부트를-사용한다면-설정-필요없이-messagesproperties-사용가능">스프링 부트를 사용한다면 설정 필요없이 messages.properties 사용가능</h2>
+<h3 id="결론">결론</h3>
+
 <ul>
-  <li>messages.properties</li>
-  <li>messages_ko_ko.properties</li>
+  <li>video/audio 태그에 autoplay를 사용하려면, muted를 함께 주자.</li>
+  <li>브라우저 정책을 위반하면서 까지 개발하지는 말자.</li>
 </ul>
 
+<h4 id="참고">참고</h4>
+
+<ul>
+  <li>https://mygumi.tistory.com/333</li>
+</ul>
 
                     
 
