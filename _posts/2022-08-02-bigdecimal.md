@@ -6,7 +6,7 @@ tags: bigdecimal double 부동소수점
 description: 소수점 몇자리 까지 지원할거냐
 ---
 
-### 화폐 게산에 대하여 처리할때,,
+### 화폐 계산에 대하여 처리할때,,
 
 - 코인 관련 프로젝트를 하다 보니, 코인의 갯수를 메모리(변수)에 담아서 연산을 처리해야할때가 있다.
 - 그런데, fe(react) 에서도 그렇고, be(spring) 에서도 그렇고 js의 number, java double, mysql double 타입으로 커버되지 않는 문제가 생겼다.

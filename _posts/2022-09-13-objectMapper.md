@@ -31,3 +31,14 @@ mapper.readValue(jsonStr, new TypeReference<CommonResponseDTO<TestDto>>() {});
 
 - Class 타입으로 받으면, mapper가 제네릭까지 알수 없기 때문에 TypeReference를 사용하여 convert 가능하다.
 - 컴파일 시점에 알수 없는 key, value에 대해서는 Map으로 convert 하는듯
+
+### spring controller에서 json convert
+
+- spring http message converter는 controller에서 응답을 줄때, 어떤 형태(json? xml?)로 줄지 결정한다.
+- spring mvc는 spring 프로젝트 의존성에 따라 메시지 컨버터를 spring mvb에서 등록한다.
+  - WebMvcConfigurationSupport 에서 필요한 라이브러리의 classPath가 있는지 확인하여 등록함.
+- http contentType/ acceptType을 기본적으로 참고한다.
+
+#### spring boot에서 json converter
+
+- spring boot를 사용하는 경우 기본적으로 jacksonJson2 의존성(objectMapper)이 들어있다. 즉, JSON용 http 메시지 컨버터가 잇는거임.

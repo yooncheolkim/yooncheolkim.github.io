@@ -42,6 +42,24 @@ mapper.readValue(jsonStr, new TypeReference&amp;lt;CommonResponseDTO&amp;lt;Test
   &lt;li&gt;Class 타입으로 받으면, mapper가 제네릭까지 알수 없기 때문에 TypeReference를 사용하여 convert 가능하다.&lt;/li&gt;
   &lt;li&gt;컴파일 시점에 알수 없는 key, value에 대해서는 Map으로 convert 하는듯&lt;/li&gt;
 &lt;/ul&gt;
+
+&lt;h3 id=&quot;spring-controller에서-json-convert&quot;&gt;spring controller에서 json convert&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;spring http message converter는 controller에서 응답을 줄때, 어떤 형태(json? xml?)로 줄지 결정한다.&lt;/li&gt;
+  &lt;li&gt;spring mvc는 spring 프로젝트 의존성에 따라 메시지 컨버터를 spring mvb에서 등록한다.
+    &lt;ul&gt;
+      &lt;li&gt;WebMvcConfigurationSupport 에서 필요한 라이브러리의 classPath가 있는지 확인하여 등록함.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;http contentType/ acceptType을 기본적으로 참고한다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;spring-boot에서-json-converter&quot;&gt;spring boot에서 json converter&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;spring boot를 사용하는 경우 기본적으로 jacksonJson2 의존성(objectMapper)이 들어있다. 즉, JSON용 http 메시지 컨버터가 잇는거임.&lt;/li&gt;
+&lt;/ul&gt;
 </description>
 				<pubDate>Tue, 13 Sep 2022 14:30:00 +0900</pubDate>
 				<link>/2022/09/objectMapper/</link>
@@ -50,7 +68,7 @@ mapper.readValue(jsonStr, new TypeReference&amp;lt;CommonResponseDTO&amp;lt;Test
 		
 			<item>
 				<title>소수점 몇자리 까지 지원할거냐</title>
-				<description>&lt;h3 id=&quot;화폐-게산에-대하여-처리할때&quot;&gt;화폐 게산에 대하여 처리할때,,&lt;/h3&gt;
+				<description>&lt;h3 id=&quot;화폐-계산에-대하여-처리할때&quot;&gt;화폐 계산에 대하여 처리할때,,&lt;/h3&gt;
 
 &lt;ul&gt;
   &lt;li&gt;코인 관련 프로젝트를 하다 보니, 코인의 갯수를 메모리(변수)에 담아서 연산을 처리해야할때가 있다.&lt;/li&gt;
