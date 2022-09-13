@@ -1,4 +1,4 @@
-I"A*<h1 id="스코프-체인">스코프 체인</h1>
+I"T*<h1 id="스코프-체인">스코프 체인</h1>
 <ul>
   <li>C, java 같은 경우, {} 단락이 끝나면, 해당 {} 안에 변수는 사라진다. (gc에 의해..)</li>
   <li>js 에서는 그렇지 않다.</li>
@@ -119,7 +119,7 @@
 <p>newObj.prototype.who = function(greeting, name){<br />
     console.log(greeting + “ “ + (name || “everyone”));<br />
 }</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
 - newObj 함수는 HelloFunc의 객체를 좀더 자유롭게 활요하려고 정의한 함수다.
 - 첫번째 인자 obj가 helloFunc이 되고, 두 번째 인자가 사용자가 출력을 원하는 사람이 된다.
 

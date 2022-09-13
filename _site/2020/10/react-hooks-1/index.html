@@ -193,7 +193,7 @@
   <span class="k">return</span> <span class="p">(</span>
     <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span>
       <span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>
-        <span class="err">현재</span> <span class="err">카운터</span> <span class="err">값은</span><span class="o">&lt;</span><span class="nx">b</span><span class="o">&gt;</span><span class="p">{</span><span class="nx">state</span><span class="p">.</span><span class="nx">value</span><span class="p">}</span><span class="o">&lt;</span><span class="sr">/b&gt;입니다</span><span class="err">.
+        <span class="nx">현재</span> <span class="nx">카운터</span> <span class="nx">값은</span><span class="o">&lt;</span><span class="nx">b</span><span class="o">&gt;</span><span class="p">{</span><span class="nx">state</span><span class="p">.</span><span class="nx">value</span><span class="p">}</span><span class="o">&lt;</span><span class="sr">/b&gt;입니다</span><span class="err">.
 </span>      <span class="o">&lt;</span><span class="sr">/p</span><span class="err">&gt;
 </span>      <span class="o">&lt;</span><span class="nx">button</span> <span class="nx">onClick</span><span class="o">=</span><span class="p">{()</span> <span class="o">=&gt;</span> <span class="nx">dispatch</span><span class="p">({</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">INCREMENT</span><span class="dl">"</span> <span class="p">})}</span><span class="o">&gt;</span> <span class="o">+</span><span class="mi">1</span><span class="o">&lt;</span><span class="sr">/button</span><span class="err">&gt;
 </span>      <span class="o">&lt;</span><span class="nx">button</span> <span class="nx">onClick</span><span class="o">=</span><span class="p">{()</span> <span class="o">=&gt;</span> <span class="nx">dispatch</span><span class="p">({</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">DECREMENT</span><span class="dl">"</span> <span class="p">})}</span><span class="o">&gt;-</span><span class="mi">1</span><span class="o">&lt;</span><span class="sr">/button</span><span class="err">&gt;
@@ -239,14 +239,14 @@
   <span class="k">return</span> <span class="p">(</span>
     <span class="o">&lt;&gt;</span>
       <span class="o">&lt;</span><span class="nx">input</span> <span class="nx">value</span><span class="o">=</span><span class="p">{</span><span class="nx">number</span><span class="p">}</span> <span class="nx">onChange</span><span class="o">=</span><span class="p">{</span><span class="nx">onChange</span><span class="p">}</span><span class="o">&gt;&lt;</span><span class="sr">/input</span><span class="err">&gt;
-</span>      <span class="o">&lt;</span><span class="nx">button</span> <span class="nx">onClick</span><span class="o">=</span><span class="p">{</span><span class="nx">onInsert</span><span class="p">}</span><span class="o">&gt;</span><span class="err">등록</span><span class="o">&lt;</span><span class="sr">/button</span><span class="err">&gt;
+</span>      <span class="o">&lt;</span><span class="nx">button</span> <span class="nx">onClick</span><span class="o">=</span><span class="p">{</span><span class="nx">onInsert</span><span class="p">}</span><span class="o">&gt;</span><span class="nx">등록</span><span class="o">&lt;</span><span class="sr">/button</span><span class="err">&gt;
 </span>      <span class="o">&lt;</span><span class="nx">ul</span><span class="o">&gt;</span>
         <span class="p">{</span><span class="nx">list</span><span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="nx">value</span><span class="p">,</span> <span class="nx">index</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">(</span>
           <span class="o">&lt;</span><span class="nx">li</span> <span class="nx">key</span><span class="o">=</span><span class="p">{</span><span class="nx">index</span><span class="p">}</span><span class="o">&gt;</span><span class="p">{</span><span class="nx">value</span><span class="p">}</span><span class="o">&lt;</span><span class="sr">/li</span><span class="err">&gt;
 </span>        <span class="p">))}</span>
       <span class="o">&lt;</span><span class="sr">/ul</span><span class="err">&gt;
 </span>      <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span>
-        <span class="o">&lt;</span><span class="nx">b</span><span class="o">&gt;</span><span class="err">평균값</span><span class="p">:</span> <span class="o">&lt;</span><span class="sr">/b</span><span class="err">&gt;
+        <span class="o">&lt;</span><span class="nx">b</span><span class="o">&gt;</span><span class="na">평균값</span><span class="p">:</span> <span class="o">&lt;</span><span class="sr">/b</span><span class="err">&gt;
 </span>        <span class="p">{</span><span class="nx">avg</span><span class="p">}</span>
       <span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
 </span>    <span class="o">&lt;</span><span class="sr">/</span><span class="err">&gt;
@@ -312,15 +312,15 @@
   <h2>Recent Posts</h2>
   <ul>
     
+    <li><a href="/2022/09/objectMapper/">object mapper 정리</a></li>
+    
+    <li><a href="/2022/08/bigdecimal/">소수점 몇자리 까지 지원할거냐</a></li>
+    
     <li><a href="/2022/05/browser-policy-mute/">browser media 자동재생 정책</a></li>
     
     <li><a href="/2022/05/react-addEventListener/">react addEventListner 시 주의사항</a></li>
     
     <li><a href="/2022/05/spring-changes/">spring only changes?</a></li>
-    
-    <li><a href="/2021/04/web-cors/">web cors</a></li>
-    
-    <li><a href="/2021/03/javascript-eventloop/">자바스크립트 eventloop</a></li>
     
   </ul>
 </div>
@@ -371,6 +371,10 @@
         <span>aws</span></a></li>
     
     <li>
+      <a href="/tag/bigdecimal" data-toggle="tooltip" data-placement="right" title="1">
+        <span>bigdecimal</span></a></li>
+    
+    <li>
       <a href="/tag/browser" data-toggle="tooltip" data-placement="right" title="1">
         <span>browser</span></a></li>
     
@@ -381,6 +385,10 @@
     <li>
       <a href="/tag/docker" data-toggle="tooltip" data-placement="right" title="1">
         <span>docker</span></a></li>
+    
+    <li>
+      <a href="/tag/double" data-toggle="tooltip" data-placement="right" title="1">
+        <span>double</span></a></li>
     
     <li>
       <a href="/tag/eventloop" data-toggle="tooltip" data-placement="right" title="1">
@@ -431,6 +439,10 @@
         <span>media</span></a></li>
     
     <li>
+      <a href="/tag/objectMapper" data-toggle="tooltip" data-placement="right" title="1">
+        <span>objectMapper</span></a></li>
+    
+    <li>
       <a href="/tag/patch" data-toggle="tooltip" data-placement="right" title="1">
         <span>patch</span></a></li>
     
@@ -473,6 +485,10 @@
     <li>
       <a href="/tag/web" data-toggle="tooltip" data-placement="right" title="1">
         <span>web</span></a></li>
+    
+    <li>
+      <a href="/tag/%EB%B6%80%EB%8F%99%EC%86%8C%EC%88%98%EC%A0%90" data-toggle="tooltip" data-placement="right" title="1">
+        <span>부동소수점</span></a></li>
     
     <li>
       <a href="/tag/%EC%84%B8%EA%B7%B8%EB%A8%BC%ED%8A%B8%ED%8A%B8%EB%A6%AC" data-toggle="tooltip" data-placement="right" title="1">

@@ -1,4 +1,4 @@
-I"9!<h1 id="자바스크립트-프로퍼티">자바스크립트 프로퍼티</h1>
+I"L!<h1 id="자바스크립트-프로퍼티">자바스크립트 프로퍼티</h1>
 <ul>
   <li>자바스크립트 함수 역시 객체다.</li>
   <li>일반 객체와는 다르게 함수는 함수 객체만의 표준 프로퍼티를 가지고 있다.</li>
@@ -38,7 +38,7 @@
 <span class="nx">console</span><span class="p">.</span><span class="nx">dir</span><span class="p">(</span><span class="nx">myFunction</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="kd">constructor</span><span class="p">);</span>
 </code></pre></div></div>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Object
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Object
     constructor: ƒ myFunction()
     __proto__: Object
 ƒ myFunction()

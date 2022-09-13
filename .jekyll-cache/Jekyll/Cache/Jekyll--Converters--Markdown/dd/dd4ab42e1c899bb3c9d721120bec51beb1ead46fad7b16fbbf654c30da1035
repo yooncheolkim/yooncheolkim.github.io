@@ -1,4 +1,4 @@
-I"�T<h1 id="hooks">Hooks</h1>
+I"�T<h1 id="hooks">Hooks</h1>
 
 <ul>
   <li>v16.8에 새로 도입된 함수형 컴포넌트에서도 state 관리 가능하도록 다양한 작업을 할수 있도록 해줌.</li>
@@ -101,7 +101,7 @@
   <span class="k">return</span> <span class="p">(</span>
     <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span>
       <span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>
-        <span class="err">현재</span> <span class="err">카운터</span> <span class="err">값은</span><span class="o">&lt;</span><span class="nx">b</span><span class="o">&gt;</span><span class="p">{</span><span class="nx">state</span><span class="p">.</span><span class="nx">value</span><span class="p">}</span><span class="o">&lt;</span><span class="sr">/b&gt;입니다</span><span class="err">.
+        <span class="nx">현재</span> <span class="nx">카운터</span> <span class="nx">값은</span><span class="o">&lt;</span><span class="nx">b</span><span class="o">&gt;</span><span class="p">{</span><span class="nx">state</span><span class="p">.</span><span class="nx">value</span><span class="p">}</span><span class="o">&lt;</span><span class="sr">/b&gt;입니다</span><span class="err">.
 </span>      <span class="o">&lt;</span><span class="sr">/p</span><span class="err">&gt;
 </span>      <span class="o">&lt;</span><span class="nx">button</span> <span class="nx">onClick</span><span class="o">=</span><span class="p">{()</span> <span class="o">=&gt;</span> <span class="nx">dispatch</span><span class="p">({</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">INCREMENT</span><span class="dl">"</span> <span class="p">})}</span><span class="o">&gt;</span> <span class="o">+</span><span class="mi">1</span><span class="o">&lt;</span><span class="sr">/button</span><span class="err">&gt;
 </span>      <span class="o">&lt;</span><span class="nx">button</span> <span class="nx">onClick</span><span class="o">=</span><span class="p">{()</span> <span class="o">=&gt;</span> <span class="nx">dispatch</span><span class="p">({</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">DECREMENT</span><span class="dl">"</span> <span class="p">})}</span><span class="o">&gt;-</span><span class="mi">1</span><span class="o">&lt;</span><span class="sr">/button</span><span class="err">&gt;
@@ -147,14 +147,14 @@
   <span class="k">return</span> <span class="p">(</span>
     <span class="o">&lt;&gt;</span>
       <span class="o">&lt;</span><span class="nx">input</span> <span class="nx">value</span><span class="o">=</span><span class="p">{</span><span class="nx">number</span><span class="p">}</span> <span class="nx">onChange</span><span class="o">=</span><span class="p">{</span><span class="nx">onChange</span><span class="p">}</span><span class="o">&gt;&lt;</span><span class="sr">/input</span><span class="err">&gt;
-</span>      <span class="o">&lt;</span><span class="nx">button</span> <span class="nx">onClick</span><span class="o">=</span><span class="p">{</span><span class="nx">onInsert</span><span class="p">}</span><span class="o">&gt;</span><span class="err">등록</span><span class="o">&lt;</span><span class="sr">/button</span><span class="err">&gt;
+</span>      <span class="o">&lt;</span><span class="nx">button</span> <span class="nx">onClick</span><span class="o">=</span><span class="p">{</span><span class="nx">onInsert</span><span class="p">}</span><span class="o">&gt;</span><span class="nx">등록</span><span class="o">&lt;</span><span class="sr">/button</span><span class="err">&gt;
 </span>      <span class="o">&lt;</span><span class="nx">ul</span><span class="o">&gt;</span>
         <span class="p">{</span><span class="nx">list</span><span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="nx">value</span><span class="p">,</span> <span class="nx">index</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">(</span>
           <span class="o">&lt;</span><span class="nx">li</span> <span class="nx">key</span><span class="o">=</span><span class="p">{</span><span class="nx">index</span><span class="p">}</span><span class="o">&gt;</span><span class="p">{</span><span class="nx">value</span><span class="p">}</span><span class="o">&lt;</span><span class="sr">/li</span><span class="err">&gt;
 </span>        <span class="p">))}</span>
       <span class="o">&lt;</span><span class="sr">/ul</span><span class="err">&gt;
 </span>      <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span>
-        <span class="o">&lt;</span><span class="nx">b</span><span class="o">&gt;</span><span class="err">평균값</span><span class="p">:</span> <span class="o">&lt;</span><span class="sr">/b</span><span class="err">&gt;
+        <span class="o">&lt;</span><span class="nx">b</span><span class="o">&gt;</span><span class="na">평균값</span><span class="p">:</span> <span class="o">&lt;</span><span class="sr">/b</span><span class="err">&gt;
 </span>        <span class="p">{</span><span class="nx">avg</span><span class="p">}</span>
       <span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
 </span>    <span class="o">&lt;</span><span class="sr">/</span><span class="err">&gt;

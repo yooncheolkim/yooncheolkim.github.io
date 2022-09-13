@@ -92,20 +92,20 @@
 
 <h2 id="resources---applicationxml-만들어서-사용한다">resources - application.xml 만들어서 사용한다.</h2>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
-<span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">"http://www.springframework.org/schema/beans"</span>
-       <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span>
-       <span class="na">xsi:schemaLocation=</span><span class="s">"http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"</span><span class="nt">&gt;</span>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"&gt;
 
-<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"bookService"</span> <span class="na">class=</span><span class="s">"io.github.yooncheolkim.demospringioc.BookService"</span>
-      <span class="na">scope=</span><span class="s">"singleton"</span>
-      <span class="na">autowire=</span><span class="s">"default"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"bookRepository"</span> <span class="na">ref=</span><span class="s">"bookRepository"</span><span class="nt">/&gt;</span>
-<span class="nt">&lt;/bean&gt;</span>
+&lt;bean id="bookService" class="io.github.yooncheolkim.demospringioc.BookService"
+      scope="singleton"
+      autowire="default"&gt;
+    &lt;property name="bookRepository" ref="bookRepository"/&gt;
+&lt;/bean&gt;
 
-<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"bookRepository"</span>
-      <span class="na">class=</span><span class="s">"io.github.yooncheolkim.demospringioc.BookRepository"</span><span class="nt">/&gt;</span>
-<span class="nt">&lt;/beans&gt;</span>
+&lt;bean id="bookRepository"
+      class="io.github.yooncheolkim.demospringioc.BookRepository"/&gt;
+&lt;/beans&gt;
 </code></pre></div></div>
 
 <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">io.github.yooncheolkim.demospringioc</span><span class="o">;</span>
@@ -133,21 +133,21 @@
 <span class="o">}</span></code></pre></figure>
 
 <h3 id="결과">결과</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[bookService, bookRepository]
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[bookService, bookRepository]
 true
 </code></pre></div></div>
 
 <h2 id="xml에-bean-하나하나-등록하기-싫으니">xml에 bean 하나하나 등록하기 싫으니,,</h2>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
-<span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">"http://www.springframework.org/schema/beans"</span>
-       <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span>
-       <span class="na">xmlns:context=</span><span class="s">"http://www.springframework.org/schema/context"</span>
-       <span class="na">xsi:schemaLocation=</span><span class="s">"http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd"</span><span class="nt">&gt;</span>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd"&gt;
 
-    <span class="nt">&lt;context:component-scan</span> <span class="na">base-package=</span><span class="s">"io.github.yooncheolkim.demospringioc"</span> <span class="nt">/&gt;</span>
+    &lt;context:component-scan base-package="io.github.yooncheolkim.demospringioc" /&gt;
 
-<span class="nt">&lt;/beans&gt;</span>
+&lt;/beans&gt;
 </code></pre></div></div>
 <ul>
   <li>component-scan 이라는 태그 사용하면, @Component 로 된 애들 다 bean으로 등록해준다.</li>
@@ -213,7 +213,7 @@ true
 
 <h2 id="componentscan">@ComponentScan()</h2>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@Configuration
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@Configuration
 @ComponentScan(basePackageClasses = DemospringiocApplication.class)
 public class ApplicationConfig {
 
@@ -257,15 +257,15 @@ public class BookService {
   <h2>Recent Posts</h2>
   <ul>
     
+    <li><a href="/2022/09/objectMapper/">object mapper 정리</a></li>
+    
+    <li><a href="/2022/08/bigdecimal/">소수점 몇자리 까지 지원할거냐</a></li>
+    
     <li><a href="/2022/05/browser-policy-mute/">browser media 자동재생 정책</a></li>
     
     <li><a href="/2022/05/react-addEventListener/">react addEventListner 시 주의사항</a></li>
     
     <li><a href="/2022/05/spring-changes/">spring only changes?</a></li>
-    
-    <li><a href="/2021/04/web-cors/">web cors</a></li>
-    
-    <li><a href="/2021/03/javascript-eventloop/">자바스크립트 eventloop</a></li>
     
   </ul>
 </div>
@@ -316,6 +316,10 @@ public class BookService {
         <span>aws</span></a></li>
     
     <li>
+      <a href="/tag/bigdecimal" data-toggle="tooltip" data-placement="right" title="1">
+        <span>bigdecimal</span></a></li>
+    
+    <li>
       <a href="/tag/browser" data-toggle="tooltip" data-placement="right" title="1">
         <span>browser</span></a></li>
     
@@ -326,6 +330,10 @@ public class BookService {
     <li>
       <a href="/tag/docker" data-toggle="tooltip" data-placement="right" title="1">
         <span>docker</span></a></li>
+    
+    <li>
+      <a href="/tag/double" data-toggle="tooltip" data-placement="right" title="1">
+        <span>double</span></a></li>
     
     <li>
       <a href="/tag/eventloop" data-toggle="tooltip" data-placement="right" title="1">
@@ -376,6 +384,10 @@ public class BookService {
         <span>media</span></a></li>
     
     <li>
+      <a href="/tag/objectMapper" data-toggle="tooltip" data-placement="right" title="1">
+        <span>objectMapper</span></a></li>
+    
+    <li>
       <a href="/tag/patch" data-toggle="tooltip" data-placement="right" title="1">
         <span>patch</span></a></li>
     
@@ -418,6 +430,10 @@ public class BookService {
     <li>
       <a href="/tag/web" data-toggle="tooltip" data-placement="right" title="1">
         <span>web</span></a></li>
+    
+    <li>
+      <a href="/tag/%EB%B6%80%EB%8F%99%EC%86%8C%EC%88%98%EC%A0%90" data-toggle="tooltip" data-placement="right" title="1">
+        <span>부동소수점</span></a></li>
     
     <li>
       <a href="/tag/%EC%84%B8%EA%B7%B8%EB%A8%BC%ED%8A%B8%ED%8A%B8%EB%A6%AC" data-toggle="tooltip" data-placement="right" title="1">

@@ -15,7 +15,7 @@
   <span class="nx">setFiles</span><span class="p">([...</span><span class="nx">files</span><span class="p">,</span> <span class="nx">newFiles</span><span class="p">]);</span>
 <span class="p">};</span>
 
-<span class="kd">const</span> <span class="nx">handleDrop</span> <span class="o">=</span> <span class="p">(</span><span class="na">e</span><span class="p">:</span> <span class="nx">DragEvent</span><span class="p">):</span> <span class="k">void</span> <span class="o">=&gt;</span> <span class="p">{</span>
+<span class="kd">const</span> <span class="nx">handleDrop</span> <span class="o">=</span> <span class="p">(</span><span class="nx">e</span><span class="p">:</span> <span class="nx">DragEvent</span><span class="p">):</span> <span class="k">void</span> <span class="o">=&gt;</span> <span class="p">{</span>
   <span class="nx">addFile</span><span class="p">(</span><span class="nx">e</span><span class="p">);</span>
 <span class="p">};</span>
 

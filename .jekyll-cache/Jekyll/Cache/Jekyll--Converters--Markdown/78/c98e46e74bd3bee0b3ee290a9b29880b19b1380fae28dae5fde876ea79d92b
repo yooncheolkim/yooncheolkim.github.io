@@ -1,4 +1,4 @@
-I"�<div class="page-content wc-container">
+I"6	<div class="page-content wc-container">
 	<div class="post">
 		<h1>Tags</h1>  
 		<ul>
@@ -72,6 +72,20 @@
 			<li><a href="/tag/patch">patch</a></li>
 			
 			<li><a href="/tag/addEventListener">addEventListener</a></li>
+			
+			<li><a href="/tag/browser">browser</a></li>
+			
+			<li><a href="/tag/media">media</a></li>
+			
+			<li><a href="/tag/autoplay">autoplay</a></li>
+			
+			<li><a href="/tag/bigdecimal">bigdecimal</a></li>
+			
+			<li><a href="/tag/double">double</a></li>
+			
+			<li><a href="/tag/%EB%B6%80%EB%8F%99%EC%86%8C%EC%88%98%EC%A0%90">부동소수점</a></li>
+			
+			<li><a href="/tag/objectMapper">objectMapper</a></li>
 			
 		</ul>
 	</div>

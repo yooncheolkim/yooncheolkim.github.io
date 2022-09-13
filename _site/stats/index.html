@@ -102,6 +102,20 @@
     var datePostsWords = [
         
             {
+                "t":"2022-9",
+                "year":"2022",
+                "x":1,
+                "y":82
+            },
+        
+            {
+                "t":"2022-8",
+                "year":"2022",
+                "x":1,
+                "y":183
+            },
+        
+            {
                 "t":"2022-5",
                 "year":"2022",
                 "x":1,
@@ -126,7 +140,7 @@
                 "t":"2021-4",
                 "year":"2021",
                 "x":1,
-                "y":357
+                "y":358
             },
         
             {
@@ -196,21 +210,21 @@
                 "t":"2020-6",
                 "year":"2020",
                 "x":1,
-                "y":721
+                "y":722
             },
         
             {
                 "t":"2020-6",
                 "year":"2020",
                 "x":1,
-                "y":599
+                "y":600
             },
         
             {
                 "t":"2020-6",
                 "year":"2020",
                 "x":1,
-                "y":951
+                "y":954
             },
         
             {
@@ -224,7 +238,7 @@
                 "t":"2020-6",
                 "year":"2020",
                 "x":1,
-                "y":388
+                "y":390
             },
         
             {
@@ -245,7 +259,7 @@
                 "t":"2020-5",
                 "year":"2020",
                 "x":1,
-                "y":252
+                "y":253
             },
         
             {
@@ -273,7 +287,7 @@
                 "t":"2020-5",
                 "year":"2020",
                 "x":1,
-                "y":596
+                "y":551
             },
         
             {
@@ -301,7 +315,7 @@
                 "t":"2020-4",
                 "year":"2020",
                 "x":1,
-                "y":92
+                "y":93
             },
         
             {
@@ -322,7 +336,7 @@
                 "t":"2020-3",
                 "year":"2020",
                 "x":1,
-                "y":77
+                "y":79
             },
         
             {
@@ -343,7 +357,7 @@
                 "t":"2020-3",
                 "year":"2020",
                 "x":1,
-                "y":16
+                "y":29
             },
         
     ];
@@ -493,6 +507,9 @@
              "세그먼트트리", 
         
             
+             "부동소수점", 
+        
+            
              "web", 
         
             
@@ -512,6 +529,9 @@
         
             
              "patch", 
+        
+            
+             "objectMapper", 
         
             
              "media", 
@@ -544,6 +564,9 @@
              "eventloop", 
         
             
+             "double", 
+        
+            
              "docker", 
         
             
@@ -551,6 +574,9 @@
         
             
              "browser", 
+        
+            
+             "bigdecimal", 
         
             
              "await", 
@@ -698,6 +724,18 @@
              1, 
         
             
+             1, 
+        
+            
+             1, 
+        
+            
+             1, 
+        
+            
+             1, 
+        
+            
              , 
         
     ];
@@ -727,13 +765,17 @@
 <script>
     var totalWords = [
         
+            82,
+        
+            183,
+        
             105,
         
             367,
         
             752,
         
-            357,
+            358,
         
             73,
         
@@ -753,21 +795,21 @@
         
             234,
         
-            721,
+            722,
         
-            599,
+            600,
         
-            951,
+            954,
         
             83,
         
-            388,
+            390,
         
             594,
         
             26,
         
-            252,
+            253,
         
             163,
         
@@ -775,7 +817,7 @@
         
             309,
         
-            596,
+            551,
         
             58,
         
@@ -783,22 +825,22 @@
         
             3933,
         
-            92,
+            93,
         
             83,
         
             149,
         
-            77,
+            79,
         
             141,
         
             342,
         
-            16,
+            29,
         
     ].reduce((a, b) => a + b, 0);
-    var totalPosts = 35;
+    var totalPosts = 37;
 
     function concatBoldTextToELement(id, text) {
         var abvgd = document.createElement('b');
@@ -819,15 +861,15 @@
   <h2>Recent Posts</h2>
   <ul>
     
+    <li><a href="/2022/09/objectMapper/">object mapper 정리</a></li>
+    
+    <li><a href="/2022/08/bigdecimal/">소수점 몇자리 까지 지원할거냐</a></li>
+    
     <li><a href="/2022/05/browser-policy-mute/">browser media 자동재생 정책</a></li>
     
     <li><a href="/2022/05/react-addEventListener/">react addEventListner 시 주의사항</a></li>
     
     <li><a href="/2022/05/spring-changes/">spring only changes?</a></li>
-    
-    <li><a href="/2021/04/web-cors/">web cors</a></li>
-    
-    <li><a href="/2021/03/javascript-eventloop/">자바스크립트 eventloop</a></li>
     
   </ul>
 </div>
@@ -878,6 +920,10 @@
         <span>aws</span></a></li>
     
     <li>
+      <a href="/tag/bigdecimal" data-toggle="tooltip" data-placement="right" title="1">
+        <span>bigdecimal</span></a></li>
+    
+    <li>
       <a href="/tag/browser" data-toggle="tooltip" data-placement="right" title="1">
         <span>browser</span></a></li>
     
@@ -888,6 +934,10 @@
     <li>
       <a href="/tag/docker" data-toggle="tooltip" data-placement="right" title="1">
         <span>docker</span></a></li>
+    
+    <li>
+      <a href="/tag/double" data-toggle="tooltip" data-placement="right" title="1">
+        <span>double</span></a></li>
     
     <li>
       <a href="/tag/eventloop" data-toggle="tooltip" data-placement="right" title="1">
@@ -938,6 +988,10 @@
         <span>media</span></a></li>
     
     <li>
+      <a href="/tag/objectMapper" data-toggle="tooltip" data-placement="right" title="1">
+        <span>objectMapper</span></a></li>
+    
+    <li>
       <a href="/tag/patch" data-toggle="tooltip" data-placement="right" title="1">
         <span>patch</span></a></li>
     
@@ -980,6 +1034,10 @@
     <li>
       <a href="/tag/web" data-toggle="tooltip" data-placement="right" title="1">
         <span>web</span></a></li>
+    
+    <li>
+      <a href="/tag/%EB%B6%80%EB%8F%99%EC%86%8C%EC%88%98%EC%A0%90" data-toggle="tooltip" data-placement="right" title="1">
+        <span>부동소수점</span></a></li>
     
     <li>
       <a href="/tag/%EC%84%B8%EA%B7%B8%EB%A8%BC%ED%8A%B8%ED%8A%B8%EB%A6%AC" data-toggle="tooltip" data-placement="right" title="1">

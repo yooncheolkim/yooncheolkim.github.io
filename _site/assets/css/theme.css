@@ -160,9 +160,6 @@ table.inner-borders td { border: 1px solid #5e5e5e; }
 
 .filename p { margin: 0; }
 
-@media (min-width: 1000px) { .twoRow .navbar-collapse { clear: left; }
-  .footer-distributed .footer { text-align: center; }
-  .footer-distributed .footer { float: none; margin: 0 auto 20px; }
-  .footer-distributed .footer { line-height: 1.8; } }
+@media (min-width: 1000px) { .twoRow .navbar-collapse { clear: left; } .footer-distributed .footer { text-align: center; } .footer-distributed .footer { float: none; margin: 0 auto 20px; } .footer-distributed .footer { line-height: 1.8; } }
 
 /*# sourceMappingURL=theme.css.map */

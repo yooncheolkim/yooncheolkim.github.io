@@ -1,9 +1,9 @@
-I"�<h3 id="jenkins-image-받아오기">jenkins image 받아오기</h3>
+I"�<h3 id="jenkins-image-받아오기">jenkins image 받아오기</h3>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker pull jenkins/jenkins
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker pull jenkins/jenkins
 </code></pre></div></div>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run -d -p 8181:8080 -v jyjenkins:/var/jenkins_home --name jyjenkins -u root jenkins/jenkins
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run -d -p 8181:8080 -v jyjenkins:/var/jenkins_home --name jyjenkins -u root jenkins/jenkins
 </code></pre></div></div>
 <ul>
   <li>d : 컨테이너 백그라운드 실행</li>

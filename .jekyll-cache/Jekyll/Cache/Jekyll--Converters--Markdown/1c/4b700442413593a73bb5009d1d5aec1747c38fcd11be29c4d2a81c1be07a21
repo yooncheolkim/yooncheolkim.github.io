@@ -1,4 +1,4 @@
-I"Ÿ<h1 id="applicationcontext-extends-environmentcapable">ApplicationContext extends EnvironmentCapable</h1>
+I"²<h1 id="applicationcontext-extends-environmentcapable">ApplicationContext extends EnvironmentCapable</h1>
 <ul>
   <li>getEnvironment()</li>
 </ul>
@@ -95,7 +95,7 @@
 </ul>
 
 <h3 id="propertysource">@PropertySource</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@SpringBootApplication
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@SpringBootApplication
 @PropertySource("classpath:/app.properties")
 </code></pre></div></div>
 

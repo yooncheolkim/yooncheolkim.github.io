@@ -1,4 +1,4 @@
-I"S<h3 id="cross-origin-resouce-sharing">Cross Origin Resouce Sharing</h3>
+I"f<h3 id="cross-origin-resouce-sharing">Cross Origin Resouce Sharing</h3>
 
 <ul>
   <li>naver 접속해서 다른 도메인으로 http 요청 보내면 에러 발생한다.</li>
@@ -69,7 +69,7 @@
   <li>Access-Control-Allow-Origin 를 * 로</li>
 </ul>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Access-Control-Allow-Origin : *
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Access-Control-Allow-Origin : *
 Access-Control-Allow-Methods: GET,POST,PUT,DELETE,OPTIONS
 Access-Control-Max-Age : 3600
 Access-Control-Allow-Headers: Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method,

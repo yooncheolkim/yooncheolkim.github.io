@@ -1,4 +1,4 @@
-I"�<ul>
+I"�<ul>
   <li>왠지는 모르겠지만,,<br />
 jekyll serve 안될때,</li>
 </ul>
@@ -6,6 +6,10 @@ jekyll serve 안될때,</li>
 <p>source ~/.zshrc</p>
 
 <p>해주고 하면 잘된다..</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bundle exec jekyll build
+bundle exec jekyll serve
+</code></pre></div></div>
 
 <p>참고 <a href="https://jojoldu.tistory.com/288">https://jojoldu.tistory.com/288</a></p>
 :ET

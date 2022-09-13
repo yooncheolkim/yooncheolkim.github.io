@@ -1,4 +1,4 @@
-I"x<h1 id="resource-추상화">Resource 추상화</h1>
+I"�<h1 id="resource-추상화">Resource 추상화</h1>
 <ul>
   <li>org.springframework.core.io.Resource</li>
   <li>java.net.URL 를 추상화</li>
@@ -65,7 +65,7 @@
 
 <ul>
   <li>결과
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class org.springframework.context.annotation.AnnotationConfigApplicationContext
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class org.springframework.context.annotation.AnnotationConfigApplicationContext
 class org.springframework.core.io.ClassPathResource
 true
 class path resource [test.txt]
@@ -89,7 +89,7 @@ class path resource [test.txt]
 
 <ul>
   <li>결과
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class org.springframework.context.annotation.AnnotationConfigApplicationContext
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class org.springframework.context.annotation.AnnotationConfigApplicationContext
 class org.springframework.core.io.DefaultResourceLoader$ClassPathContextResource
 true
 class path resource [test.txt]
