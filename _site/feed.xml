@@ -7,6 +7,161 @@
 		<atom:link href="/feed.xml" rel="self" type="application/rss+xml" />
 		
 			<item>
+				<title>spring controller validation</title>
+				<description>&lt;h3 id=&quot;controller-parameter-validation&quot;&gt;controller parameter validation&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;기본적으로 springmvc는 JSR 303 implementation, hibernate-validator 같은 library가 추가되어야한다.
+    &lt;ul&gt;
+      &lt;li&gt;그리고 @Configure로 bean 등록하여야한다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;spiring boot는 자동으로 등록되어있다.&lt;/li&gt;
+  &lt;li&gt;기본적으로 path or request param error 는 500 http error 로 response 된다.
+    &lt;ul&gt;
+      &lt;li&gt;@ControllerAdvice로 custom error 처리를 할 수 있다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;validation&quot;&gt;validation&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;javax.validation.constraints package에 있는 모든 validation 을 사용할 수 있다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    //request /testController?age=100
+    @PostMapping(&quot;/testController&quot;)
+    public ResponseEntity&amp;lt;ResponseData&amp;gt; test(@RequestParam @Min(1) @Max(99) Integer age) {
+        return ResponseUtility.createPostAsyncSuccessResponse(null);
+    }
+
+    //결과 : test.age: 99 이하여야 합니다
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    @PostMapping(&quot;/testController/{name}&quot;)
+    public ResponseEntity&amp;lt;ResponseData&amp;gt; updateMemberWallets(@RequestParam @Min(1) @Max(99) Integer age, @PathVariable(name = &quot;name&quot;) @NotBlank @Size(min = 10) String name) {
+        return ResponseUtility.createPostAsyncSuccessResponse(null);
+    }
+
+    //결과 : test.name: 크기가 10에서 2147483647 사이여야 합니다
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;@RequestBody의 경우, 정의된 dto의 각 필드에 validation annotation을 정의하고, @RequestBody @Valid DTO dto 로 하면 validation 처리할 수 있다.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;참고 : https://www.baeldung.com/spring-validate-requestparam-pathvariable&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+</description>
+				<pubDate>Sat, 17 Sep 2022 12:30:00 +0900</pubDate>
+				<link>/2022/09/spring-controller-validation/</link>
+				<guid isPermaLink="true">/2022/09/spring-controller-validation/</guid>
+			</item>
+		
+			<item>
+				<title>profile에 따라 bean 주입</title>
+				<description>&lt;h3 id=&quot;bean-주입-방식&quot;&gt;bean 주입 방식&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;bean 주입 방식은 필드 주입(@autowire), final 을 이용한 생성자 주입, bean 주입이 있다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;bean으로-등록하기&quot;&gt;bean으로 등록하기&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;@Service, @Repository, @RestController 들은 모두 @Component 로 되어있어, 런타임시 자동으로 spring bean으로 등록된다.
+    &lt;ul&gt;
+      &lt;li&gt;내가 만든 class를 bean으로 등록하고 싶다면, @Component를 붙여주면 spring component 스캔대상이 되어 bean으로 등록된다.&lt;/li&gt;
+      &lt;li&gt;즉, spring 에게 알아서 bean으로 등록해서 인스턴스 생성/관리 해달라고 하는것&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;@Configure class에 @Bean 메소드(setter, builder)를 생성하여, bean 등록할 수 있다.
+    &lt;ul&gt;
+      &lt;li&gt;주로 외부 라이브러리(redis관련, swagger) 를 등록할때 사용된다.
+        &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;@Bean
+public RedisTemplate&amp;lt;String, Object&amp;gt; redisTemplate() throws SystemException {
+    RedisTemplate&amp;lt;String, Object&amp;gt; redisTemplate = new RedisTemplate&amp;lt;&amp;gt;();
+    redisTemplate.setConnectionFactory(this.redisConnectionFactory());
+    redisTemplate.setKeySerializer(new StringRedisSerializer());
+    redisTemplate.setValueSerializer(new StringRedisSerializer());
+    return redisTemplate;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;        &lt;/div&gt;
+      &lt;/li&gt;
+      &lt;li&gt;개발하면서 생성한 클래스도 @Bean을 사용하여 등록가능하다.
+        &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;@Bean
+@Primary
+public FeignUtility feignUtility() {
+    return new FeignUtilityMock();
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;        &lt;/div&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;profile에-따라-bean-주입을-선택적으로&quot;&gt;profile에 따라 bean 주입을 선택적으로&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;feign client를 사용하여, 외부 api call을 개발한 경우, 모듈 테스트를 위하여, 실제 request를 하지 않도록 하고, mocking 해야하는 경우가 있다.&lt;/li&gt;
+  &lt;li&gt;이때 feign interface를 구현한 mocking 클래스를 @Bean으로 주입하여, spring app이 기동되도록 profile과 간단한 설정으로 가능하다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// build.gradle 설정 : automation profile
+task bootRunAutomation {
+    group = &quot;application&quot;
+    gradle.taskGraph.whenReady { graph -&amp;gt;
+        if (graph.hasTask(bootRunAutomation)) {
+            bootRun {
+                configure {
+                    systemProperty &quot;spring.profiles.active&quot;, &quot;automation&quot;
+                }
+            }
+        }
+    }
+    finalizedBy(&quot;bootRun&quot;)
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// application-automation.yml
+spring:
+  config:
+    import: application-local.yml
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;@Configuration
+@Profile({&quot;automation&quot;, &quot;feature&quot;})
+public class MockConfig {
+
+    @Bean
+    @Primary
+    public FeignUtility feignUtility() {
+        return new FeignUtilityMock();
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;//실제 Feign client interface
+@FeignClient(
+        name = &quot;feignUtility&quot;,
+        url = &quot;${feign.url}&quot;,
+        primary = false)
+public interface FeignUtility {
+    @PostMapping(path = &quot;/member&quot;)
+    MemberDTO getMemberInfo(
+            @RequestBody RequestDTO requestDTO);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+</description>
+				<pubDate>Sat, 17 Sep 2022 11:30:00 +0900</pubDate>
+				<link>/2022/09/bean-inject/</link>
+				<guid isPermaLink="true">/2022/09/bean-inject/</guid>
+			</item>
+		
+			<item>
 				<title>object mapper 정리</title>
 				<description>&lt;h3 id=&quot;object-mapper-정리&quot;&gt;object mapper 정리&lt;/h3&gt;
 
@@ -404,13 +559,13 @@ controller에서 map으로 받을 경우, fe에서 보낸 body fields만 받을 
 
 &lt;ul&gt;
   &lt;li&gt;도메인, 프로토콜, 포트가 다른 곳으로 요청을 보내는것을 cors라 한다.&lt;/li&gt;
+  &lt;li&gt;origin : http + domain + port&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h3 id=&quot;왜-필요한가&quot;&gt;왜 필요한가.&lt;/h3&gt;
 
 &lt;ul&gt;
   &lt;li&gt;예를 들어, 사용자가 해커가 만든 hacker.com에 접속하여, gmail.com에 요청을 보내 나의 메일 정보를 다 가져간다면?&lt;/li&gt;
-  &lt;li&gt;이런 cors 제약 덕분에, 안전&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h4 id=&quot;과거의-우회-방법들&quot;&gt;과거의 우회 방법들&lt;/h4&gt;
@@ -435,7 +590,7 @@ controller에서 map으로 받을 경우, fe에서 보낸 body fields만 받을 
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;처음에는 크로스 오리진 요청이 불가능했지만, 풀기로함.&lt;/li&gt;
+  &lt;li&gt;처음에는 크로스 오리진 요청이 불가능했지만, 풀기로함. cros가 정의됨.&lt;/li&gt;
   &lt;li&gt;서버에서 명시적으로 허용했을때만 가능.&lt;/li&gt;
 &lt;/ul&gt;
 
@@ -453,6 +608,43 @@ controller에서 map으로 받을 경우, fe에서 보낸 body fields만 받을 
 &lt;/ol&gt;
 
 &lt;h3 id=&quot;그렇다면-서버측-처리는&quot;&gt;그렇다면 서버측 처리는?&lt;/h3&gt;
+
+&lt;h4 id=&quot;spring&quot;&gt;spring&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;springboot에서는 다음과 같이 처리 가능&lt;/li&gt;
+  &lt;li&gt;전체 적용&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;@Configuration
+public class CorsConfig implements WebMvcConfigurer {
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping(&quot;/**&quot;)
+                .allowedOriginPatterns(&quot;*&quot;)
+                .allowedMethods(&quot;GET&quot;, &quot;POST&quot;, &quot;PUT&quot;, &quot;DELETE&quot;, &quot;OPTIONS&quot;)
+                .allowedHeaders(
+                        &quot;Content-Type&quot;,
+                        &quot;X-Requested-With&quot;,
+                        &quot;x-session-id&quot;,
+                        &quot;x-session-info&quot;,
+                        &quot;x-correlation-id&quot;,
+                        &quot;x-language-code&quot;,
+                        &quot;Accept&quot;,
+                        &quot;Origin&quot;,
+                        &quot;Authorization&quot;,
+                        &quot;Date&quot;,
+                        &quot;Access-Control-Request-Method&quot;)
+                .exposedHeaders(
+                        &quot;Access-Control-Allow-Headers&quot;,
+                        &quot;Access-Control-Allow-Origin&quot;,
+                        &quot;Access-Control-Allow-Credentials&quot;)
+                .allowCredentials(true)
+                .maxAge(3000L);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h4 id=&quot;모든-외부-도메인-요청을-허용할-경우&quot;&gt;모든 외부 도메인 요청을 허용할 경우&lt;/h4&gt;
 
@@ -676,144 +868,6 @@ Access-Control-Request-Headers,Authorization
 				<pubDate>Tue, 02 Mar 2021 07:30:00 +0900</pubDate>
 				<link>/2021/03/js-promise-await-async/</link>
 				<guid isPermaLink="true">/2021/03/js-promise-await-async/</guid>
-			</item>
-		
-			<item>
-				<title>자바스크립트 this 주의점</title>
-				<description>&lt;h1 id=&quot;arrow-function-과-그냥-function-의-this&quot;&gt;arrow function 과 그냥 function 의 this&lt;/h1&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;this는 function 실행 시점의 해당 function의 객체를 의미한다.&lt;/li&gt;
-  &lt;li&gt;람다 function의 경우, this는 선언된 곳에서의 this를 지정해보린다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nx&quot;&gt;param&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;global param&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;printParam&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;param&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;kd&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;object&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;param&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;object param&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;printParam&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;object2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;param&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;object2 param&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;printParam&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
-
-&lt;span class=&quot;nx&quot;&gt;object&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//object param&lt;/span&gt;
-&lt;span class=&quot;nx&quot;&gt;object2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//object2 param&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;printParm은 정의가 되고, object로 인해 실행되기 때문에 this는 각 object&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nx&quot;&gt;param&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;global param&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;kd&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;printParam&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;param&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
-
-&lt;span class=&quot;kd&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;object&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;param&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;object param&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;printParam&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;object2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;param&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;object2 param&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;printParam&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
-
-&lt;span class=&quot;nx&quot;&gt;object&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//global param&lt;/span&gt;
-&lt;span class=&quot;nx&quot;&gt;object2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//global param&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;printParam은 람다식으로 정의 됨.&lt;/li&gt;
-  &lt;li&gt;printParam의 this는 global을 지정하고 있다.&lt;/li&gt;
-&lt;/ul&gt;
-</description>
-				<pubDate>Mon, 01 Mar 2021 05:30:00 +0900</pubDate>
-				<link>/2021/03/js-this/</link>
-				<guid isPermaLink="true">/2021/03/js-this/</guid>
-			</item>
-		
-			<item>
-				<title>자바스크립트 프로퍼티</title>
-				<description>&lt;h1 id=&quot;자바스크립트-prototype&quot;&gt;자바스크립트 [Prototype]&lt;/h1&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;함수 생성자로 만들어진, 객체는 모두 &lt;strong&gt;proto&lt;/strong&gt; 를 가지고 있다.&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;proto&lt;/strong&gt; 는 부모객체(프로토타입)을 참조하고 있다.&lt;/li&gt;
-  &lt;li&gt;🔴 &lt;strong&gt;proto&lt;/strong&gt; 는 legacy, 개발자가 직접 참조하여 사용하는거는 지양해야한다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;language-js highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Yoon&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;aa&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;dir&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h1 id=&quot;자바스크립트-함수-생성자의-prototype&quot;&gt;자바스크립트 함수 생성자의 prototype&lt;/h1&gt;
-
-&lt;div class=&quot;language-js highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Yoon&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;aa&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;dir&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;Yoon&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;함수 생성자의 속성중 prototype이 있다.&lt;/li&gt;
-  &lt;li&gt;이 prototype 은 함수 생성자로 만들어진, 객체의 &lt;strong&gt;proto&lt;/strong&gt; 와 같은곳을 참조하고 있다.&lt;/li&gt;
-  &lt;li&gt;Yoon.prototype&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h1 id=&quot;자바스크립트-룩업-방식&quot;&gt;자바스크립트 룩업 방식&lt;/h1&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;자바스크립트는 객체의 속성을 찾는 방법이 있다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;현재 객체 내부에서 찾는다.&lt;/li&gt;
-  &lt;li&gt;없으면, &lt;strong&gt;proto&lt;/strong&gt; 가 참조하는 객체로 간다.&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;proto&lt;/strong&gt; 가 참조하는 객체에서 찾는다.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;이런 방식으로 객체의 상속/오버라이드를 구현할 수 있다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;language-js highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;method1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;a1&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
-
-&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;__proto__&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;method2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;b1&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
-
-&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;__proto__&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;method3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;c3&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
-
-&lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;method1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
-&lt;span class=&quot;nx&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;method1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-</description>
-				<pubDate>Tue, 19 Jan 2021 04:30:00 +0900</pubDate>
-				<link>/2021/01/js-property/</link>
-				<guid isPermaLink="true">/2021/01/js-property/</guid>
 			</item>
 		
 	</channel>

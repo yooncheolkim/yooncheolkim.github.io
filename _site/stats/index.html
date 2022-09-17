@@ -105,6 +105,20 @@
                 "t":"2022-9",
                 "year":"2022",
                 "x":1,
+                "y":151
+            },
+        
+            {
+                "t":"2022-9",
+                "year":"2022",
+                "x":1,
+                "y":282
+            },
+        
+            {
+                "t":"2022-9",
+                "year":"2022",
+                "x":1,
                 "y":149
             },
         
@@ -140,7 +154,7 @@
                 "t":"2021-4",
                 "year":"2021",
                 "x":1,
-                "y":358
+                "y":418
             },
         
             {
@@ -513,6 +527,9 @@
              "web", 
         
             
+             "validation", 
+        
+            
              "this", 
         
             
@@ -526,6 +543,12 @@
         
             
              "promise", 
+        
+            
+             "profile", 
+        
+            
+             "primary", 
         
             
              "patch", 
@@ -573,10 +596,16 @@
              "cors", 
         
             
+             "controller", 
+        
+            
              "browser", 
         
             
              "bigdecimal", 
+        
+            
+             "bean", 
         
             
              "await", 
@@ -736,6 +765,21 @@
              1, 
         
             
+             1, 
+        
+            
+             1, 
+        
+            
+             1, 
+        
+            
+             1, 
+        
+            
+             1, 
+        
+            
              , 
         
     ];
@@ -765,6 +809,10 @@
 <script>
     var totalWords = [
         
+            151,
+        
+            282,
+        
             149,
         
             183,
@@ -775,7 +823,7 @@
         
             752,
         
-            358,
+            418,
         
             73,
         
@@ -840,7 +888,7 @@
             29,
         
     ].reduce((a, b) => a + b, 0);
-    var totalPosts = 37;
+    var totalPosts = 39;
 
     function concatBoldTextToELement(id, text) {
         var abvgd = document.createElement('b');
@@ -861,15 +909,15 @@
   <h2>Recent Posts</h2>
   <ul>
     
+    <li><a href="/2022/09/spring-controller-validation/">spring controller validation</a></li>
+    
+    <li><a href="/2022/09/bean-inject/">profile에 따라 bean 주입</a></li>
+    
     <li><a href="/2022/09/objectMapper/">object mapper 정리</a></li>
     
     <li><a href="/2022/08/bigdecimal/">소수점 몇자리 까지 지원할거냐</a></li>
     
     <li><a href="/2022/05/browser-policy-mute/">browser media 자동재생 정책</a></li>
-    
-    <li><a href="/2022/05/react-addEventListener/">react addEventListner 시 주의사항</a></li>
-    
-    <li><a href="/2022/05/spring-changes/">spring only changes?</a></li>
     
   </ul>
 </div>
@@ -920,12 +968,20 @@
         <span>aws</span></a></li>
     
     <li>
+      <a href="/tag/bean" data-toggle="tooltip" data-placement="right" title="1">
+        <span>bean</span></a></li>
+    
+    <li>
       <a href="/tag/bigdecimal" data-toggle="tooltip" data-placement="right" title="1">
         <span>bigdecimal</span></a></li>
     
     <li>
       <a href="/tag/browser" data-toggle="tooltip" data-placement="right" title="1">
         <span>browser</span></a></li>
+    
+    <li>
+      <a href="/tag/controller" data-toggle="tooltip" data-placement="right" title="1">
+        <span>controller</span></a></li>
     
     <li>
       <a href="/tag/cors" data-toggle="tooltip" data-placement="right" title="1">
@@ -996,6 +1052,14 @@
         <span>patch</span></a></li>
     
     <li>
+      <a href="/tag/primary" data-toggle="tooltip" data-placement="right" title="1">
+        <span>primary</span></a></li>
+    
+    <li>
+      <a href="/tag/profile" data-toggle="tooltip" data-placement="right" title="1">
+        <span>profile</span></a></li>
+    
+    <li>
       <a href="/tag/promise" data-toggle="tooltip" data-placement="right" title="1">
         <span>promise</span></a></li>
     
@@ -1030,6 +1094,10 @@
     <li>
       <a href="/tag/this" data-toggle="tooltip" data-placement="right" title="1">
         <span>this</span></a></li>
+    
+    <li>
+      <a href="/tag/validation" data-toggle="tooltip" data-placement="right" title="1">
+        <span>validation</span></a></li>
     
     <li>
       <a href="/tag/web" data-toggle="tooltip" data-placement="right" title="1">

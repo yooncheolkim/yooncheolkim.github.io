@@ -105,13 +105,13 @@
 
 <ul>
   <li>도메인, 프로토콜, 포트가 다른 곳으로 요청을 보내는것을 cors라 한다.</li>
+  <li>origin : http + domain + port</li>
 </ul>
 
 <h3 id="왜-필요한가">왜 필요한가.</h3>
 
 <ul>
   <li>예를 들어, 사용자가 해커가 만든 hacker.com에 접속하여, gmail.com에 요청을 보내 나의 메일 정보를 다 가져간다면?</li>
-  <li>이런 cors 제약 덕분에, 안전</li>
 </ul>
 
 <h4 id="과거의-우회-방법들">과거의 우회 방법들</h4>
@@ -136,7 +136,7 @@
 </code></pre></div></div>
 
 <ul>
-  <li>처음에는 크로스 오리진 요청이 불가능했지만, 풀기로함.</li>
+  <li>처음에는 크로스 오리진 요청이 불가능했지만, 풀기로함. cros가 정의됨.</li>
   <li>서버에서 명시적으로 허용했을때만 가능.</li>
 </ul>
 
@@ -154,6 +154,43 @@
 </ol>
 
 <h3 id="그렇다면-서버측-처리는">그렇다면 서버측 처리는?</h3>
+
+<h4 id="spring">spring</h4>
+
+<ul>
+  <li>springboot에서는 다음과 같이 처리 가능</li>
+  <li>전체 적용</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@Configuration
+public class CorsConfig implements WebMvcConfigurer {
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOriginPatterns("*")
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowedHeaders(
+                        "Content-Type",
+                        "X-Requested-With",
+                        "x-session-id",
+                        "x-session-info",
+                        "x-correlation-id",
+                        "x-language-code",
+                        "Accept",
+                        "Origin",
+                        "Authorization",
+                        "Date",
+                        "Access-Control-Request-Method")
+                .exposedHeaders(
+                        "Access-Control-Allow-Headers",
+                        "Access-Control-Allow-Origin",
+                        "Access-Control-Allow-Credentials")
+                .allowCredentials(true)
+                .maxAge(3000L);
+    }
+}
+</code></pre></div></div>
 
 <h4 id="모든-외부-도메인-요청을-허용할-경우">모든 외부 도메인 요청을 허용할 경우</h4>
 
@@ -201,15 +238,15 @@ Access-Control-Request-Headers,Authorization
   <h2>Recent Posts</h2>
   <ul>
     
+    <li><a href="/2022/09/spring-controller-validation/">spring controller validation</a></li>
+    
+    <li><a href="/2022/09/bean-inject/">profile에 따라 bean 주입</a></li>
+    
     <li><a href="/2022/09/objectMapper/">object mapper 정리</a></li>
     
     <li><a href="/2022/08/bigdecimal/">소수점 몇자리 까지 지원할거냐</a></li>
     
     <li><a href="/2022/05/browser-policy-mute/">browser media 자동재생 정책</a></li>
-    
-    <li><a href="/2022/05/react-addEventListener/">react addEventListner 시 주의사항</a></li>
-    
-    <li><a href="/2022/05/spring-changes/">spring only changes?</a></li>
     
   </ul>
 </div>
@@ -260,12 +297,20 @@ Access-Control-Request-Headers,Authorization
         <span>aws</span></a></li>
     
     <li>
+      <a href="/tag/bean" data-toggle="tooltip" data-placement="right" title="1">
+        <span>bean</span></a></li>
+    
+    <li>
       <a href="/tag/bigdecimal" data-toggle="tooltip" data-placement="right" title="1">
         <span>bigdecimal</span></a></li>
     
     <li>
       <a href="/tag/browser" data-toggle="tooltip" data-placement="right" title="1">
         <span>browser</span></a></li>
+    
+    <li>
+      <a href="/tag/controller" data-toggle="tooltip" data-placement="right" title="1">
+        <span>controller</span></a></li>
     
     <li>
       <a href="/tag/cors" data-toggle="tooltip" data-placement="right" title="1">
@@ -336,6 +381,14 @@ Access-Control-Request-Headers,Authorization
         <span>patch</span></a></li>
     
     <li>
+      <a href="/tag/primary" data-toggle="tooltip" data-placement="right" title="1">
+        <span>primary</span></a></li>
+    
+    <li>
+      <a href="/tag/profile" data-toggle="tooltip" data-placement="right" title="1">
+        <span>profile</span></a></li>
+    
+    <li>
       <a href="/tag/promise" data-toggle="tooltip" data-placement="right" title="1">
         <span>promise</span></a></li>
     
@@ -370,6 +423,10 @@ Access-Control-Request-Headers,Authorization
     <li>
       <a href="/tag/this" data-toggle="tooltip" data-placement="right" title="1">
         <span>this</span></a></li>
+    
+    <li>
+      <a href="/tag/validation" data-toggle="tooltip" data-placement="right" title="1">
+        <span>validation</span></a></li>
     
     <li>
       <a href="/tag/web" data-toggle="tooltip" data-placement="right" title="1">
