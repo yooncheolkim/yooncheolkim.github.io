@@ -23,7 +23,7 @@ description: 많이 사용하는 object mapper 정리
 
 - objectMapper 의 변환 함수는 두번째 인자로 TypeReference를 받을 수 있다.
 
-```
+```java
 mapper.readValue(jsonStr, CommonResponseDTO.class);
 // instead of
 mapper.readValue(jsonStr, new TypeReference<CommonResponseDTO<TestDto>>() {});

@@ -158,38 +158,37 @@
 <h4 id="spring">spring</h4>
 
 <ul>
-  <li>springboot에서는 다음과 같이 처리 가능</li>
-  <li>전체 적용</li>
+  <li>springboot에서는 다음과 같이 처리 가능, 전체 적용</li>
 </ul>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@Configuration
-public class CorsConfig implements WebMvcConfigurer {
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Configuration</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CorsConfig</span> <span class="kd">implements</span> <span class="nc">WebMvcConfigurer</span> <span class="o">{</span>
 
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-                .allowedOriginPatterns("*")
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                .allowedHeaders(
-                        "Content-Type",
-                        "X-Requested-With",
-                        "x-session-id",
-                        "x-session-info",
-                        "x-correlation-id",
-                        "x-language-code",
-                        "Accept",
-                        "Origin",
-                        "Authorization",
-                        "Date",
-                        "Access-Control-Request-Method")
-                .exposedHeaders(
-                        "Access-Control-Allow-Headers",
-                        "Access-Control-Allow-Origin",
-                        "Access-Control-Allow-Credentials")
-                .allowCredentials(true)
-                .maxAge(3000L);
-    }
-}
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">addCorsMappings</span><span class="o">(</span><span class="nc">CorsRegistry</span> <span class="n">registry</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">registry</span><span class="o">.</span><span class="na">addMapping</span><span class="o">(</span><span class="s">"/**"</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">allowedOriginPatterns</span><span class="o">(</span><span class="s">"*"</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">allowedMethods</span><span class="o">(</span><span class="s">"GET"</span><span class="o">,</span> <span class="s">"POST"</span><span class="o">,</span> <span class="s">"PUT"</span><span class="o">,</span> <span class="s">"DELETE"</span><span class="o">,</span> <span class="s">"OPTIONS"</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">allowedHeaders</span><span class="o">(</span>
+                        <span class="s">"Content-Type"</span><span class="o">,</span>
+                        <span class="s">"X-Requested-With"</span><span class="o">,</span>
+                        <span class="s">"x-session-id"</span><span class="o">,</span>
+                        <span class="s">"x-session-info"</span><span class="o">,</span>
+                        <span class="s">"x-correlation-id"</span><span class="o">,</span>
+                        <span class="s">"x-language-code"</span><span class="o">,</span>
+                        <span class="s">"Accept"</span><span class="o">,</span>
+                        <span class="s">"Origin"</span><span class="o">,</span>
+                        <span class="s">"Authorization"</span><span class="o">,</span>
+                        <span class="s">"Date"</span><span class="o">,</span>
+                        <span class="s">"Access-Control-Request-Method"</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">exposedHeaders</span><span class="o">(</span>
+                        <span class="s">"Access-Control-Allow-Headers"</span><span class="o">,</span>
+                        <span class="s">"Access-Control-Allow-Origin"</span><span class="o">,</span>
+                        <span class="s">"Access-Control-Allow-Credentials"</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">allowCredentials</span><span class="o">(</span><span class="kc">true</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">maxAge</span><span class="o">(</span><span class="mi">3000L</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
 </code></pre></div></div>
 
 <h4 id="모든-외부-도메인-요청을-허용할-경우">모든 외부 도메인 요청을 허용할 경우</h4>

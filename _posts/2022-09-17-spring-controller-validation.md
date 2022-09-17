@@ -18,7 +18,7 @@ description:
 
 - javax.validation.constraints package에 있는 모든 validation 을 사용할 수 있다.
 
-```
+```java
     //request /testController?age=100
     @PostMapping("/testController")
     public ResponseEntity<ResponseData> test(@RequestParam @Min(1) @Max(99) Integer age) {
@@ -28,7 +28,7 @@ description:
     //결과 : test.age: 99 이하여야 합니다
 ```
 
-```
+```java
     @PostMapping("/testController/{name}")
     public ResponseEntity<ResponseData> updateMemberWallets(@RequestParam @Min(1) @Max(99) Integer age, @PathVariable(name = "name") @NotBlank @Size(min = 10) String name) {
         return ResponseUtility.createPostAsyncSuccessResponse(null);

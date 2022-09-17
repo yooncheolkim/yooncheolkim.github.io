@@ -113,9 +113,9 @@
   <li>objectMapper 의 변환 함수는 두번째 인자로 TypeReference를 받을 수 있다.</li>
 </ul>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mapper.readValue(jsonStr, CommonResponseDTO.class);
-// instead of
-mapper.readValue(jsonStr, new TypeReference&lt;CommonResponseDTO&lt;TestDto&gt;&gt;() {});
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">mapper</span><span class="o">.</span><span class="na">readValue</span><span class="o">(</span><span class="n">jsonStr</span><span class="o">,</span> <span class="nc">CommonResponseDTO</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+<span class="c1">// instead of</span>
+<span class="n">mapper</span><span class="o">.</span><span class="na">readValue</span><span class="o">(</span><span class="n">jsonStr</span><span class="o">,</span> <span class="k">new</span> <span class="nc">TypeReference</span><span class="o">&lt;</span><span class="nc">CommonResponseDTO</span><span class="o">&lt;</span><span class="nc">TestDto</span><span class="o">&gt;&gt;()</span> <span class="o">{});</span>
 </code></pre></div></div>
 
 <ul>

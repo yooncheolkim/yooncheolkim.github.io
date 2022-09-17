@@ -1,0 +1,48 @@
+I"*<h3 id="controller-parameter-validation">controller parameter validation</h3>
+
+<ul>
+  <li>기본적으로 springmvc는 JSR 303 implementation, hibernate-validator 같은 library가 추가되어야한다.
+    <ul>
+      <li>그리고 @Configure로 bean 등록하여야한다.</li>
+    </ul>
+  </li>
+  <li>spiring boot는 자동으로 등록되어있다.</li>
+  <li>기본적으로 path or request param error 는 500 http error 로 response 된다.
+    <ul>
+      <li>@ControllerAdvice로 custom error 처리를 할 수 있다.</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="validation">validation</h4>
+
+<ul>
+  <li>javax.validation.constraints package에 있는 모든 validation 을 사용할 수 있다.</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="c1">//request /testController?age=100</span>
+    <span class="nd">@PostMapping</span><span class="o">(</span><span class="s">"/testController"</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="nc">ResponseEntity</span><span class="o">&lt;</span><span class="nc">ResponseData</span><span class="o">&gt;</span> <span class="nf">test</span><span class="o">(</span><span class="nd">@RequestParam</span> <span class="nd">@Min</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span> <span class="nd">@Max</span><span class="o">(</span><span class="mi">99</span><span class="o">)</span> <span class="nc">Integer</span> <span class="n">age</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="nc">ResponseUtility</span><span class="o">.</span><span class="na">createPostAsyncSuccessResponse</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="c1">//결과 : test.age: 99 이하여야 합니다</span>
+</code></pre></div></div>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nd">@PostMapping</span><span class="o">(</span><span class="s">"/testController/{name}"</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="nc">ResponseEntity</span><span class="o">&lt;</span><span class="nc">ResponseData</span><span class="o">&gt;</span> <span class="nf">updateMemberWallets</span><span class="o">(</span><span class="nd">@RequestParam</span> <span class="nd">@Min</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span> <span class="nd">@Max</span><span class="o">(</span><span class="mi">99</span><span class="o">)</span> <span class="nc">Integer</span> <span class="n">age</span><span class="o">,</span> <span class="nd">@PathVariable</span><span class="o">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">"name"</span><span class="o">)</span> <span class="nd">@NotBlank</span> <span class="nd">@Size</span><span class="o">(</span><span class="n">min</span> <span class="o">=</span> <span class="mi">10</span><span class="o">)</span> <span class="nc">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="nc">ResponseUtility</span><span class="o">.</span><span class="na">createPostAsyncSuccessResponse</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="c1">//결과 : test.name: 크기가 10에서 2147483647 사이여야 합니다</span>
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p>@RequestBody의 경우, 정의된 dto의 각 필드에 validation annotation을 정의하고, @RequestBody @Valid DTO dto 로 하면 validation 처리할 수 있다.</p>
+  </li>
+  <li>
+    <p>참고 : https://www.baeldung.com/spring-validate-requestparam-pathvariable</p>
+  </li>
+</ul>
+:ET

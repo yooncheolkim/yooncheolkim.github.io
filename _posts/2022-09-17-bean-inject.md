@@ -17,7 +17,7 @@ description: profile에 따라 bean 주입하는 방법
   - 즉, spring 에게 알아서 bean으로 등록해서 인스턴스 생성/관리 해달라고 하는것
 - @Configure class에 @Bean 메소드(setter, builder)를 생성하여, bean 등록할 수 있다.
   - 주로 외부 라이브러리(redis관련, swagger) 를 등록할때 사용된다.
-  ```
+  ```java
     @Bean
     public RedisTemplate<String, Object> redisTemplate() throws SystemException {
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
@@ -28,7 +28,7 @@ description: profile에 따라 bean 주입하는 방법
     }
   ```
   - 개발하면서 생성한 클래스도 @Bean을 사용하여 등록가능하다.
-  ```
+  ```java
     @Bean
     @Primary
     public FeignUtility feignUtility() {
@@ -41,7 +41,7 @@ description: profile에 따라 bean 주입하는 방법
 - feign client를 사용하여, 외부 api call을 개발한 경우, 모듈 테스트를 위하여, 실제 request를 하지 않도록 하고, mocking 해야하는 경우가 있다.
 - 이때 feign interface를 구현한 mocking 클래스를 @Bean으로 주입하여, spring app이 기동되도록 profile과 간단한 설정으로 가능하다.
 
-```
+```java
 // build.gradle 설정 : automation profile
 task bootRunAutomation {
     group = "application"
@@ -58,14 +58,14 @@ task bootRunAutomation {
 }
 ```
 
-```
+```java
 // application-automation.yml
 spring:
   config:
     import: application-local.yml
 ```
 
-```
+```java
 @Configuration
 @Profile({"automation", "feature"})
 public class MockConfig {
@@ -78,7 +78,7 @@ public class MockConfig {
 }
 ```
 
-```
+```java
 //실제 Feign client interface
 @FeignClient(
         name = "feignUtility",

@@ -112,21 +112,21 @@
   <li>javax.validation.constraints package에 있는 모든 validation 을 사용할 수 있다.</li>
 </ul>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    //request /testController?age=100
-    @PostMapping("/testController")
-    public ResponseEntity&lt;ResponseData&gt; test(@RequestParam @Min(1) @Max(99) Integer age) {
-        return ResponseUtility.createPostAsyncSuccessResponse(null);
-    }
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="c1">//request /testController?age=100</span>
+    <span class="nd">@PostMapping</span><span class="o">(</span><span class="s">"/testController"</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="nc">ResponseEntity</span><span class="o">&lt;</span><span class="nc">ResponseData</span><span class="o">&gt;</span> <span class="nf">test</span><span class="o">(</span><span class="nd">@RequestParam</span> <span class="nd">@Min</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span> <span class="nd">@Max</span><span class="o">(</span><span class="mi">99</span><span class="o">)</span> <span class="nc">Integer</span> <span class="n">age</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="nc">ResponseUtility</span><span class="o">.</span><span class="na">createPostAsyncSuccessResponse</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span>
+    <span class="o">}</span>
 
-    //결과 : test.age: 99 이하여야 합니다
+    <span class="c1">//결과 : test.age: 99 이하여야 합니다</span>
 </code></pre></div></div>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    @PostMapping("/testController/{name}")
-    public ResponseEntity&lt;ResponseData&gt; updateMemberWallets(@RequestParam @Min(1) @Max(99) Integer age, @PathVariable(name = "name") @NotBlank @Size(min = 10) String name) {
-        return ResponseUtility.createPostAsyncSuccessResponse(null);
-    }
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nd">@PostMapping</span><span class="o">(</span><span class="s">"/testController/{name}"</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="nc">ResponseEntity</span><span class="o">&lt;</span><span class="nc">ResponseData</span><span class="o">&gt;</span> <span class="nf">updateMemberWallets</span><span class="o">(</span><span class="nd">@RequestParam</span> <span class="nd">@Min</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span> <span class="nd">@Max</span><span class="o">(</span><span class="mi">99</span><span class="o">)</span> <span class="nc">Integer</span> <span class="n">age</span><span class="o">,</span> <span class="nd">@PathVariable</span><span class="o">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">"name"</span><span class="o">)</span> <span class="nd">@NotBlank</span> <span class="nd">@Size</span><span class="o">(</span><span class="n">min</span> <span class="o">=</span> <span class="mi">10</span><span class="o">)</span> <span class="nc">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="nc">ResponseUtility</span><span class="o">.</span><span class="na">createPostAsyncSuccessResponse</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span>
+    <span class="o">}</span>
 
-    //결과 : test.name: 크기가 10에서 2147483647 사이여야 합니다
+    <span class="c1">//결과 : test.name: 크기가 10에서 2147483647 사이여야 합니다</span>
 </code></pre></div></div>
 
 <ul>
