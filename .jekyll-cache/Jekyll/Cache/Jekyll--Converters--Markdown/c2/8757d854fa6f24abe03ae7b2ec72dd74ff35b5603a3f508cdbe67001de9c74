@@ -1,0 +1,49 @@
+I"�<h3 id="feign-client-response">feign client response</h3>
+
+<ul>
+  <li>프로젝트 진행중, be에서 외부 api request 할일이 생기면서, api request 시, 오류 건에 대하여, 이력을 남기는 작업을 진행하였다.</li>
+  <li>feign client 로 api request를 진행하였는데, 이력을 남기기위한 정보(request url, pathparam, queryparam, requestbody..)가 필요하다.</li>
+</ul>
+
+<h4 id="기존-feign-client-response">기존 feign client response</h4>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@FeignClient</span><span class="o">(</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="s">"externalApiCall"</span><span class="o">,</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="s">"${external.api.url}"</span><span class="o">,</span>
+        <span class="n">primary</span> <span class="o">=</span> <span class="kc">false</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">ExternalApiFeign</span> <span class="o">{</span>
+    <span class="nd">@PostMapping</span><span class="o">(</span><span class="n">path</span> <span class="o">=</span> <span class="s">"/contract"</span><span class="o">)</span>
+    <span class="nc">ExternalResponseDTO</span> <span class="nf">retrieveContractInfo</span><span class="o">(</span>
+            <span class="nd">@RequestBody</span> <span class="nc">ExternalRequestDTO</span> <span class="n">dto</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>위 코드처럼 하게되면, feign에서 알아서 http response body를 꺼내어 ExternalResponseDTO로 만들어준다.</li>
+  <li>그런데, 나는 dto 뿐만아니라, 이력을 남기기 위한 정보(request url, pathparam, queryparam, requestbody..)가 필요했다.</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nd">@PostMapping</span><span class="o">(</span><span class="n">path</span> <span class="o">=</span> <span class="s">"/contract"</span><span class="o">)</span>
+        <span class="nc">Response</span> <span class="nf">retrieveContractInfo</span><span class="o">(</span>
+            <span class="nd">@RequestBody</span> <span class="nc">ExternalRequestDTO</span> <span class="n">dto</span><span class="o">);</span>
+</code></pre></div></div>
+
+<ul>
+  <li>Feign의 Response 를 리턴하도록 하고, 내부 로직에서 해당 response에서 request url, pathparam, requestbody 등등을 꺼내어 사용할 수 있다.</li>
+</ul>
+
+<h4 id="에러">에러</h4>
+
+<ul>
+  <li>feign에서는 기본적으로 200~300 http statuscode는 정상응답으로 처리하고, 이외의 상태코드는 FeignException을 발생시킨다.</li>
+  <li>하지만 리턴타입을 Response로 해놓으면, 4xx의 응답도 정상응답으로 처리하고, 사용하는 개발자에게 처리하도록 만들어 놓았다.</li>
+  <li>이럴때는, feign에서 제공하는 ErrorDecoder 를 사용하여, 처리 가능하다. (참고 : https://www.baeldung.com/java-feign-client-exception-handling)</li>
+</ul>
+
+<h4 id="공통화">공통화</h4>
+
+<ul>
+  <li>이력을 남기는 작업은 비즈니스 로직 곳곳에서 이뤄진다.</li>
+  <li>spring aop를 이용하여, 외부 호출 전, 후로 이력을 남기는 작업을 진행하면, 공통화 하여 처리할 수 있을듯하다.</li>
+</ul>
+:ET

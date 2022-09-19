@@ -42,3 +42,9 @@ mapper.readValue(jsonStr, new TypeReference<CommonResponseDTO<TestDto>>() {});
 #### spring boot에서 json converter
 
 - spring boot를 사용하는 경우 기본적으로 jacksonJson2 의존성(objectMapper)이 들어있다. 즉, JSON용 http 메시지 컨버터가 잇는거임.
+
+#### 존재하지 않는 field mapping
+
+- FAIL_ON_UNKNOWN_PROPERTIES 설정이 기본적으로 켜져있다. 그렇기 때문에, 존재하지 않는 field를 dto로 변환하려고 하면 fail 됨.
+- 특히, 외부 연동을 할 경우, 아무 생각없이 json에 field 하나 추가해서 에러가 발생할 수도 있다. 이때 해당 설정을 disable 해야 문제가 없을것이다.
+- 상황에 맞게, 해당 설정을 disabled 하자.
