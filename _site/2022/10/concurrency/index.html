@@ -11,7 +11,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>윤철이 블로그 | spring only changes? </title>
+    <title>윤철이 블로그 | db 동시성 처리 </title>
     <meta name="theme-color" content="#222222"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="/assets/js/jquery.min.js"></script>
@@ -74,185 +74,100 @@
             <div class="col-md-8 offset-md-1">
               <div class="article">
                 <div class="card">
-                  <h1><a href="/2022/05/spring-changes/">spring only changes?</a></h1>
+                  <h1><a href="/2022/10/concurrency/">db 동시성 처리</a></h1>
                   <div class="post-meta">
                     <div class="post-time">
                       <i class="fa fa-calendar-alt"></i>
-                      <time>08 May 2022</time>
+                      <time>11 Oct 2022</time>
                     </div>
                     <ul>
                       
-                        <li><a href="/tag/spring">spring</a></li>
+                        <li><a href="/tag/db">db</a></li>
                       
-                        <li><a href="/tag/put">put</a></li>
+                        <li><a href="/tag/concurrency">concurrency</a></li>
                       
-                        <li><a href="/tag/patch">patch</a></li>
+                        <li><a href="/tag/isolation">isolation</a></li>
                       
                     </ul>
                   </div>
                   <div class="post-content">
                     
-                    <h3 id="fe에서-변경점만-보내고-싶다고-하면">fe에서 변경점만 보내고 싶다고 하면?</h3>
+                    <h3 id="cuncurrency">cuncurrency</h3>
 
 <ul>
-  <li>fe form에서 임시저장한 form data를 조회해서, 사용자가 변경한 부분만 골라서, api call한다고 했을때, 서버에서는 어떻게 처리해야하나</li>
+  <li>db에 데이터(특정 데이터)의 접근을 어떻게 처리할것인가?</li>
+  <li>수 많은 요청에 대해서, transaction을 생성 처리 하는 과정에서 어떻게 데이터가 유효한지 확인할 수 있을까?</li>
 </ul>
 
-<h4 id="nodejs에서는">nodejs에서는…</h4>
-
-<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">data</span> <span class="p">:</span> <span class="p">{</span>
-<span class="nl">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">yooncheol</span><span class="dl">'</span><span class="p">,</span>
-<span class="nx">address</span><span class="p">:</span> <span class="dl">'</span><span class="s1">cheonju</span><span class="dl">'</span>
-<span class="p">}</span>
-</code></pre></div></div>
+<h4 id="문제-상황">문제 상황</h4>
 
 <ul>
-  <li>위 처럼 request body json data가 온다고 했을때, js에서는 json field가 undefined인지, 아예 field가 없는지 확인 할 수 있다.</li>
-  <li>fe에서 변경되지 않은 field는 delete를 해서, 아예 보내지 않고, 변경된 field는 undefined/null/value를 선택하여 보내면 그대로 서버에서 처리하면된다.</li>
+  <li>account의 balance가 10 이라고 하자</li>
+  <li>account의 명의가 두명(A,B) 라고 하면</li>
 </ul>
 
-<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">data</span> <span class="p">:</span> <span class="p">{</span>
-<span class="nl">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">yooncheol</span><span class="dl">'</span><span class="p">,</span>
-<span class="nx">address</span> <span class="p">:</span> <span class="kc">undefined</span><span class="p">,</span>
-<span class="p">};</span>
-
-<span class="k">if</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">address</span> <span class="o">===</span> <span class="kc">null</span><span class="p">){</span>
-<span class="c1">// 빈값으로 세팅하는 것</span>
-<span class="p">}</span>
-<span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">data</span><span class="p">.</span><span class="nx">address</span><span class="p">){</span>
-<span class="c1">// field가 존재하지 않음. 변경하지 않는것</span>
-<span class="p">}</span>
-<span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">address</span><span class="p">){</span>
-<span class="c1">// value 존재, 변경</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<h4 id="javaspring-에서는">java/spring 에서는..?</h4>
+<ol>
+  <li>A가 계좌에 10이 남아있어서 10을 withdraw 요청을 함.</li>
+  <li>B도 동시에(거의 같은시간에) 요청을 함<br />
+3-1. A 요청 처리, validateion(10 &gt; balance) OK<br />
+3-2. B 요청 처리, validation(10 &gt; balance) OK<br />
+4-1. A 요청 update(balance = balance - 10) 커밋<br />
+4-2. B 요청 update(balance = balance - 10) 커밋</li>
+</ol>
 
 <ul>
-  <li>spring controller에서는 class로 requestbody를 class로 받아야한다.</li>
+  <li>이렇게 진행되면, balance는 -10이 됨. 말이 안된다…</li>
 </ul>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nd">@PatchMapping</span><span class="o">(</span><span class="err">''</span><span class="o">)</span>
-  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">patchMemberInfo</span><span class="o">(</span><span class="nd">@RequestBody</span> <span class="nc">MemberInfo</span> <span class="n">memberInfo</span><span class="o">){</span>
-  <span class="o">...</span>
-  <span class="o">}</span>
-
-<span class="kd">class</span> <span class="nc">MemberInfo</span><span class="o">{</span>
-<span class="nc">String</span> <span class="n">name</span><span class="o">;</span>
-<span class="nc">String</span> <span class="n">address</span><span class="o">;</span>
-<span class="nc">Integer</span> <span class="n">age</span><span class="o">;</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<ul>
-  <li>spring에서는 json 데이터를 MessageConverter를 이용하여 자동 json request body를 class 형태로 convert해준다.</li>
-  <li>하지만, class로 변경되면서, 없는 field는 자연스럽게 null로 세팅된다.</li>
-  <li>java에는 undefined가 없기 때문에, 필드가 존재하지 않는것과 필드가 null로 세팅된것을 구분할 방법이 없어진다.</li>
-  <li>string의 경우는 null(필드 없음) / ‘‘(빈값으로 세팅) / ‘value’(값있음) 으로 구분하면 문제될게 없다.</li>
-  <li>하지만! 숫자형의 경우, 빈값이라는것을 표현할 수 없다. 0이 빈값은 아니니깐. 그렇다고 db의 default값이 빈값? 여러가지 애매모호한 상황들이 생긴다.</li>
-  <li>그렇다면 이렇게 spring에서 변경된 값만 받아서 처리하려면 어떻게 해야할까?</li>
-</ul>
-
-<h4 id="javaspring에서-처리-방법">java/spring에서 처리 방법</h4>
+<h4 id="db-isolation-level">db isolation level</h4>
 
 <ul>
   <li>
-    <p>여러 가지 방법이 있다.</p>
-
-    <ol>
-      <li>
-        <p>특정 숫자(like. -2,147,483,648)를 빈값으로 정의하고 이것을 fe와 규약으로 사용한다.<br />
-1번은 굉장히 이상한 방법이다.<br />
-계속 투입되는 개발자는 의문이 생길거고, 계속 설명해줘야한다.</p>
-      </li>
-      <li>
-        <p>모든 숫자형태를 default 값을 정하고 사용한다.<br />
-비즈니스가 어떻게 바뀔지 모르는 상황에서 이 방법 또한 이상하다.</p>
-      </li>
-      <li>
-        <p>spring controller에서 map&lt;String,Object&gt;로 받는다.<br />
-controller에서 map으로 받을 경우, fe에서 보낸 body fields만 받을 수 있다.<br />
-가장 이상적인 방법이다…</p>
-      </li>
-    </ol>
+    <p>참고 : https://zzang9ha.tistory.com/381</p>
   </li>
+  <li>read uncommitted : 다른 트랜잭션에서 commit 되지 않는 내용도 읽을 수 있음</li>
+  <li>read committed : 다른 트랜잭션에서 commit 된 내용만 읽을 수 있음</li>
+  <li>repeatable read : 다른 트랜잭션에서 commit 된 내용이 있어도, 처음 읽은 데이터가 유지됨</li>
+  <li>
+    <p>serialize : 다른 트랜잭션의 데이터 접근을 막음.</p>
+  </li>
+  <li>실제 서비스에서는 serialize는 사용하지 않는다. 한 트랜잭션이 데이터를 점유하고 있게 되면, 다른 트랜잭션이 무한정 기다리게 되는 deadlock 문제가 발생하게된다.</li>
+  <li>read committed/ repeatable read 에서도 문제상황과 같은 현상이 발생하게 될텐데 어떻게 처리할 수 있을까?</li>
 </ul>
 
-<h4 id="3번으로-했을때-문제점">3번으로 했을때, 문제점</h4>
+<h3 id="read-committed에서-동시성-문제-해결-방법lock">Read committed에서 동시성 문제 해결 방법(lock)</h3>
+
+<h4 id="1-비관적-lock">1. 비관적 lock</h4>
 
 <ul>
-  <li>3번 방법으로 결정하고 개발을 진행하면서 겪은 많은 문제점? 수고로움이 있다.</li>
+  <li>select … for update</li>
+  <li>다른 트랜잭션이 접근하지 못하게 한다. serialize와 같은 방법 문제가 많다.</li>
 </ul>
 
-<h5 id="map을-사용했을때-수고로움-1">map을 사용했을때 수고로움 1</h5>
+<h4 id="2-낙관적-lock---update-validation">2. 낙관적 lock - update validation</h4>
 
 <ul>
-  <li>map을 사용하게 되면, 결국 비즈니스 로직을 처리하기 위해, dto or vo로 변환이 필요하고, map에 존재하는 값만 해당 dto or vo로 넣어줘야한다.</li>
-  <li>단순 primitive wrapper type 혹은 String이면 문제 없다.</li>
-  <li>하지만 비즈니스가 복잡해질수록, map/dto/vo의 깊이는 깊어진다.</li>
-  <li>map to (dto or vo) 를 하기 위해, 각 필드마다 변환해줘야하는 convert 로직을 작성해야한다.</li>
+  <li>낙관적 Lock은 application 단에서 수행하는 Lock 이다.</li>
+  <li>해당 방법은 비즈니스 요구사항에 따라 다르게 사용된다.</li>
+  <li>보통 update가 가능한지 확인하기 위해 validation을 진행하게 되고, update를 진행한다.</li>
+  <li>문제는 validation은 통과했지만, Update 시 다른 트랜잭션이 update하여, 한 트랜잭션에서 데이터의 동일성을 보장하지 못한다는것이다.</li>
+  <li>이때 update 시에도 validation을 진행하는것이다.</li>
 </ul>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Dto</span><span class="o">{</span>
-    <span class="nc">String</span> <span class="n">name</span><span class="o">;</span>
-    <span class="nc">String</span> <span class="n">address</span><span class="o">;</span>
-    <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Comment</span><span class="o">&gt;</span> <span class="n">comments</span><span class="o">;</span>
-    <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Order</span><span class="o">&gt;</span> <span class="n">orders</span><span class="o">;</span>
-<span class="o">}</span>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">UPDATE</span> <span class="n">account</span> <span class="n">a</span>
+<span class="k">SET</span> <span class="n">balance</span> <span class="o">=</span> <span class="n">a</span><span class="p">.</span><span class="n">balance</span> <span class="o">-</span> <span class="p">:</span><span class="n">amount</span>
+<span class="k">WHERE</span> <span class="n">balance</span> <span class="o">&gt;</span> <span class="p">:</span><span class="n">amount</span>
 </code></pre></div></div>
 
 <ul>
-  <li>Dto class 처럼 Comment/Order 와 같은 class의 경우 map to dto convert 로직을 작성해줘야한다.</li>
-  <li>타입에 맞춰서, 하위 class 형태를 맞춰서 convert해야하기 때문에 이 변환 로직은 굉장히 복잡할 것이다.</li>
-  <li>class depth가 깊어지며 깊어질수록, 더욱 복잡해진다.</li>
+  <li>update 하는 동시에 유효한 값인지 확인하게 되면 동시성문제를 회피할 수 있다.</li>
 </ul>
 
-<h5 id="map을-사용했을때-수고로움-2">map을 사용했을때 수고로움 2</h5>
+<h4 id="3-낙관적-lock---version">3. 낙관적 lock - Version</h4>
 
 <ul>
-  <li>프로젝트에서 api 문서화를 위하여, swagger를 사용하고 있었다.</li>
-  <li>map&lt;String,Object&gt; 으로 request body를 받고 있기 때문에, swagger에서 해당 map을 제대로 표현하지 못한다…</li>
-</ul>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nd">@PatchMapping</span><span class="o">(</span><span class="err">''</span><span class="o">)</span>
-  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">patchMemberInfo</span><span class="o">(</span><span class="nd">@RequestBody</span> <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span><span class="nc">Object</span><span class="o">&gt;</span> <span class="n">changes</span><span class="o">){</span>
-  <span class="o">...</span>
-  <span class="o">}</span>
-</code></pre></div></div>
-
-<ul>
-  <li>swagger에게 해당 map은 어떤 DTO class를 표현하고 있는것이라고 알려줘야한다.</li>
-  <li>swagger config 설정시에 dto 패키지 하위에 있는 class들을 모두 swagger의 schema로 등록해줘야했다.</li>
-</ul>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Configuration</span>
-<span class="nd">@EnableWebMvc</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">SwaggerConfig</span><span class="o">{</span>
-
-    <span class="nd">@Bean</span>
-    <span class="kd">public</span> <span class="nc">Docket</span> <span class="nf">api</span><span class="o">(</span><span class="nc">TypeResolver</span> <span class="n">typeResolver</span><span class="o">){</span>
-        <span class="c1">// some jobs.</span>
-        <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">Class</span><span class="o">&gt;</span> <span class="n">dtoClasses</span> <span class="o">=</span> <span class="n">findAllClasses</span><span class="o">(</span><span class="s">"package.dto"</span><span class="o">);</span>
-
-        <span class="nc">Interator</span><span class="o">&lt;</span><span class="nc">Class</span><span class="o">&gt;</span> <span class="n">iterator</span> <span class="o">=</span> <span class="n">dtoClasses</span><span class="o">.</span><span class="na">iterator</span><span class="o">();</span>
-
-        <span class="k">while</span> <span class="o">(</span><span class="n">iterator</span><span class="o">.</span><span class="na">hasNext</span><span class="o">()){</span>
-            <span class="n">docket</span><span class="o">.</span><span class="na">additionalModels</span><span class="o">(</span><span class="n">typeResolver</span><span class="o">.</span><span class="na">resolve</span><span class="o">(</span><span class="n">iterator</span><span class="o">.</span><span class="na">next</span><span class="o">()));</span>
-        <span class="o">}</span>
-
-    <span class="k">return</span> <span class="n">docket</span><span class="o">;</span>
-    <span class="o">}</span>
-
-<span class="o">}</span>
-</code></pre></div></div>
-
-<h4 id="결론">결론</h4>
-
-<ul>
-  <li>처음에는 fe와 be 사이의 필요한 최소한의 데이터만 주고 받아야지! 라고 생각하여 변경된 값만 fe에서 보내야지 라고 생각하였다.</li>
-  <li>spring에서는 이런 과정이 너무 많은 공수와 노력을 들게 한다.</li>
-  <li>다음에는 “fe에서 변경된 값 + 기존에 있는 값 모두 다 보내주세요.” 라고 하자.</li>
+  <li>version등의 구분 컬럼을 이용해서 read - update 시, Read 했을때의 Version이 update 시의 version과 같은지 확인하는 절차를 진행한다.</li>
+  <li>jpa에서는 @version 을 통해서 해당 낙관적 lock을 지원한다.</li>
 </ul>
 
                     

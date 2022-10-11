@@ -7,6 +7,91 @@
 		<atom:link href="/feed.xml" rel="self" type="application/rss+xml" />
 		
 			<item>
+				<title>db 동시성 처리</title>
+				<description>&lt;h3 id=&quot;cuncurrency&quot;&gt;cuncurrency&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;db에 데이터(특정 데이터)의 접근을 어떻게 처리할것인가?&lt;/li&gt;
+  &lt;li&gt;수 많은 요청에 대해서, transaction을 생성 처리 하는 과정에서 어떻게 데이터가 유효한지 확인할 수 있을까?&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;문제-상황&quot;&gt;문제 상황&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;account의 balance가 10 이라고 하자&lt;/li&gt;
+  &lt;li&gt;account의 명의가 두명(A,B) 라고 하면&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;A가 계좌에 10이 남아있어서 10을 withdraw 요청을 함.&lt;/li&gt;
+  &lt;li&gt;B도 동시에(거의 같은시간에) 요청을 함&lt;br /&gt;
+3-1. A 요청 처리, validateion(10 &amp;gt; balance) OK&lt;br /&gt;
+3-2. B 요청 처리, validation(10 &amp;gt; balance) OK&lt;br /&gt;
+4-1. A 요청 update(balance = balance - 10) 커밋&lt;br /&gt;
+4-2. B 요청 update(balance = balance - 10) 커밋&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;이렇게 진행되면, balance는 -10이 됨. 말이 안된다…&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;db-isolation-level&quot;&gt;db isolation level&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;참고 : https://zzang9ha.tistory.com/381&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;read uncommitted : 다른 트랜잭션에서 commit 되지 않는 내용도 읽을 수 있음&lt;/li&gt;
+  &lt;li&gt;read committed : 다른 트랜잭션에서 commit 된 내용만 읽을 수 있음&lt;/li&gt;
+  &lt;li&gt;repeatable read : 다른 트랜잭션에서 commit 된 내용이 있어도, 처음 읽은 데이터가 유지됨&lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;serialize : 다른 트랜잭션의 데이터 접근을 막음.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;실제 서비스에서는 serialize는 사용하지 않는다. 한 트랜잭션이 데이터를 점유하고 있게 되면, 다른 트랜잭션이 무한정 기다리게 되는 deadlock 문제가 발생하게된다.&lt;/li&gt;
+  &lt;li&gt;read committed/ repeatable read 에서도 문제상황과 같은 현상이 발생하게 될텐데 어떻게 처리할 수 있을까?&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;read-committed에서-동시성-문제-해결-방법lock&quot;&gt;Read committed에서 동시성 문제 해결 방법(lock)&lt;/h3&gt;
+
+&lt;h4 id=&quot;1-비관적-lock&quot;&gt;1. 비관적 lock&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;select … for update&lt;/li&gt;
+  &lt;li&gt;다른 트랜잭션이 접근하지 못하게 한다. serialize와 같은 방법 문제가 많다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;2-낙관적-lock---update-validation&quot;&gt;2. 낙관적 lock - update validation&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;낙관적 Lock은 application 단에서 수행하는 Lock 이다.&lt;/li&gt;
+  &lt;li&gt;해당 방법은 비즈니스 요구사항에 따라 다르게 사용된다.&lt;/li&gt;
+  &lt;li&gt;보통 update가 가능한지 확인하기 위해 validation을 진행하게 되고, update를 진행한다.&lt;/li&gt;
+  &lt;li&gt;문제는 validation은 통과했지만, Update 시 다른 트랜잭션이 update하여, 한 트랜잭션에서 데이터의 동일성을 보장하지 못한다는것이다.&lt;/li&gt;
+  &lt;li&gt;이때 update 시에도 validation을 진행하는것이다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;UPDATE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;account&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;SET&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;balance&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;balance&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;amount&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;WHERE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;balance&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;amount&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;update 하는 동시에 유효한 값인지 확인하게 되면 동시성문제를 회피할 수 있다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;3-낙관적-lock---version&quot;&gt;3. 낙관적 lock - Version&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;version등의 구분 컬럼을 이용해서 read - update 시, Read 했을때의 Version이 update 시의 version과 같은지 확인하는 절차를 진행한다.&lt;/li&gt;
+  &lt;li&gt;jpa에서는 @version 을 통해서 해당 낙관적 lock을 지원한다.&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+				<pubDate>Tue, 11 Oct 2022 20:00:00 +0900</pubDate>
+				<link>/2022/10/concurrency/</link>
+				<guid isPermaLink="true">/2022/10/concurrency/</guid>
+			</item>
+		
+			<item>
 				<title>spring feign client http 정보</title>
 				<description>&lt;h3 id=&quot;feign-client-response&quot;&gt;feign client response&lt;/h3&gt;
 
@@ -746,38 +831,6 @@ Access-Control-Request-Headers,Authorization
 				<pubDate>Wed, 14 Apr 2021 06:30:00 +0900</pubDate>
 				<link>/2021/04/web-cors/</link>
 				<guid isPermaLink="true">/2021/04/web-cors/</guid>
-			</item>
-		
-			<item>
-				<title>자바스크립트 eventloop</title>
-				<description>&lt;h1 id=&quot;javascript는-실제로-어떻게-동작하지&quot;&gt;javascript는 실제로 어떻게 동작하지?&lt;/h1&gt;
-
-&lt;p&gt;동영상 링크 : &lt;a href=&quot;https://www.youtube.com/watch?v=8aGhZQkoFbQ&amp;amp;ab_channel=JSConf&quot;&gt;what the heck is the eventloop&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://evan-moon.github.io/2019/08/01/nodejs-event-loop-workflow/&quot;&gt;로우 레벨로 살펴보는 Node.js 이벤트 루프&lt;/a&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;크롬의 자바스크립트 엔진(V8) 런타임이 어떻게 동작하는지&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;메모리와-eventloop&quot;&gt;메모리와 eventloop&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;eventloop 는 ECMA혹은 에 정의된 내용이 아니다.&lt;/li&gt;
-  &lt;li&gt;eventloop 는 V8의 일부가 아니다.&lt;/li&gt;
-  &lt;li&gt;eventloop는 node, 브라우저가 담당하고 있다.&lt;/li&gt;
-  &lt;li&gt;event loop 덕분에, 자바스크립트는 싱글 스레드 event-driven 방식으로 동작하게 된다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;nodejs-이벤트-루프-설명&quot;&gt;nodejs 이벤트 루프 설명&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://nodejs.org/ko/docs/guides/event-loop-timers-and-nexttick/&quot;&gt;Node Document&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://ko.javascript.info/event-loop&quot;&gt;javascript info&lt;/a&gt;&lt;/p&gt;
-</description>
-				<pubDate>Tue, 09 Mar 2021 05:30:00 +0900</pubDate>
-				<link>/2021/03/javascript-eventloop/</link>
-				<guid isPermaLink="true">/2021/03/javascript-eventloop/</guid>
 			</item>
 		
 	</channel>
