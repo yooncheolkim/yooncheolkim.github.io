@@ -8,7 +8,7 @@
 		
 			<item>
 				<title>db 동시성 처리</title>
-				<description>&lt;h3 id=&quot;cuncurrency&quot;&gt;cuncurrency&lt;/h3&gt;
+				<description>&lt;h3 id=&quot;concurrency&quot;&gt;concurrency&lt;/h3&gt;
 
 &lt;ul&gt;
   &lt;li&gt;db에 데이터(특정 데이터)의 접근을 어떻게 처리할것인가?&lt;/li&gt;

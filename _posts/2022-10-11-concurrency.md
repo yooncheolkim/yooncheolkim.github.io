@@ -6,7 +6,7 @@ tags: db concurrency isolation
 description:
 ---
 
-### cuncurrency
+### concurrency
 
 - db에 데이터(특정 데이터)의 접근을 어떻게 처리할것인가?
 - 수 많은 요청에 대해서, transaction을 생성 처리 하는 과정에서 어떻게 데이터가 유효한지 확인할 수 있을까?
