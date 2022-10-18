@@ -150,8 +150,17 @@
   <li>하지만, class로 변경되면서, 없는 field는 자연스럽게 null로 세팅된다.</li>
   <li>java에는 undefined가 없기 때문에, 필드가 존재하지 않는것과 필드가 null로 세팅된것을 구분할 방법이 없어진다.</li>
   <li>string의 경우는 null(필드 없음) / ‘‘(빈값으로 세팅) / ‘value’(값있음) 으로 구분하면 문제될게 없다.</li>
-  <li>하지만! 숫자형의 경우, 빈값이라는것을 표현할 수 없다. 0이 빈값은 아니니깐. 그렇다고 db의 default값이 빈값? 여러가지 애매모호한 상황들이 생긴다.</li>
-  <li>그렇다면 이렇게 spring에서 변경된 값만 받아서 처리하려면 어떻게 해야할까?</li>
+  <li>숫자형의 경우 컬럼이 not null 이라면,
+    <ul>
+      <li>default 값이 존재하므로, 문제없다.</li>
+    </ul>
+  </li>
+  <li>하지만! 컬럼이 nullable 이라면?
+    <ul>
+      <li>이 경우에는 null 로 세팅하는건지… 변경되지 않는 값이여서, null 보내는건지 알 방법이 없다..</li>
+    </ul>
+  </li>
+  <li>그렇다면 이문제들 처럼, spring에서 변경된 값만 받아서 처리하려면 어떻게 해야할까?</li>
 </ul>
 
 <h4 id="javaspring에서-처리-방법">java/spring에서 처리 방법</h4>
@@ -267,15 +276,15 @@ controller에서 map으로 받을 경우, fe에서 보낸 body fields만 받을 
   <h2>Recent Posts</h2>
   <ul>
     
+    <li><a href="/2022/10/jpa-persist-merge/">jpa persist merge</a></li>
+    
+    <li><a href="/2022/10/jpa-remind/">프로젝트에서 jpa를 사용하면서 느낀것들</a></li>
+    
     <li><a href="/2022/10/concurrency/">db 동시성 처리</a></li>
     
     <li><a href="/2022/09/feign-client-response/">spring feign client http 정보</a></li>
     
     <li><a href="/2022/09/spring-controller-validation/">spring controller validation</a></li>
-    
-    <li><a href="/2022/09/bean-inject/">profile에 따라 bean 주입</a></li>
-    
-    <li><a href="/2022/09/objectMapper/">object mapper 정리</a></li>
     
   </ul>
 </div>
@@ -354,7 +363,7 @@ controller에서 map으로 받을 경우, fe에서 보낸 body fields만 받을 
         <span>cors</span></a></li>
     
     <li>
-      <a href="/tag/db" data-toggle="tooltip" data-placement="right" title="1">
+      <a href="/tag/db" data-toggle="tooltip" data-placement="right" title="3">
         <span>db</span></a></li>
     
     <li>
@@ -410,6 +419,10 @@ controller에서 map으로 받을 경우, fe에서 보낸 body fields만 받을 
         <span>jenkins</span></a></li>
     
     <li>
+      <a href="/tag/jpa" data-toggle="tooltip" data-placement="right" title="2">
+        <span>jpa</span></a></li>
+    
+    <li>
       <a href="/tag/js" data-toggle="tooltip" data-placement="right" title="1">
         <span>js</span></a></li>
     
@@ -430,8 +443,16 @@ controller에서 map으로 받을 경우, fe에서 보낸 body fields만 받을 
         <span>objectMapper</span></a></li>
     
     <li>
+      <a href="/tag/optimization" data-toggle="tooltip" data-placement="right" title="1">
+        <span>optimization</span></a></li>
+    
+    <li>
       <a href="/tag/patch" data-toggle="tooltip" data-placement="right" title="1">
         <span>patch</span></a></li>
+    
+    <li>
+      <a href="/tag/persistanceContext" data-toggle="tooltip" data-placement="right" title="1">
+        <span>persistanceContext</span></a></li>
     
     <li>
       <a href="/tag/primary" data-toggle="tooltip" data-placement="right" title="1">
@@ -460,6 +481,10 @@ controller에서 map으로 받을 경우, fe에서 보낸 body fields만 받을 
     <li>
       <a href="/tag/react" data-toggle="tooltip" data-placement="right" title="2">
         <span>react</span></a></li>
+    
+    <li>
+      <a href="/tag/remind" data-toggle="tooltip" data-placement="right" title="1">
+        <span>remind</span></a></li>
     
     <li>
       <a href="/tag/scope" data-toggle="tooltip" data-placement="right" title="1">

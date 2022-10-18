@@ -11,7 +11,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>윤철이 블로그 | react addEventListner 시 주의사항 </title>
+    <title>윤철이 블로그 | jpa persist merge </title>
     <meta name="theme-color" content="#222222"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="/assets/js/jquery.min.js"></script>
@@ -74,82 +74,123 @@
             <div class="col-md-8 offset-md-1">
               <div class="article">
                 <div class="card">
-                  <h1><a href="/2022/05/react-addEventListener/">react addEventListner 시 주의사항</a></h1>
+                  <h1><a href="/2022/10/jpa-persist-merge/">jpa persist merge</a></h1>
                   <div class="post-meta">
                     <div class="post-time">
                       <i class="fa fa-calendar-alt"></i>
-                      <time>21 May 2022</time>
+                      <time>18 Oct 2022</time>
                     </div>
                     <ul>
                       
-                        <li><a href="/tag/react">react</a></li>
+                        <li><a href="/tag/db">db</a></li>
                       
-                        <li><a href="/tag/addEventListener">addEventListener</a></li>
+                        <li><a href="/tag/jpa">jpa</a></li>
+                      
+                        <li><a href="/tag/persistanceContext">persistanceContext</a></li>
                       
                     </ul>
                   </div>
                   <div class="post-content">
                     
-                    <h3 id="react-addeventlistener">react addEventListener</h3>
+                    <h3 id="savepersist-merge와-isnew">save(persist, merge)와 isNew</h3>
 
 <ul>
-  <li>react에서 input 태그를 사용하여 파일 드래그앤드롭을 구현한다고 했을때 다음과 같이 작성할 수 있다.</li>
+  <li>save를 하면, jpa는 저장하려는 entity가 isNew 인지 확인하여, isNew라면 persist를 호출하고, 아니라면 merge를 진행한다.</li>
+  <li>persist : 최초 생성된 entity를 영속화 한다.</li>
+  <li>merge : 식별자값(id)로 1차 캐시에서 조회하고, 없으면 데이터베이스를 조회하고 1차 캐시에 저장한다. entity에 값을 채워 넣는데, 모든 값이 변경된다.</li>
+  <li>isNew는 Persistable interface의 메소드이다.</li>
 </ul>
 
-<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">dragRef</span> <span class="o">=</span> <span class="p">(</span><span class="nx">useRef</span> <span class="o">&lt;</span> <span class="nx">HTMLDivElement</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="kc">null</span> <span class="o">&gt;</span> <span class="kc">null</span><span class="p">);</span>
-<span class="kd">const</span> <span class="p">[</span><span class="nx">files</span><span class="p">,</span> <span class="nx">setFiles</span><span class="p">]</span> <span class="o">=</span> <span class="nx">useState</span><span class="p">([]);</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nd">@Transactional</span>
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="o">&lt;</span><span class="no">S</span> <span class="kd">extends</span> <span class="no">T</span><span class="o">&gt;</span> <span class="no">S</span> <span class="nf">save</span><span class="o">(</span><span class="no">S</span> <span class="n">entity</span><span class="o">)</span> <span class="o">{</span>
 
-<span class="kd">const</span> <span class="nx">addFile</span> <span class="o">=</span> <span class="p">(</span><span class="nx">e</span><span class="p">:</span> <span class="nx">ChangeEvent</span><span class="o">&lt;</span><span class="nx">HTMLInputElement</span><span class="o">&gt;</span> <span class="o">|</span> <span class="nx">any</span><span class="p">):</span> <span class="k">void</span> <span class="o">=&gt;</span> <span class="p">{</span>
-  <span class="kd">const</span> <span class="na">newFiles</span><span class="p">:</span> <span class="nx">File</span><span class="p">[]</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="k">from</span><span class="p">(</span>
-    <span class="nx">e</span><span class="p">.</span><span class="nx">type</span> <span class="o">===</span> <span class="dl">"</span><span class="s2">drop</span><span class="dl">"</span> <span class="p">?</span> <span class="nx">e</span><span class="p">.</span><span class="nx">dataTransfer</span><span class="p">.</span><span class="nx">files</span> <span class="p">:</span> <span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">files</span>
-  <span class="p">);</span>
+		<span class="nc">Assert</span><span class="o">.</span><span class="na">notNull</span><span class="o">(</span><span class="n">entity</span><span class="o">,</span> <span class="s">"Entity must not be null."</span><span class="o">);</span>
 
-  <span class="nx">setFiles</span><span class="p">([...</span><span class="nx">files</span><span class="p">,</span> <span class="nx">newFiles</span><span class="p">]);</span>
-<span class="p">};</span>
-
-<span class="kd">const</span> <span class="nx">handleDrop</span> <span class="o">=</span> <span class="p">(</span><span class="nx">e</span><span class="p">:</span> <span class="nx">DragEvent</span><span class="p">):</span> <span class="k">void</span> <span class="o">=&gt;</span> <span class="p">{</span>
-  <span class="nx">addFile</span><span class="p">(</span><span class="nx">e</span><span class="p">);</span>
-<span class="p">};</span>
-
-<span class="kd">const</span> <span class="nx">initDragEvent</span> <span class="o">=</span> <span class="p">():</span> <span class="k">void</span> <span class="o">=&gt;</span> <span class="p">{</span>
-  <span class="nx">dragRef</span><span class="p">.</span><span class="nx">current</span><span class="p">.</span><span class="nx">addEventlistener</span><span class="p">(</span><span class="dl">"</span><span class="s2">drag</span><span class="dl">"</span><span class="p">,</span> <span class="nx">handleDrop</span><span class="p">);</span>
-<span class="p">};</span>
-
-<span class="nx">useEffect</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
-  <span class="nx">initDragEvent</span><span class="p">();</span>
-<span class="p">},</span> <span class="p">[]);</span>
-
-<span class="o">&lt;</span><span class="nx">div</span> <span class="nx">ref</span><span class="o">=</span><span class="p">{</span><span class="nx">dragRef</span><span class="p">}</span><span class="o">&gt;</span>
-  <span class="o">&lt;</span><span class="nx">input</span> <span class="nx">type</span><span class="o">=</span><span class="dl">"</span><span class="s2">file</span><span class="dl">"</span> <span class="nx">accept</span><span class="o">=</span><span class="p">{</span><span class="dl">"</span><span class="s2">.jpg,.txt</span><span class="dl">"</span><span class="p">}</span> <span class="nx">multiple</span> <span class="nx">onChange</span><span class="o">=</span><span class="p">{</span><span class="nx">onChangeFiles</span><span class="p">}</span> <span class="sr">/</span><span class="err">&gt;
-</span><span class="o">&lt;</span><span class="sr">/div&gt;</span><span class="err">;
-</span></code></pre></div></div>
+		<span class="k">if</span> <span class="o">(</span><span class="n">entityInformation</span><span class="o">.</span><span class="na">isNew</span><span class="o">(</span><span class="n">entity</span><span class="o">))</span> <span class="o">{</span>
+			<span class="n">em</span><span class="o">.</span><span class="na">persist</span><span class="o">(</span><span class="n">entity</span><span class="o">);</span>
+			<span class="k">return</span> <span class="n">entity</span><span class="o">;</span>
+		<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+			<span class="k">return</span> <span class="n">em</span><span class="o">.</span><span class="na">merge</span><span class="o">(</span><span class="n">entity</span><span class="o">);</span>
+		<span class="o">}</span>
+	<span class="o">}</span>
+</code></pre></div></div>
 
 <ul>
-  <li>이렇게 했을때, addFile 안에 files는 어떻게 나올까?</li>
-  <li>첫번째 file 드롭할때는, 문제 없다.</li>
-  <li>하지만, 두번째 file 드롭할때는 files는 첫번째에 추가된 file이 보이지 않는다…</li>
+  <li>persist 와 merge의 설명</li>
 </ul>
 
-<h4 id="이유는">이유는?</h4>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="cm">/**
+     * Make an instance managed and persistent.
+     * @param entity  entity instance
+     * @throws EntityExistsException if the entity already exists.
+     * (If the entity already exists, the &lt;code&gt;EntityExistsException&lt;/code&gt; may
+     * be thrown when the persist operation is invoked, or the
+     * &lt;code&gt;EntityExistsException&lt;/code&gt; or another &lt;code&gt;PersistenceException&lt;/code&gt; may be
+     * thrown at flush or commit time.)
+     * @throws IllegalArgumentException if the instance is not an
+     *         entity
+     * @throws TransactionRequiredException if there is no transaction when
+     *         invoked on a container-managed entity manager of that is of type
+     *         &lt;code&gt;PersistenceContextType.TRANSACTION&lt;/code&gt;
+     */</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">persist</span><span class="o">(</span><span class="nc">Object</span> <span class="n">entity</span><span class="o">);</span>
+
+    <span class="cm">/**
+     * Merge the state of the given entity into the
+     * current persistence context.
+     * @param entity  entity instance
+     * @return the managed instance that the state was merged to
+     * @throws IllegalArgumentException if instance is not an
+     *         entity or is a removed entity
+     * @throws TransactionRequiredException if there is no transaction when
+     *         invoked on a container-managed entity manager of that is of type
+     *         &lt;code&gt;PersistenceContextType.TRANSACTION&lt;/code&gt;
+     */</span>
+    <span class="kd">public</span> <span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="no">T</span> <span class="nf">merge</span><span class="o">(</span><span class="no">T</span> <span class="n">entity</span><span class="o">);</span>
+</code></pre></div></div>
 
 <ul>
-  <li>files 는 과거의 value를 가지고 있다. 이유는</li>
-  <li>컴포넌트 마운트(useEffect)하면서 등록된 handleDrop은 ref로 가져온 React component가 아닌, 실제 html element event로 등록이 되었다.</li>
-  <li>첫번째 file drop 후, 리렌더 될때는 새로운 메소드가 handleDrop에 할당되지만, 여전히, dragRef.current ‘drag’ 이벤트에는 기존 메소드가 등록되어있는 상태이다.ㅋ</li>
-  <li>그러므로, 계속 old files를 바라보고 있게된다.</li>
-  <li>이 문제를 해결하려면, rerender 될때마다, 기존 등록된 event listener를 제거하고, 새로 생긴 event listener를 등록해주거나,</li>
-  <li>useRef를 사용하여, 해결가능하다.</li>
+  <li>Persistable을 구현하지 않으면, 기본적으로 AbstractEntityInformation의 isNew를 실행하게 된다.</li>
 </ul>
 
-<h4 id="결론">결론</h4>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isNew</span><span class="o">(</span><span class="no">T</span> <span class="n">entity</span><span class="o">)</span> <span class="o">{</span>
+
+		<span class="no">ID</span> <span class="n">id</span> <span class="o">=</span> <span class="n">getId</span><span class="o">(</span><span class="n">entity</span><span class="o">);</span>
+		<span class="nc">Class</span><span class="o">&lt;</span><span class="no">ID</span><span class="o">&gt;</span> <span class="n">idType</span> <span class="o">=</span> <span class="n">getIdType</span><span class="o">();</span>
+
+		<span class="k">if</span> <span class="o">(!</span><span class="n">idType</span><span class="o">.</span><span class="na">isPrimitive</span><span class="o">())</span> <span class="o">{</span>
+			<span class="k">return</span> <span class="n">id</span> <span class="o">==</span> <span class="kc">null</span><span class="o">;</span>
+		<span class="o">}</span>
+
+		<span class="k">if</span> <span class="o">(</span><span class="n">id</span> <span class="k">instanceof</span> <span class="nc">Number</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">return</span> <span class="o">((</span><span class="nc">Number</span><span class="o">)</span> <span class="n">id</span><span class="o">).</span><span class="na">longValue</span><span class="o">()</span> <span class="o">==</span> <span class="mi">0L</span><span class="o">;</span>
+		<span class="o">}</span>
+
+		<span class="k">throw</span> <span class="k">new</span> <span class="nf">IllegalArgumentException</span><span class="o">(</span><span class="nc">String</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="s">"Unsupported primitive id type %s"</span><span class="o">,</span> <span class="n">idType</span><span class="o">));</span>
+	<span class="o">}</span>
+</code></pre></div></div>
 
 <ul>
+  <li>id를 가져와서, wrapper Type이고, id가 null이면 isNew라고 판단한다.</li>
   <li>
-    <p>html element 의 이벤트 리스너 안에서는 상태값을 정상적으로 가져올수 없다. set은 가능하다.</p>
+    <p>primitive Number 이고, 0 이면 isNew라고 판단한다.</p>
   </li>
-  <li>
-    <p>참고 : https://stackoverflow.com/questions/55265255/react-usestate-hook-event-handler-using-initial-state</p>
-  </li>
+  <li>그렇기 때문에, isNew를 override하지 않았다면, id가 없을때 isNew라고 판단하고, persist를 호출한다.</li>
+  <li>반대로 Id가 존재할 경우 save했을때, isNew가 false가 되고 ,merge를 호출한다.<br />
+<br /></li>
+  <li>자주 있는 상황은 아니지만, 준영속 상태의 엔티티의 필드를 변경하고 save를 하게되면, merge가 호출된다.</li>
+  <li>이때 영속성 컨텍스트에 없는 엔티티 이므로, id 기준으로 db에서 조회해서, 준영속상태의 엔티티를 조회한 엔티티에 덮어씌워버린다.</li>
+</ul>
+
+<h3 id="복합키와-isnew">복합키와 isNew</h3>
+
+<ul>
+  <li>복합키를 사용하게 되면, 키 생성 전략(auto_increment, using sequence 등등)을 사용할수 없다.</li>
+  <li>그렇기 때문에, 로직에서 복합키를 set 해주게되고, SimpleJpaRepository의 isNew 동작에서 ID가 null이 아니기 때문에, merge를 진행한다.</li>
+  <li>merge 진행순서 : 영속성 컨텍스트에 있는지 확인 -&gt; 영속성 컨텍스트에 없으면 select 후 merge, 트랜잭션 종료전 insert</li>
+  <li>즉, select -&gt; insert가 발생하고. 필요없는 select 가 발생한다…</li>
+  <li>결론 : system key(auto_increment) 시스템 키를 사용하자.</li>
 </ul>
 
                     

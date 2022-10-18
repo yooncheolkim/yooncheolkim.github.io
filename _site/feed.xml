@@ -7,6 +7,187 @@
 		<atom:link href="/feed.xml" rel="self" type="application/rss+xml" />
 		
 			<item>
+				<title>jpa persist merge</title>
+				<description>&lt;h3 id=&quot;savepersist-merge와-isnew&quot;&gt;save(persist, merge)와 isNew&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;save를 하면, jpa는 저장하려는 entity가 isNew 인지 확인하여, isNew라면 persist를 호출하고, 아니라면 merge를 진행한다.&lt;/li&gt;
+  &lt;li&gt;persist : 최초 생성된 entity를 영속화 한다.&lt;/li&gt;
+  &lt;li&gt;merge : 식별자값(id)로 1차 캐시에서 조회하고, 없으면 데이터베이스를 조회하고 1차 캐시에 저장한다. entity에 값을 채워 넣는데, 모든 값이 변경된다.&lt;/li&gt;
+  &lt;li&gt;isNew는 Persistable interface의 메소드이다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  &lt;span class=&quot;nd&quot;&gt;@Transactional&lt;/span&gt;
+	&lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+	&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;S&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;S&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;save&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;S&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;entity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+		&lt;span class=&quot;nc&quot;&gt;Assert&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;notNull&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;entity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Entity must not be null.&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+
+		&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;entityInformation&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;isNew&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;entity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+			&lt;span class=&quot;n&quot;&gt;em&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;persist&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;entity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+			&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;entity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+		&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+			&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;em&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;merge&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;entity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+		&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+	&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;persist 와 merge의 설명&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;cm&quot;&gt;/**
+     * Make an instance managed and persistent.
+     * @param entity  entity instance
+     * @throws EntityExistsException if the entity already exists.
+     * (If the entity already exists, the &amp;lt;code&amp;gt;EntityExistsException&amp;lt;/code&amp;gt; may
+     * be thrown when the persist operation is invoked, or the
+     * &amp;lt;code&amp;gt;EntityExistsException&amp;lt;/code&amp;gt; or another &amp;lt;code&amp;gt;PersistenceException&amp;lt;/code&amp;gt; may be
+     * thrown at flush or commit time.)
+     * @throws IllegalArgumentException if the instance is not an
+     *         entity
+     * @throws TransactionRequiredException if there is no transaction when
+     *         invoked on a container-managed entity manager of that is of type
+     *         &amp;lt;code&amp;gt;PersistenceContextType.TRANSACTION&amp;lt;/code&amp;gt;
+     */&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;persist&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;entity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+
+    &lt;span class=&quot;cm&quot;&gt;/**
+     * Merge the state of the given entity into the
+     * current persistence context.
+     * @param entity  entity instance
+     * @return the managed instance that the state was merged to
+     * @throws IllegalArgumentException if instance is not an
+     *         entity or is a removed entity
+     * @throws TransactionRequiredException if there is no transaction when
+     *         invoked on a container-managed entity manager of that is of type
+     *         &amp;lt;code&amp;gt;PersistenceContextType.TRANSACTION&amp;lt;/code&amp;gt;
+     */&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;T&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;merge&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;T&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;entity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Persistable을 구현하지 않으면, 기본적으로 AbstractEntityInformation의 isNew를 실행하게 된다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;	&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;isNew&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;T&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;entity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+		&lt;span class=&quot;no&quot;&gt;ID&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;getId&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;entity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+		&lt;span class=&quot;nc&quot;&gt;Class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;ID&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;idType&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;getIdType&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+
+		&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(!&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;idType&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;isPrimitive&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;())&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+			&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+		&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+		&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;instanceof&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Number&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+			&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Number&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;longValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0L&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+		&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+		&lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;IllegalArgumentException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Unsupported primitive id type %s&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;idType&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+	&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;id를 가져와서, wrapper Type이고, id가 null이면 isNew라고 판단한다.&lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;primitive Number 이고, 0 이면 isNew라고 판단한다.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;그렇기 때문에, isNew를 override하지 않았다면, id가 없을때 isNew라고 판단하고, persist를 호출한다.&lt;/li&gt;
+  &lt;li&gt;반대로 Id가 존재할 경우 save했을때, isNew가 false가 되고 ,merge를 호출한다.&lt;br /&gt;
+&lt;br /&gt;&lt;/li&gt;
+  &lt;li&gt;자주 있는 상황은 아니지만, 준영속 상태의 엔티티의 필드를 변경하고 save를 하게되면, merge가 호출된다.&lt;/li&gt;
+  &lt;li&gt;이때 영속성 컨텍스트에 없는 엔티티 이므로, id 기준으로 db에서 조회해서, 준영속상태의 엔티티를 조회한 엔티티에 덮어씌워버린다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;복합키와-isnew&quot;&gt;복합키와 isNew&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;복합키를 사용하게 되면, 키 생성 전략(auto_increment, using sequence 등등)을 사용할수 없다.&lt;/li&gt;
+  &lt;li&gt;그렇기 때문에, 로직에서 복합키를 set 해주게되고, SimpleJpaRepository의 isNew 동작에서 ID가 null이 아니기 때문에, merge를 진행한다.&lt;/li&gt;
+  &lt;li&gt;merge 진행순서 : 영속성 컨텍스트에 있는지 확인 -&amp;gt; 영속성 컨텍스트에 없으면 select 후 merge, 트랜잭션 종료전 insert&lt;/li&gt;
+  &lt;li&gt;즉, select -&amp;gt; insert가 발생하고. 필요없는 select 가 발생한다…&lt;/li&gt;
+  &lt;li&gt;결론 : system key(auto_increment) 시스템 키를 사용하자.&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+				<pubDate>Tue, 18 Oct 2022 20:00:00 +0900</pubDate>
+				<link>/2022/10/jpa-persist-merge/</link>
+				<guid isPermaLink="true">/2022/10/jpa-persist-merge/</guid>
+			</item>
+		
+			<item>
+				<title>프로젝트에서 jpa를 사용하면서 느낀것들</title>
+				<description>&lt;h3 id=&quot;jpa-와-jdbc-jpa를-사용하면서-전반적으로-느낀것들&quot;&gt;jpa 와 jdbc, jpa를 사용하면서 전반적으로 느낀것들&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;이전 프로젝트에서는 be에서 직접 jdbc를 사용하여, 프로젝트 개발을 하였다.&lt;/li&gt;
+  &lt;li&gt;쿼리를 문자열로 작성하고, parameter mapping 하고, 개발자마다 indent도 다 다르게 작성하는 엄청난 양의 쿼리를 개발만 하고 떠났다.&lt;/li&gt;
+  &lt;li&gt;실제로 파라미터 mapping 하는 과정에서의 디버깅도 상당히 오래 걸린다.&lt;/li&gt;
+  &lt;li&gt;paging or 동적 쿼리도 쿼리 문자열 중간중간 수 많은 if문으로 되어있다.&lt;/li&gt;
+  &lt;li&gt;운영하는 입장에서 봤을때, 지옥 그 자체다.&lt;/li&gt;
+  &lt;li&gt;현재 진행하고 있는 프로젝트에서는 jpa를 사용했다.&lt;/li&gt;
+  &lt;li&gt;기본적인 쿼리들이 모두 객체로 model화 되어, class 와 repository로 관리되니, be 소스 자체에 쿼리가 많이 줄어든 느낌이다.&lt;/li&gt;
+  &lt;li&gt;개발하는 시간도 현저히 줄어들었다. 이게 가장 큰 이점이라고 생각한다.&lt;/li&gt;
+  &lt;li&gt;하지만, 잘 모르고 사용하다보니, update 하나 날리는데 두번의 쿼리가 나가고… jdbc를 사용했으면, 하나의 쿼리로 가능한데, 여러번의 쿼리를 날리게되는 과정을 거쳤다…&lt;/li&gt;
+  &lt;li&gt;그래서 프로젝트 진행하면서, jpa를 최적화 관련한 사항을 정리 해두려고한다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;변경된것만-update&quot;&gt;변경된것만 update?&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;jpa는 기본적으로 하나의 필드라도, 변경감지가 되면, model의 모든 필드를 update한다.&lt;/li&gt;
+  &lt;li&gt;db에 보내는 데이터 전송량이 많아진다.&lt;/li&gt;
+  &lt;li&gt;하지만, 변경감지로 인해 모든 필드를 Update하기때문에 수정쿼리가 항상 같다. 그러므로 db는 한번 파싱된 쿼리를 재사용하는 이점이 있다.&lt;/li&gt;
+  &lt;li&gt;수정된 데이터만 동적으로 update 하고 싶다면, model 에 @DynamicUpdate를 붙여주면 된다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;내부조인-외부조인&quot;&gt;내부조인? 외부조인&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;부끄럽게도, 프로젝트 중반에 알게된 내용이다.&lt;/li&gt;
+  &lt;li&gt;연관관계를 설정하고, eager 로딩을 할 경우, nullable = false 로 해주지 않으면, jpa 는 기본적으로 Left 조인을 한다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@ManyToOne&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fetch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;FetchType&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;EAGER&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;nd&quot;&gt;@JoinColumn&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(...,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nullable&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// Or&lt;/span&gt;
+&lt;span class=&quot;nd&quot;&gt;@ManyToOne&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fetch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;FetchType&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;EAGER&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;optional&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;nd&quot;&gt;@JoinColumn&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(...)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;이렇게되면, 원하지 않은 join이 되어, null column을 가진 대상도 같이 조회 될 것이다.&lt;/li&gt;
+  &lt;li&gt;이번 프로젝트 하면서 느끼는거지만, db 컬럼 정의부터, entity 설정까지.. 정확한 도메인 분석을 바탕으로 설계하는것이 필수다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;jpql-페치조인--글로벌-로딩-전략&quot;&gt;JPQL 페치조인 / 글로벌 로딩 전략&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;entity에 적용하는 로딩 전략은 글로벌 로딩 전략이라고 한다.&lt;/li&gt;
+  &lt;li&gt;기본적으로 글로벌 로딩 전략으로 lazy 전략을 사용하고, 최적화가 필요한 곳에 페치 조인을 사용하는것이 합리적이다
+    &lt;ul&gt;
+      &lt;li&gt;이유는, 글로벌 로딩 전략으로 eager를 사용하면, 여러 엔티티가 필요한 곳에서는 효과적일 수 있지만, 단건 조회하는 곳에서는 성능에 악영향을 미친다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;jpql-벌크연산-주의점&quot;&gt;JPQL 벌크연산 주의점&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;JPQL은 일단 db에 쿼리를 날리는게 먼저다.&lt;/li&gt;
+  &lt;li&gt;즉, JPQL 벌크연산(delete, update, insert)은 영속성 컨텍스트를 무시하고 db에 직접 쿼리한다.&lt;/li&gt;
+  &lt;li&gt;그러므로, 벌크연산시 영속성컨텍스트에 존재하는 엔티티의 값은 변경되지 않는다.&lt;/li&gt;
+  &lt;li&gt;결론. 벌크 연산을 수행한 후에 refresh를 하여 재조회하거나, 벌크 연산을 트랜잭션 가정 먼저 실행하거나, 벌크연산 후에 영속성 컨텍스트를 초기화(clear and flush) 해야한다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;###&lt;/p&gt;
+</description>
+				<pubDate>Mon, 17 Oct 2022 20:00:00 +0900</pubDate>
+				<link>/2022/10/jpa-remind/</link>
+				<guid isPermaLink="true">/2022/10/jpa-remind/</guid>
+			</item>
+		
+			<item>
 				<title>db 동시성 처리</title>
 				<description>&lt;h3 id=&quot;concurrency&quot;&gt;concurrency&lt;/h3&gt;
 
@@ -519,318 +700,6 @@
 				<pubDate>Sat, 21 May 2022 11:00:00 +0900</pubDate>
 				<link>/2022/05/react-addEventListener/</link>
 				<guid isPermaLink="true">/2022/05/react-addEventListener/</guid>
-			</item>
-		
-			<item>
-				<title>spring only changes?</title>
-				<description>&lt;h3 id=&quot;fe에서-변경점만-보내고-싶다고-하면&quot;&gt;fe에서 변경점만 보내고 싶다고 하면?&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;fe form에서 임시저장한 form data를 조회해서, 사용자가 변경한 부분만 골라서, api call한다고 했을때, 서버에서는 어떻게 처리해야하나&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4 id=&quot;nodejs에서는&quot;&gt;nodejs에서는…&lt;/h4&gt;
-
-&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-&lt;span class=&quot;nl&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;yooncheol&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-&lt;span class=&quot;nx&quot;&gt;address&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;cheonju&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;위 처럼 request body json data가 온다고 했을때, js에서는 json field가 undefined인지, 아예 field가 없는지 확인 할 수 있다.&lt;/li&gt;
-  &lt;li&gt;fe에서 변경되지 않은 field는 delete를 해서, 아예 보내지 않고, 변경된 field는 undefined/null/value를 선택하여 보내면 그대로 서버에서 처리하면된다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-&lt;span class=&quot;nl&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;yooncheol&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-&lt;span class=&quot;nx&quot;&gt;address&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;undefined&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;address&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;// 빈값으로 세팅하는 것&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;address&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;// field가 존재하지 않음. 변경하지 않는것&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;address&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;// value 존재, 변경&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;javaspring-에서는&quot;&gt;java/spring 에서는..?&lt;/h4&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;spring controller에서는 class로 requestbody를 class로 받아야한다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  &lt;span class=&quot;nd&quot;&gt;@PatchMapping&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&apos;&apos;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-  &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;patchMemberInfo&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@RequestBody&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MemberInfo&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;memberInfo&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
-  &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
-  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MemberInfo&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;address&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;nc&quot;&gt;Integer&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;age&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;spring에서는 json 데이터를 MessageConverter를 이용하여 자동 json request body를 class 형태로 convert해준다.&lt;/li&gt;
-  &lt;li&gt;하지만, class로 변경되면서, 없는 field는 자연스럽게 null로 세팅된다.&lt;/li&gt;
-  &lt;li&gt;java에는 undefined가 없기 때문에, 필드가 존재하지 않는것과 필드가 null로 세팅된것을 구분할 방법이 없어진다.&lt;/li&gt;
-  &lt;li&gt;string의 경우는 null(필드 없음) / ‘‘(빈값으로 세팅) / ‘value’(값있음) 으로 구분하면 문제될게 없다.&lt;/li&gt;
-  &lt;li&gt;하지만! 숫자형의 경우, 빈값이라는것을 표현할 수 없다. 0이 빈값은 아니니깐. 그렇다고 db의 default값이 빈값? 여러가지 애매모호한 상황들이 생긴다.&lt;/li&gt;
-  &lt;li&gt;그렇다면 이렇게 spring에서 변경된 값만 받아서 처리하려면 어떻게 해야할까?&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4 id=&quot;javaspring에서-처리-방법&quot;&gt;java/spring에서 처리 방법&lt;/h4&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;여러 가지 방법이 있다.&lt;/p&gt;
-
-    &lt;ol&gt;
-      &lt;li&gt;
-        &lt;p&gt;특정 숫자(like. -2,147,483,648)를 빈값으로 정의하고 이것을 fe와 규약으로 사용한다.&lt;br /&gt;
-1번은 굉장히 이상한 방법이다.&lt;br /&gt;
-계속 투입되는 개발자는 의문이 생길거고, 계속 설명해줘야한다.&lt;/p&gt;
-      &lt;/li&gt;
-      &lt;li&gt;
-        &lt;p&gt;모든 숫자형태를 default 값을 정하고 사용한다.&lt;br /&gt;
-비즈니스가 어떻게 바뀔지 모르는 상황에서 이 방법 또한 이상하다.&lt;/p&gt;
-      &lt;/li&gt;
-      &lt;li&gt;
-        &lt;p&gt;spring controller에서 map&amp;lt;String,Object&amp;gt;로 받는다.&lt;br /&gt;
-controller에서 map으로 받을 경우, fe에서 보낸 body fields만 받을 수 있다.&lt;br /&gt;
-가장 이상적인 방법이다…&lt;/p&gt;
-      &lt;/li&gt;
-    &lt;/ol&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4 id=&quot;3번으로-했을때-문제점&quot;&gt;3번으로 했을때, 문제점&lt;/h4&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;3번 방법으로 결정하고 개발을 진행하면서 겪은 많은 문제점? 수고로움이 있다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h5 id=&quot;map을-사용했을때-수고로움-1&quot;&gt;map을 사용했을때 수고로움 1&lt;/h5&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;map을 사용하게 되면, 결국 비즈니스 로직을 처리하기 위해, dto or vo로 변환이 필요하고, map에 존재하는 값만 해당 dto or vo로 넣어줘야한다.&lt;/li&gt;
-  &lt;li&gt;단순 primitive wrapper type 혹은 String이면 문제 없다.&lt;/li&gt;
-  &lt;li&gt;하지만 비즈니스가 복잡해질수록, map/dto/vo의 깊이는 깊어진다.&lt;/li&gt;
-  &lt;li&gt;map to (dto or vo) 를 하기 위해, 각 필드마다 변환해줘야하는 convert 로직을 작성해야한다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Dto&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;address&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;nc&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Comment&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;comments&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;nc&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Order&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;orders&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Dto class 처럼 Comment/Order 와 같은 class의 경우 map to dto convert 로직을 작성해줘야한다.&lt;/li&gt;
-  &lt;li&gt;타입에 맞춰서, 하위 class 형태를 맞춰서 convert해야하기 때문에 이 변환 로직은 굉장히 복잡할 것이다.&lt;/li&gt;
-  &lt;li&gt;class depth가 깊어지며 깊어질수록, 더욱 복잡해진다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h5 id=&quot;map을-사용했을때-수고로움-2&quot;&gt;map을 사용했을때 수고로움 2&lt;/h5&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;프로젝트에서 api 문서화를 위하여, swagger를 사용하고 있었다.&lt;/li&gt;
-  &lt;li&gt;map&amp;lt;String,Object&amp;gt; 으로 request body를 받고 있기 때문에, swagger에서 해당 map을 제대로 표현하지 못한다…&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  &lt;span class=&quot;nd&quot;&gt;@PatchMapping&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&apos;&apos;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-  &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;patchMemberInfo&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@RequestBody&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;changes&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
-  &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
-  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;swagger에게 해당 map은 어떤 DTO class를 표현하고 있는것이라고 알려줘야한다.&lt;/li&gt;
-  &lt;li&gt;swagger config 설정시에 dto 패키지 하위에 있는 class들을 모두 swagger의 schema로 등록해줘야했다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Configuration&lt;/span&gt;
-&lt;span class=&quot;nd&quot;&gt;@EnableWebMvc&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SwaggerConfig&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-
-    &lt;span class=&quot;nd&quot;&gt;@Bean&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Docket&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;api&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;TypeResolver&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;typeResolver&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// some jobs.&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;Set&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dtoClasses&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;findAllClasses&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;package.dto&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-
-        &lt;span class=&quot;nc&quot;&gt;Interator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;iterator&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dtoClasses&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;iterator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-
-        &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;iterator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;hasNext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()){&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;docket&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;additionalModels&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;typeResolver&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;resolve&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;iterator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;next&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()));&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;docket&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;결론&quot;&gt;결론&lt;/h4&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;처음에는 fe와 be 사이의 필요한 최소한의 데이터만 주고 받아야지! 라고 생각하여 변경된 값만 fe에서 보내야지 라고 생각하였다.&lt;/li&gt;
-  &lt;li&gt;spring에서는 이런 과정이 너무 많은 공수와 노력을 들게 한다.&lt;/li&gt;
-  &lt;li&gt;다음에는 “fe에서 변경된 값 + 기존에 있는 값 모두 다 보내주세요.” 라고 하자.&lt;/li&gt;
-&lt;/ul&gt;
-</description>
-				<pubDate>Sun, 08 May 2022 20:30:00 +0900</pubDate>
-				<link>/2022/05/spring-changes/</link>
-				<guid isPermaLink="true">/2022/05/spring-changes/</guid>
-			</item>
-		
-			<item>
-				<title>web cors</title>
-				<description>&lt;h3 id=&quot;cross-origin-resouce-sharing&quot;&gt;Cross Origin Resouce Sharing&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;naver 접속해서 다른 도메인으로 http 요청 보내면 에러 발생한다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;try&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;fetch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;http://example.com&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;err&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;nx&quot;&gt;alert&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;err&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// TypeError: Failed to fetch&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;도메인, 프로토콜, 포트가 다른 곳으로 요청을 보내는것을 cors라 한다.&lt;/li&gt;
-  &lt;li&gt;origin : http + domain + port&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;왜-필요한가&quot;&gt;왜 필요한가.&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;예를 들어, 사용자가 해커가 만든 hacker.com에 접속하여, gmail.com에 요청을 보내 나의 메일 정보를 다 가져간다면?&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4 id=&quot;과거의-우회-방법들&quot;&gt;과거의 우회 방법들&lt;/h4&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;form 태그는 action을 통해 어디든 데이터를 보낼수 있다는 점을 이용&lt;/li&gt;
-  &lt;li&gt;script 태그의 src 를 사용&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;script 태그의 src는 도메인을 상관하지 않는다.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;url의 쿼리 파라미터로 callback 메소드를 넘겨주고, 서버는 그 메소드를 실행시킨다.&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;script&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;document&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;createElement&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;script&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;nx&quot;&gt;script&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;src&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;`http://another.com/weather.json?callback=gotWeather`&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;document&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;append&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;script&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;처음에는 크로스 오리진 요청이 불가능했지만, 풀기로함. cros가 정의됨.&lt;/li&gt;
-  &lt;li&gt;서버에서 명시적으로 허용했을때만 가능.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;외부요청-가능하게-하는법&quot;&gt;외부요청 가능하게 하는법?&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;서버에서 응답 헤더에 Access-Control-Allow-Origin 이 있으면 요청 가능하다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;cors-작동-방식&quot;&gt;CORS 작동 방식&lt;/h3&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;브라우저에서 교차 요청일 경우 Preflight를 먼저 날려보고 (OPTIONS 메소드 사용)&lt;/li&gt;
-  &lt;li&gt;응답에 Access-Control-Allow-Origin일 경우, 브라우저에서 실제 요청을 보낸다.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h3 id=&quot;그렇다면-서버측-처리는&quot;&gt;그렇다면 서버측 처리는?&lt;/h3&gt;
-
-&lt;h4 id=&quot;spring&quot;&gt;spring&lt;/h4&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;springboot에서는 다음과 같이 처리 가능, 전체 적용&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Configuration&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;CorsConfig&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;WebMvcConfigurer&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-
-    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;addCorsMappings&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;CorsRegistry&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;registry&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;registry&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;addMapping&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/**&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-                &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;allowedOriginPatterns&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;*&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-                &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;allowedMethods&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;GET&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;POST&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;PUT&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;DELETE&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;OPTIONS&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-                &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;allowedHeaders&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-                        &lt;span class=&quot;s&quot;&gt;&quot;Content-Type&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-                        &lt;span class=&quot;s&quot;&gt;&quot;X-Requested-With&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-                        &lt;span class=&quot;s&quot;&gt;&quot;x-session-id&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-                        &lt;span class=&quot;s&quot;&gt;&quot;x-session-info&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-                        &lt;span class=&quot;s&quot;&gt;&quot;x-correlation-id&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-                        &lt;span class=&quot;s&quot;&gt;&quot;x-language-code&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-                        &lt;span class=&quot;s&quot;&gt;&quot;Accept&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-                        &lt;span class=&quot;s&quot;&gt;&quot;Origin&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-                        &lt;span class=&quot;s&quot;&gt;&quot;Authorization&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-                        &lt;span class=&quot;s&quot;&gt;&quot;Date&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-                        &lt;span class=&quot;s&quot;&gt;&quot;Access-Control-Request-Method&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-                &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;exposedHeaders&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-                        &lt;span class=&quot;s&quot;&gt;&quot;Access-Control-Allow-Headers&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-                        &lt;span class=&quot;s&quot;&gt;&quot;Access-Control-Allow-Origin&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-                        &lt;span class=&quot;s&quot;&gt;&quot;Access-Control-Allow-Credentials&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-                &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;allowCredentials&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-                &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;maxAge&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3000L&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;모든-외부-도메인-요청을-허용할-경우&quot;&gt;모든 외부 도메인 요청을 허용할 경우&lt;/h4&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Access-Control-Allow-Origin 를 * 로&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Access-Control-Allow-Origin : *
-Access-Control-Allow-Methods: GET,POST,PUT,DELETE,OPTIONS
-Access-Control-Max-Age : 3600
-Access-Control-Allow-Headers: Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method,
-Access-Control-Request-Headers,Authorization
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;외부-도메인-요청을-선별적으로-허용할-경우&quot;&gt;외부 도메인 요청을 선별적으로 허용할 경우&lt;/h4&gt;
-
-&lt;h5 id=&quot;클라이언트-요청-헤더&quot;&gt;클라이언트 요청 헤더&lt;/h5&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Origin : 요청을 보내는 페이지의 출처(도메인)&lt;/li&gt;
-  &lt;li&gt;Access-Control-Request-Method : 실제 요청 메서드&lt;/li&gt;
-  &lt;li&gt;Access-Control-Request-Headers: 실제 요청에 포함되어 있는 헤더 이름&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h5 id=&quot;서버의-응답-헤더&quot;&gt;서버의 응답 헤더&lt;/h5&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Access-Control-Allow-Origin : 요청을 허용하는 출처, (*일 경우 모든 곳에 공개)&lt;/li&gt;
-  &lt;li&gt;Access-Control-Allow-Credentials : 클라이언트 요청이 쿠키를 통해 자격증명 해야 하는 경우에 true.(true를 받은 클라이언트는 실제 요청시 서버에서 정의된 규격의 인증값이 담긴 쿠키를 같이 보내야함.)&lt;/li&gt;
-  &lt;li&gt;Access-Control-Expose-Headers : 클라이언트 요청에 포함되어도 되는 사용자 정의 헤더&lt;/li&gt;
-  &lt;li&gt;Access-Control-Max-Age : preflight 저장 기간. 클라이언트에서 다시 요청하지 않게 하려고.&lt;/li&gt;
-  &lt;li&gt;Access-Control-Allow-Methods : 요청을 허용하는 메서드&lt;/li&gt;
-  &lt;li&gt;Access-Control-Allow-Headers : 요청을 허용하는 헤더&lt;/li&gt;
-&lt;/ul&gt;
-</description>
-				<pubDate>Wed, 14 Apr 2021 06:30:00 +0900</pubDate>
-				<link>/2021/04/web-cors/</link>
-				<guid isPermaLink="true">/2021/04/web-cors/</guid>
 			</item>
 		
 	</channel>

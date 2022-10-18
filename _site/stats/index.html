@@ -105,6 +105,20 @@
                 "t":"2022-10",
                 "year":"2022",
                 "x":1,
+                "y":598
+            },
+        
+            {
+                "t":"2022-10",
+                "year":"2022",
+                "x":1,
+                "y":386
+            },
+        
+            {
+                "t":"2022-10",
+                "year":"2022",
+                "x":1,
                 "y":352
             },
         
@@ -161,7 +175,7 @@
                 "t":"2022-5",
                 "year":"2022",
                 "x":1,
-                "y":752
+                "y":768
             },
         
             {
@@ -514,6 +528,9 @@
              "java", 
         
             
+             "db", 
+        
+            
              "react", 
         
             
@@ -521,6 +538,9 @@
         
             
              "property", 
+        
+            
+             "jpa", 
         
             
              "aws", 
@@ -553,6 +573,9 @@
              "scope", 
         
             
+             "remind", 
+        
+            
              "put", 
         
             
@@ -565,7 +588,13 @@
              "primary", 
         
             
+             "persistanceContext", 
+        
+            
              "patch", 
+        
+            
+             "optimization", 
         
             
              "objectMapper", 
@@ -614,9 +643,6 @@
         
             
              "docker", 
-        
-            
-             "db", 
         
             
              "cors", 
@@ -680,7 +706,7 @@
              6, 
         
             
-             2, 
+             3, 
         
             
              2, 
@@ -693,6 +719,18 @@
         
             
              2, 
+        
+            
+             2, 
+        
+            
+             2, 
+        
+            
+             1, 
+        
+            
+             1, 
         
             
              1, 
@@ -859,6 +897,10 @@
 <script>
     var totalWords = [
         
+            598,
+        
+            386,
+        
             352,
         
             242,
@@ -875,7 +917,7 @@
         
             367,
         
-            752,
+            768,
         
             504,
         
@@ -942,7 +984,7 @@
             29,
         
     ].reduce((a, b) => a + b, 0);
-    var totalPosts = 41;
+    var totalPosts = 43;
 
     function concatBoldTextToELement(id, text) {
         var abvgd = document.createElement('b');
@@ -963,15 +1005,15 @@
   <h2>Recent Posts</h2>
   <ul>
     
+    <li><a href="/2022/10/jpa-persist-merge/">jpa persist merge</a></li>
+    
+    <li><a href="/2022/10/jpa-remind/">프로젝트에서 jpa를 사용하면서 느낀것들</a></li>
+    
     <li><a href="/2022/10/concurrency/">db 동시성 처리</a></li>
     
     <li><a href="/2022/09/feign-client-response/">spring feign client http 정보</a></li>
     
     <li><a href="/2022/09/spring-controller-validation/">spring controller validation</a></li>
-    
-    <li><a href="/2022/09/bean-inject/">profile에 따라 bean 주입</a></li>
-    
-    <li><a href="/2022/09/objectMapper/">object mapper 정리</a></li>
     
   </ul>
 </div>
@@ -1050,7 +1092,7 @@
         <span>cors</span></a></li>
     
     <li>
-      <a href="/tag/db" data-toggle="tooltip" data-placement="right" title="1">
+      <a href="/tag/db" data-toggle="tooltip" data-placement="right" title="3">
         <span>db</span></a></li>
     
     <li>
@@ -1106,6 +1148,10 @@
         <span>jenkins</span></a></li>
     
     <li>
+      <a href="/tag/jpa" data-toggle="tooltip" data-placement="right" title="2">
+        <span>jpa</span></a></li>
+    
+    <li>
       <a href="/tag/js" data-toggle="tooltip" data-placement="right" title="1">
         <span>js</span></a></li>
     
@@ -1126,8 +1172,16 @@
         <span>objectMapper</span></a></li>
     
     <li>
+      <a href="/tag/optimization" data-toggle="tooltip" data-placement="right" title="1">
+        <span>optimization</span></a></li>
+    
+    <li>
       <a href="/tag/patch" data-toggle="tooltip" data-placement="right" title="1">
         <span>patch</span></a></li>
+    
+    <li>
+      <a href="/tag/persistanceContext" data-toggle="tooltip" data-placement="right" title="1">
+        <span>persistanceContext</span></a></li>
     
     <li>
       <a href="/tag/primary" data-toggle="tooltip" data-placement="right" title="1">
@@ -1156,6 +1210,10 @@
     <li>
       <a href="/tag/react" data-toggle="tooltip" data-placement="right" title="2">
         <span>react</span></a></li>
+    
+    <li>
+      <a href="/tag/remind" data-toggle="tooltip" data-placement="right" title="1">
+        <span>remind</span></a></li>
     
     <li>
       <a href="/tag/scope" data-toggle="tooltip" data-placement="right" title="1">
