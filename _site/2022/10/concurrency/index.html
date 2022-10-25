@@ -161,6 +161,8 @@
 
 <ul>
   <li>update 하는 동시에 유효한 값인지 확인하게 되면 동시성문제를 회피할 수 있다.</li>
+  <li>read-committed 인 경우, update 하고, Tx가 커밋될때까지, 해당 Row는 lock이 걸리게 된다. 다른 tx에서 접근 불가</li>
+  <li>jpa의 가장 큰 장점중 하나는, 쓰기지연이다. write 기능을 트랜잭션 종료전 마지막에 수행한다는것이다. 그러므로 Lock을 최소화해준다.</li>
 </ul>
 
 <h4 id="3-낙관적-lock---version">3. 낙관적 lock - Version</h4>
@@ -182,6 +184,8 @@
   <h2>Recent Posts</h2>
   <ul>
     
+    <li><a href="/2022/10/jpa-bulk-insert/">spring jpa save와 saveAll 그리고 batch insert(with transaction)</a></li>
+    
     <li><a href="/2022/10/jpa-persist-merge/">jpa persist merge</a></li>
     
     <li><a href="/2022/10/jpa-remind/">프로젝트에서 jpa를 사용하면서 느낀것들</a></li>
@@ -189,8 +193,6 @@
     <li><a href="/2022/10/concurrency/">db 동시성 처리</a></li>
     
     <li><a href="/2022/09/feign-client-response/">spring feign client http 정보</a></li>
-    
-    <li><a href="/2022/09/spring-controller-validation/">spring controller validation</a></li>
     
   </ul>
 </div>
@@ -269,7 +271,7 @@
         <span>cors</span></a></li>
     
     <li>
-      <a href="/tag/db" data-toggle="tooltip" data-placement="right" title="3">
+      <a href="/tag/db" data-toggle="tooltip" data-placement="right" title="4">
         <span>db</span></a></li>
     
     <li>
@@ -325,7 +327,7 @@
         <span>jenkins</span></a></li>
     
     <li>
-      <a href="/tag/jpa" data-toggle="tooltip" data-placement="right" title="2">
+      <a href="/tag/jpa" data-toggle="tooltip" data-placement="right" title="3">
         <span>jpa</span></a></li>
     
     <li>
@@ -391,6 +393,10 @@
     <li>
       <a href="/tag/remind" data-toggle="tooltip" data-placement="right" title="1">
         <span>remind</span></a></li>
+    
+    <li>
+      <a href="/tag/saveAll" data-toggle="tooltip" data-placement="right" title="1">
+        <span>saveAll</span></a></li>
     
     <li>
       <a href="/tag/scope" data-toggle="tooltip" data-placement="right" title="1">

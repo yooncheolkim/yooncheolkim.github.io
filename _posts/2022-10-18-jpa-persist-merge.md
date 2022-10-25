@@ -91,10 +91,11 @@ description:
 - 자주 있는 상황은 아니지만, 준영속 상태의 엔티티의 필드를 변경하고 save를 하게되면, merge가 호출된다.
 - 이때 영속성 컨텍스트에 없는 엔티티 이므로, id 기준으로 db에서 조회해서, 준영속상태의 엔티티를 조회한 엔티티에 덮어씌워버린다.
 
-### 복합키와 isNew
+### 정수형이 아닌 키와 isNew
 
-- 복합키를 사용하게 되면, 키 생성 전략(auto_increment, using sequence 등등)을 사용할수 없다.
+- 복합키 또는 String의 키를 사용하게 되면, 키 생성 전략(auto_increment, using sequence 등등)을 사용할수 없다.
 - 그렇기 때문에, 로직에서 복합키를 set 해주게되고, SimpleJpaRepository의 isNew 동작에서 ID가 null이 아니기 때문에, merge를 진행한다.
 - merge 진행순서 : 영속성 컨텍스트에 있는지 확인 -> 영속성 컨텍스트에 없으면 select 후 merge, 트랜잭션 종료전 insert
 - 즉, select -> insert가 발생하고. 필요없는 select 가 발생한다...
+- 그러므로, isNew를 override 하여, 불필요한 select가 발생하지 않도록 해야한다.
 - 결론 : system key(auto_increment) 시스템 키를 사용하자.

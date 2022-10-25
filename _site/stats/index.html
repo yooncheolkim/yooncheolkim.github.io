@@ -105,7 +105,14 @@
                 "t":"2022-10",
                 "year":"2022",
                 "x":1,
-                "y":598
+                "y":570
+            },
+        
+            {
+                "t":"2022-10",
+                "year":"2022",
+                "x":1,
+                "y":612
             },
         
             {
@@ -119,7 +126,7 @@
                 "t":"2022-10",
                 "year":"2022",
                 "x":1,
-                "y":352
+                "y":383
             },
         
             {
@@ -531,6 +538,9 @@
              "db", 
         
             
+             "jpa", 
+        
+            
              "react", 
         
             
@@ -538,9 +548,6 @@
         
             
              "property", 
-        
-            
-             "jpa", 
         
             
              "aws", 
@@ -571,6 +578,9 @@
         
             
              "scope", 
+        
+            
+             "saveAll", 
         
             
              "remind", 
@@ -706,6 +716,9 @@
              6, 
         
             
+             4, 
+        
+            
              3, 
         
             
@@ -724,7 +737,7 @@
              2, 
         
             
-             2, 
+             1, 
         
             
              1, 
@@ -897,11 +910,13 @@
 <script>
     var totalWords = [
         
-            598,
+            570,
+        
+            612,
         
             386,
         
-            352,
+            383,
         
             242,
         
@@ -984,7 +999,7 @@
             29,
         
     ].reduce((a, b) => a + b, 0);
-    var totalPosts = 43;
+    var totalPosts = 44;
 
     function concatBoldTextToELement(id, text) {
         var abvgd = document.createElement('b');
@@ -1005,6 +1020,8 @@
   <h2>Recent Posts</h2>
   <ul>
     
+    <li><a href="/2022/10/jpa-bulk-insert/">spring jpa save와 saveAll 그리고 batch insert(with transaction)</a></li>
+    
     <li><a href="/2022/10/jpa-persist-merge/">jpa persist merge</a></li>
     
     <li><a href="/2022/10/jpa-remind/">프로젝트에서 jpa를 사용하면서 느낀것들</a></li>
@@ -1012,8 +1029,6 @@
     <li><a href="/2022/10/concurrency/">db 동시성 처리</a></li>
     
     <li><a href="/2022/09/feign-client-response/">spring feign client http 정보</a></li>
-    
-    <li><a href="/2022/09/spring-controller-validation/">spring controller validation</a></li>
     
   </ul>
 </div>
@@ -1092,7 +1107,7 @@
         <span>cors</span></a></li>
     
     <li>
-      <a href="/tag/db" data-toggle="tooltip" data-placement="right" title="3">
+      <a href="/tag/db" data-toggle="tooltip" data-placement="right" title="4">
         <span>db</span></a></li>
     
     <li>
@@ -1148,7 +1163,7 @@
         <span>jenkins</span></a></li>
     
     <li>
-      <a href="/tag/jpa" data-toggle="tooltip" data-placement="right" title="2">
+      <a href="/tag/jpa" data-toggle="tooltip" data-placement="right" title="3">
         <span>jpa</span></a></li>
     
     <li>
@@ -1214,6 +1229,10 @@
     <li>
       <a href="/tag/remind" data-toggle="tooltip" data-placement="right" title="1">
         <span>remind</span></a></li>
+    
+    <li>
+      <a href="/tag/saveAll" data-toggle="tooltip" data-placement="right" title="1">
+        <span>saveAll</span></a></li>
     
     <li>
       <a href="/tag/scope" data-toggle="tooltip" data-placement="right" title="1">

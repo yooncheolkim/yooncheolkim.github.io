@@ -59,6 +59,8 @@ WHERE balance > :amount
 ```
 
 - update 하는 동시에 유효한 값인지 확인하게 되면 동시성문제를 회피할 수 있다.
+- read-committed 인 경우, update 하고, Tx가 커밋될때까지, 해당 Row는 lock이 걸리게 된다. 다른 tx에서 접근 불가
+- jpa의 가장 큰 장점중 하나는, 쓰기지연이다. write 기능을 트랜잭션 종료전 마지막에 수행한다는것이다. 그러므로 Lock을 최소화해준다.
 
 #### 3. 낙관적 lock - Version
 

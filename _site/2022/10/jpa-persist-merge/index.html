@@ -183,13 +183,14 @@
   <li>이때 영속성 컨텍스트에 없는 엔티티 이므로, id 기준으로 db에서 조회해서, 준영속상태의 엔티티를 조회한 엔티티에 덮어씌워버린다.</li>
 </ul>
 
-<h3 id="복합키와-isnew">복합키와 isNew</h3>
+<h3 id="정수형이-아닌-키와-isnew">정수형이 아닌 키와 isNew</h3>
 
 <ul>
-  <li>복합키를 사용하게 되면, 키 생성 전략(auto_increment, using sequence 등등)을 사용할수 없다.</li>
+  <li>복합키 또는 String의 키를 사용하게 되면, 키 생성 전략(auto_increment, using sequence 등등)을 사용할수 없다.</li>
   <li>그렇기 때문에, 로직에서 복합키를 set 해주게되고, SimpleJpaRepository의 isNew 동작에서 ID가 null이 아니기 때문에, merge를 진행한다.</li>
   <li>merge 진행순서 : 영속성 컨텍스트에 있는지 확인 -&gt; 영속성 컨텍스트에 없으면 select 후 merge, 트랜잭션 종료전 insert</li>
   <li>즉, select -&gt; insert가 발생하고. 필요없는 select 가 발생한다…</li>
+  <li>그러므로, isNew를 override 하여, 불필요한 select가 발생하지 않도록 해야한다.</li>
   <li>결론 : system key(auto_increment) 시스템 키를 사용하자.</li>
 </ul>
 
@@ -205,6 +206,8 @@
   <h2>Recent Posts</h2>
   <ul>
     
+    <li><a href="/2022/10/jpa-bulk-insert/">spring jpa save와 saveAll 그리고 batch insert(with transaction)</a></li>
+    
     <li><a href="/2022/10/jpa-persist-merge/">jpa persist merge</a></li>
     
     <li><a href="/2022/10/jpa-remind/">프로젝트에서 jpa를 사용하면서 느낀것들</a></li>
@@ -212,8 +215,6 @@
     <li><a href="/2022/10/concurrency/">db 동시성 처리</a></li>
     
     <li><a href="/2022/09/feign-client-response/">spring feign client http 정보</a></li>
-    
-    <li><a href="/2022/09/spring-controller-validation/">spring controller validation</a></li>
     
   </ul>
 </div>
@@ -292,7 +293,7 @@
         <span>cors</span></a></li>
     
     <li>
-      <a href="/tag/db" data-toggle="tooltip" data-placement="right" title="3">
+      <a href="/tag/db" data-toggle="tooltip" data-placement="right" title="4">
         <span>db</span></a></li>
     
     <li>
@@ -348,7 +349,7 @@
         <span>jenkins</span></a></li>
     
     <li>
-      <a href="/tag/jpa" data-toggle="tooltip" data-placement="right" title="2">
+      <a href="/tag/jpa" data-toggle="tooltip" data-placement="right" title="3">
         <span>jpa</span></a></li>
     
     <li>
@@ -414,6 +415,10 @@
     <li>
       <a href="/tag/remind" data-toggle="tooltip" data-placement="right" title="1">
         <span>remind</span></a></li>
+    
+    <li>
+      <a href="/tag/saveAll" data-toggle="tooltip" data-placement="right" title="1">
+        <span>saveAll</span></a></li>
     
     <li>
       <a href="/tag/scope" data-toggle="tooltip" data-placement="right" title="1">
