@@ -63,8 +63,8 @@ description:
 - 그러므로, auto_increment로 설정해놓으면, 실제 insert 하기전에는 해당 entity의 실제 id값을 알수가 없다.
 - 그런 이유로, identity 전략으로 생성된 entity의 batch insert를 지원하지 않는다.
 
-- jpa의 identity id 생성 전략과 batch insert: https://stackoverflow.com/questions/27697810/why-does-hibernate-disable-insert-batching-when-using-an-identity-identifier-gen
-- jpa의 table id 생성 전략과 transaction 문제 : https://techblog.woowahan.com/2663/
+- [jpa의 identity id 생성 전략과 batch insert](https://stackoverflow.com/questions/27697810/why-does-hibernate-disable-insert-batching-when-using-an-identity-identifier-gen)
+- [jpa의 table id 생성 전략과 transaction 문제](https://techblog.woowahan.com/2663)
 
 ### 참고. spring transactional 구조
 

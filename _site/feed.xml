@@ -72,8 +72,8 @@
   &lt;li&gt;
     &lt;p&gt;그런 이유로, identity 전략으로 생성된 entity의 batch insert를 지원하지 않는다.&lt;/p&gt;
   &lt;/li&gt;
-  &lt;li&gt;jpa의 identity id 생성 전략과 batch insert: https://stackoverflow.com/questions/27697810/why-does-hibernate-disable-insert-batching-when-using-an-identity-identifier-gen&lt;/li&gt;
-  &lt;li&gt;jpa의 table id 생성 전략과 transaction 문제 : https://techblog.woowahan.com/2663/&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://stackoverflow.com/questions/27697810/why-does-hibernate-disable-insert-batching-when-using-an-identity-identifier-gen&quot;&gt;jpa의 identity id 생성 전략과 batch insert&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://techblog.woowahan.com/2663&quot;&gt;jpa의 table id 생성 전략과 transaction 문제&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h3 id=&quot;참고-spring-transactional-구조&quot;&gt;참고. spring transactional 구조&lt;/h3&gt;
