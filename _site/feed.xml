@@ -7,6 +7,41 @@
 		<atom:link href="/feed.xml" rel="self" type="application/rss+xml" />
 		
 			<item>
+				<title>browser storage 와 token 공유</title>
+				<description>&lt;h3 id=&quot;browser-session-storage와-local-storage&quot;&gt;browser session storage와 local storage&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;local storage 특징
+    &lt;ul&gt;
+      &lt;li&gt;브라우저 닫고 켜도 유지됨&lt;/li&gt;
+      &lt;li&gt;도메인 별로 관리됨, 다른 도메인에서 접근 불가&lt;/li&gt;
+      &lt;li&gt;탭간 공유 가능&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;session storage 특징
+    &lt;ul&gt;
+      &lt;li&gt;브라우저 닫고 키면 사라짐&lt;/li&gt;
+      &lt;li&gt;브라우저 탭간 공유 불가능&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;token-id-공유하기&quot;&gt;token id 공유하기&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;한 도메인 사이트를 여러 탭에서 띄웠을때, 로그아웃 로그인 상태가 공유 되어야 한다면&lt;/li&gt;
+  &lt;li&gt;sessino storage에 tokenId 생성/삭제 상태를 다른 탭에 공유하여야한다.&lt;/li&gt;
+  &lt;li&gt;eventListenr 중에 ‘storage’ 이벤트가 존재하는데, local storage가 변경되면 발생하는 이벤트이다.&lt;/li&gt;
+  &lt;li&gt;이 이벤트를 사용하여, token id 삭제/생성 등 상태를 공유하여, 탭간 세션 공유를 구현할 수 있다.&lt;/li&gt;
+  &lt;li&gt;그리고, local storage로 token id를 공유해야하므로, local storage로 전달하고, 바로 삭제해야, 보안상 문제가 발생하지 않는다.&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+				<pubDate>Sat, 29 Oct 2022 14:00:00 +0900</pubDate>
+				<link>/2022/10/browser-storage/</link>
+				<guid isPermaLink="true">/2022/10/browser-storage/</guid>
+			</item>
+		
+			<item>
 				<title>spring jpa save와 saveAll 그리고 batch insert(with transaction)</title>
 				<description>&lt;h3 id=&quot;transactional-동작과정-with-프록시&quot;&gt;@Transactional 동작과정 with 프록시&lt;/h3&gt;
 
@@ -110,8 +145,8 @@
 &lt;/ul&gt;
 </description>
 				<pubDate>Sun, 23 Oct 2022 12:30:00 +0900</pubDate>
-				<link>/2022/10/jpa-bulk-insert/</link>
-				<guid isPermaLink="true">/2022/10/jpa-bulk-insert/</guid>
+				<link>/2022/10/jpa-bulk-insert-copy/</link>
+				<guid isPermaLink="true">/2022/10/jpa-bulk-insert-copy/</guid>
 			</item>
 		
 			<item>
@@ -711,37 +746,6 @@
 				<pubDate>Tue, 02 Aug 2022 20:00:00 +0900</pubDate>
 				<link>/2022/08/bigdecimal/</link>
 				<guid isPermaLink="true">/2022/08/bigdecimal/</guid>
-			</item>
-		
-			<item>
-				<title>browser media 자동재생 정책</title>
-				<description>&lt;h3 id=&quot;browser에서-media-자동재생-정책&quot;&gt;browser에서 media 자동재생 정책&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;video/audio 태그에 autoplay 속성이 존재하여, 자동재생이 가능하도록 할 수 있다.&lt;/li&gt;
-  &lt;li&gt;하지만, 많은 브라우저에서 autoplay 속성을 적용하면, 무조건 muted 속성도 같이 주어야 autoplay 가능하도록 정책상 막고 있다.&lt;/li&gt;
-  &lt;li&gt;이유는 사용자가 특정 사이트에 들어왔을때, 사용자와의 interaction 없이 소리가 갑자기 나와 사용자를 깜짝 놀래키는것을 막기 위함이다.&lt;/li&gt;
-  &lt;li&gt;크롬 : react에서 link를 타고 router 이동을 한다면, muted 속성 없이 autoplay가 동작한다. (해당 사이트에서 사용자의 interaction이 있다면, 자동재생을 허용하는듯)&lt;/li&gt;
-  &lt;li&gt;사파리 : 사용자의 interaction이 있다 하더라도, muted 없이 autoplay는 불가능&lt;/li&gt;
-  &lt;li&gt;엣지 : 크롬과 같다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;결론&quot;&gt;결론&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;video/audio 태그에 autoplay를 사용하려면, muted를 함께 주자.&lt;/li&gt;
-  &lt;li&gt;브라우저 정책을 위반하면서 까지 개발하지는 말자.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4 id=&quot;참고&quot;&gt;참고&lt;/h4&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;https://mygumi.tistory.com/333&lt;/li&gt;
-&lt;/ul&gt;
-</description>
-				<pubDate>Sat, 28 May 2022 15:00:00 +0900</pubDate>
-				<link>/2022/05/browser-policy-mute/</link>
-				<guid isPermaLink="true">/2022/05/browser-policy-mute/</guid>
 			</item>
 		
 	</channel>
