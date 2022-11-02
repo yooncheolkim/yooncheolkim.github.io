@@ -1,6 +1,6 @@
 # Jekyll configuration
 
-name: 윤철이 블로그
+name: 헤딩한 내용들
 description: Software Developer
 
 # Url is currently only used only for the RSS feed in feed.xml
@@ -26,7 +26,7 @@ social:
   github: yooncheolkim
   #stackoverflow: ''
   #linkedin:
-  instagram: 'k.yooncheol'
+  instagram: "k.yooncheol"
   #lastfm: ''
   rss: feed.xml
 
@@ -34,7 +34,6 @@ social:
 google_analytics_key:
 # Yandex metrica (https://metrica.yandex.com/) leave blank to ignore or put true to use
 yandex_metrica:
-
 
 # Set this to your disqus shortname to enable comments. Note that the 'comments'
 # setting below must also be true. Individual posts can override 'comments' to
@@ -54,7 +53,7 @@ kramdown:
   input: GFM # Enable GitHub Flavored Markdown (fenced code blocks)
   hard_wrap: true
 
-exclude: ['README.md', 'LICENSE']
+exclude: ["README.md", "LICENSE"]
 
 published: true
 future: true

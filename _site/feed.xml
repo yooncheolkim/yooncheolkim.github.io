@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 	<channel>
-		<title>윤철이 블로그</title>
+		<title>헤딩한 내용들</title>
 		<description>Software Developer</description>
 		<link></link>
 		<atom:link href="/feed.xml" rel="self" type="application/rss+xml" />
@@ -26,14 +26,14 @@
   &lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h3 id=&quot;token-id-공유하기&quot;&gt;token id 공유하기&lt;/h3&gt;
+&lt;h3 id=&quot;탭간-session-storage-공유하기&quot;&gt;탭간 session storage 공유하기&lt;/h3&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;한 도메인 사이트를 여러 탭에서 띄웠을때, 로그아웃 로그인 상태가 공유 되어야 한다면&lt;/li&gt;
-  &lt;li&gt;sessino storage에 tokenId 생성/삭제 상태를 다른 탭에 공유하여야한다.&lt;/li&gt;
+  &lt;li&gt;token같은 정보를 sessino storage에 저장해 두었다면, 다른 탭에서는 해당 내용을 볼수 없으니, 로그인 상태도 유지할 수 없다.&lt;/li&gt;
+  &lt;li&gt;session storage에 token 생성/삭제 상태를 다른 탭에 공유하여야한다.&lt;/li&gt;
   &lt;li&gt;eventListenr 중에 ‘storage’ 이벤트가 존재하는데, local storage가 변경되면 발생하는 이벤트이다.&lt;/li&gt;
-  &lt;li&gt;이 이벤트를 사용하여, token id 삭제/생성 등 상태를 공유하여, 탭간 세션 공유를 구현할 수 있다.&lt;/li&gt;
-  &lt;li&gt;그리고, local storage로 token id를 공유해야하므로, local storage로 전달하고, 바로 삭제해야, 보안상 문제가 발생하지 않는다.&lt;/li&gt;
+  &lt;li&gt;이 이벤트를 사용하여, token 삭제/생성 등 상태를 공유하여, 탭간 세션 공유를 구현할 수 있다. (publish / subscribe 동작)&lt;/li&gt;
+  &lt;li&gt;그리고, local storage로 token 를 공유해야하므로, local storage로 전달하고, 바로 삭제해야, 보안상 문제가 발생하지 않는다.&lt;/li&gt;
 &lt;/ul&gt;
 </description>
 				<pubDate>Sat, 29 Oct 2022 14:00:00 +0900</pubDate>
