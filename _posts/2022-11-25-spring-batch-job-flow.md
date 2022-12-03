@@ -4,6 +4,7 @@ title: spring batch job flow
 date: 2022-11-25 14:00
 tags: spring batch job flow
 description: spirng batch job flow
+published: false
 ---
 
 ### batch job flow
