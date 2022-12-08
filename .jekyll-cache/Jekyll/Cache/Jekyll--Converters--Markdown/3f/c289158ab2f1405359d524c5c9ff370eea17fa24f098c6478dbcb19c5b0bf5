@@ -1,4 +1,4 @@
-I"m<h3 id="프로젝트에서-deadlock-경험기">프로젝트에서 deadlock 경험기.</h3>
+I"<h3 id="프로젝트에서-deadlock-경험기">프로젝트에서 deadlock 경험기.</h3>
 
 <ul>
   <li>다른 도메인에서 deadlock이 발생하여, 관찰(?)한 경험담을 작성한다.</li>
@@ -9,32 +9,31 @@
 
 <h3 id="db말고-애플리케이션에서는">DB말고, 애플리케이션에서는?</h3>
 <ul>
-  <li>java의 synchronized를 이용하여, lock을 잡아, 멀티스레드 환경에서 deadlock 상황을 재현할 수 있다.<br />
-```java<br />
-…<br />
-// 1번 스레드<br />
-          synchronized (object1){<br />
-              try {<br />
-                  Thread.sleep(10);<br />
-              } catch (InterruptedException e) {<br />
-                  e.printStackTrace();<br />
-              }<br />
-              synchronized (object2){<br />
-              }<br />
-          }<br />
-// 2번 쓰레드<br />
-          synchronized (object2){<br />
-              try {<br />
-                  Thread.sleep(10);<br />
-              } catch (InterruptedException e) {<br />
-                  e.printStackTrace();<br />
-              }<br />
-              synchronized (object1){<br />
-              }<br />
-          }</li>
+  <li>java의 synchronized를 이용하여, lock을 잡아, 멀티스레드 환경에서 deadlock 상황을 재현할 수 있다.</li>
 </ul>
 
-<p>```</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 1번 스레드</span>
+            <span class="kd">synchronized</span> <span class="o">(</span><span class="n">object1</span><span class="o">){</span>
+                <span class="k">try</span> <span class="o">{</span>
+                    <span class="nc">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">10</span><span class="o">);</span>
+                <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">InterruptedException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+                <span class="o">}</span>
+                <span class="kd">synchronized</span> <span class="o">(</span><span class="n">object2</span><span class="o">){</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+<span class="c1">// 2번 쓰레드</span>
+            <span class="kd">synchronized</span> <span class="o">(</span><span class="n">object2</span><span class="o">){</span>
+                <span class="k">try</span> <span class="o">{</span>
+                    <span class="nc">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">10</span><span class="o">);</span>
+                <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">InterruptedException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+                <span class="o">}</span>
+                <span class="kd">synchronized</span> <span class="o">(</span><span class="n">object1</span><span class="o">){</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+
+</code></pre></div></div>
 <ul>
   <li>두 스레드를 실행시키면, object1과 object2를 lock을 획득하려고 하면서, deadlock상황이 발생한다.</li>
   <li>사실, 애플리케이션 + db 상황에서도 트랜잭션과 db lock의 개념이 추가되는거지 크게는 이 예시와 다를게 없다.</li>
