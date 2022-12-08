@@ -7,6 +7,167 @@
 		<atom:link href="/feed.xml" rel="self" type="application/rss+xml" />
 		
 			<item>
+				<title>auth 인증 프로세스</title>
+				<description>&lt;h3 id=&quot;인증-프로세스-개발&quot;&gt;인증 프로세스 개발&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;프로젝트 진행하면서, 기본적인 인증 프로세스는 아키텍쳐께서 잡아주셨다.&lt;/li&gt;
+  &lt;li&gt;하지만, 실제로 구현은 개발자가 해야했기때문에,, 인증 전반적인 프로세스와 중요 포인트를 정리한다.&lt;/li&gt;
+  &lt;li&gt;인증 프로세스 전반이 왜 이렇게 설계 되었는지 정확히 이해되진 않지만, 각 데이터들의 역할을 파악하여 정리하였다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;wip-기본-인증-프로세스&quot;&gt;[WIP] 기본 인증 프로세스&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://drive.google.com/file/d/1V7keSAh4EyD0qE__YGn5g4t_ZBCqAgur/view?usp=sharing&quot;&gt;인증프로세스 다이어그램&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;cognito에서 생성된 accessToken, refreshToken은 client에 내려주지 않는다.&lt;/li&gt;
+  &lt;li&gt;cognito에서 생성된 accessToken과 refreshToken은 감춘채로, idToken을 accessToken처럼 관리하여, 인증프로세스를 구현한듯하다…&lt;/li&gt;
+  &lt;li&gt;redis에 (key : idToken, value : accessToken, refreshToken)을 관리하고, idToken과 refreshId라는 uuid를 생성하여 client에 전달하도록 설계 되어있다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;재인증-관련&quot;&gt;재인증 관련&lt;/h4&gt;
+&lt;ul&gt;
+  &lt;li&gt;idToken을 accessToken으로 생각하자.&lt;/li&gt;
+  &lt;li&gt;redis에 accessToken을 key로 저장하지만, 이것만 저장하면 안된다.&lt;/li&gt;
+  &lt;li&gt;보통 보안을 위해, accessToken의 expired기간을 짧게 가져가고, 재인증을 위해 refreshToken을 사용하여, cognito에 accessToken을 재요청한다.&lt;/li&gt;
+  &lt;li&gt;이때 우리는 redis에 (key : accessToken, value : refreshToken) 으로 저장하도록 했기 때문에, 이 key/value가 만료되면, refreshToken까지 사라져 버린다.&lt;/li&gt;
+  &lt;li&gt;그렇다고 refreshToken까지 client에 내려주면, token 탈취자도 계속해서 재인증을 할 수 있기 때문에, 이것은 보안상 문제가 된다.&lt;/li&gt;
+  &lt;li&gt;그래서, redis에 accessToken과 refreshToken을 저장할때 다음과 같이 두개의 key/value를 저장하도록 설계 되었다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// redis key/value&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; 
+    &lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;accessToken&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;refreshToken, id 등등 변하지 않는 부가 정보&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;re_accessToken&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;refreshToken, id 등등 변하지 않는 부가 정보&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;ul&gt;
+  &lt;li&gt;accessToken은 만료기간이 짧은 key 이고, re_accessToken 만료기간이 긴 key라면, accessToken이 만료되더라도, re_accessToken로 refreshToken을 가져와서 재인증 절차를 진행할 수 있다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;결론&quot;&gt;결론&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;인증 서버 구현은 어떻게 구성하고 개발할건지 정답이 없다. 설계하기 나름이다.&lt;/li&gt;
+  &lt;li&gt;아키텍처께서 먼저 프로젝트 철수하셔서, 정확히 왜 이렇게 설계 하셨는지 물어볼 수 없었다. 다음에는 꼭 물어봐야지…&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+				<pubDate>Thu, 08 Dec 2022 13:30:00 +0900</pubDate>
+				<link>/2022/12/auth-process/</link>
+				<guid isPermaLink="true">/2022/12/auth-process/</guid>
+			</item>
+		
+			<item>
+				<title>deadlock 경험기</title>
+				<description>&lt;h3 id=&quot;프로젝트에서-deadlock-경험기&quot;&gt;프로젝트에서 deadlock 경험기.&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;다른 도메인에서 deadlock이 발생하여, 관찰(?)한 경험담을 작성한다.&lt;/li&gt;
+  &lt;li&gt;오픈하고, 이벤트가 있는날, deadlock이 발생하였다.&lt;/li&gt;
+  &lt;li&gt;Deadlock found when trying to get lock; try restarting transaction&lt;/li&gt;
+  &lt;li&gt;db는 mysql(read-commited), application 서버는 spring,jpa를 사용하고 있었다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;db말고-애플리케이션에서는&quot;&gt;DB말고, 애플리케이션에서는?&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;java의 synchronized를 이용하여, lock을 잡아, 멀티스레드 환경에서 deadlock 상황을 재현할 수 있다.&lt;br /&gt;
+```java&lt;br /&gt;
+…&lt;br /&gt;
+// 1번 스레드&lt;br /&gt;
+          synchronized (object1){&lt;br /&gt;
+              try {&lt;br /&gt;
+                  Thread.sleep(10);&lt;br /&gt;
+              } catch (InterruptedException e) {&lt;br /&gt;
+                  e.printStackTrace();&lt;br /&gt;
+              }&lt;br /&gt;
+              synchronized (object2){&lt;br /&gt;
+              }&lt;br /&gt;
+          }&lt;br /&gt;
+// 2번 쓰레드&lt;br /&gt;
+          synchronized (object2){&lt;br /&gt;
+              try {&lt;br /&gt;
+                  Thread.sleep(10);&lt;br /&gt;
+              } catch (InterruptedException e) {&lt;br /&gt;
+                  e.printStackTrace();&lt;br /&gt;
+              }&lt;br /&gt;
+              synchronized (object1){&lt;br /&gt;
+              }&lt;br /&gt;
+          }&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;```&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;두 스레드를 실행시키면, object1과 object2를 lock을 획득하려고 하면서, deadlock상황이 발생한다.&lt;/li&gt;
+  &lt;li&gt;사실, 애플리케이션 + db 상황에서도 트랜잭션과 db lock의 개념이 추가되는거지 크게는 이 예시와 다를게 없다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;db에서-lock&quot;&gt;db에서 lock&lt;/h3&gt;
+
+&lt;h4 id=&quot;테이블-구조&quot;&gt;테이블 구조&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Parent와 자식 테이블 Child가 존재한다.&lt;/li&gt;
+  &lt;li&gt;Parent 하나에 N개의 Child가 존재하는데, 실제 1개의 Parent에 1000개의 Child가 존재한다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;로직순서&quot;&gt;로직순서&lt;/h4&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;A 트랜잭션 begin&lt;/li&gt;
+  &lt;li&gt;A 트랜잭션, native query로 Parent 테이블 update&lt;/li&gt;
+  &lt;li&gt;B 트랜잭션 begin&lt;/li&gt;
+  &lt;li&gt;B 트랜잭션, native query로 Child update, Parent 테이블 update&lt;/li&gt;
+  &lt;li&gt;B 트랜잭션, Parent 테이블 update하고 싶지만 A 트랜잭션이 lock 잡고 있어서, wait&lt;/li&gt;
+  &lt;li&gt;A 트랜잭션, Child update.&lt;/li&gt;
+  &lt;li&gt;A 트랜잭션, Child update 하려고 하지만, B 트랜잭션이 lock 잡고 잇어서, wait&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;synchronized로 재현한 구조와 같다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;deadlock-회피-방법-1&quot;&gt;deadlock 회피 방법 1&lt;/h4&gt;
+&lt;ul&gt;
+  &lt;li&gt;해당 구조에서 deadlock을 만들고 싶지 않다면 가장 쉬운 방법으로, A 트랜잭션에서 시작시점에 Parent 를 select for update 하는것이다.&lt;/li&gt;
+  &lt;li&gt;select for update는 배타 락. 다른 트랜잭션에서 쓰기는 물론 읽기도 불가능하다.&lt;/li&gt;
+  &lt;li&gt;select for update 하면, 다른 트랜잭션에서 read도 할 수 없으므로, 보통 서비스 로직을 select - update 로 구성하는 경우, deadlock을 회피할 수 있다.&lt;/li&gt;
+  &lt;li&gt;하지만 동시성이 많이 떨어지게 된다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;deadlock-회피-방법-2&quot;&gt;deadlock 회피 방법 2&lt;/h4&gt;
+&lt;ul&gt;
+  &lt;li&gt;Parent 테이블 update를 가장 뒤로 미룬다.&lt;/li&gt;
+  &lt;li&gt;트랜잭션 로직의 순서가 다음과 같다고 가정하자.(보통 별 생각없이 진행하면 이렇게 된다.)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Parent select 및 validation&lt;/li&gt;
+  &lt;li&gt;Parent update&lt;/li&gt;
+  &lt;li&gt;Child select 및 validation&lt;/li&gt;
+  &lt;li&gt;Child update (이때 Child 테이블의 수많은 row를 update하고 validation 한다면?)&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;테이블 구조상, Parent 테이블 1 row 당, Child 테이블 은 N row로 구성된다.&lt;/li&gt;
+  &lt;li&gt;Child 테이블의 validation + update 작업은 Parent validation + update 작업보다 클것이다.&lt;/li&gt;
+  &lt;li&gt;이 경우, Child 테이블을 먼저 update하도록 로직의 순서를 바꾸는게, lock을 최소화 할수 있을 것이다. (만약, jpa의 변경감지를 이용한다면, 크게 신경쓰지 않아도 될듯?)&lt;/li&gt;
+  &lt;li&gt;그리고 보통 Child 테이블 보다, Parent 테이블이 여러 서비스 로직+ 트랜잭션에서 접근하기 때문에, Parent 테이블의 lock을 최소화 하는것이 중요하다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;deadlock-회피-방법-3&quot;&gt;deadlock 회피 방법 3&lt;/h4&gt;
+&lt;ul&gt;
+  &lt;li&gt;트랜잭션을 포함하고 있는, 서비스 로직 중간에 오래 걸리는 작업(외부 api 호출 등등)이 있지 않은지 확인하자.&lt;/li&gt;
+  &lt;li&gt;이런 작업이 존재한다면, 적절히 트랜잭션을 분리하는게 옳은 방법이다.&lt;/li&gt;
+&lt;/ul&gt;
+
+</description>
+				<pubDate>Mon, 28 Nov 2022 21:30:00 +0900</pubDate>
+				<link>/2022/11/deadlock-1/</link>
+				<guid isPermaLink="true">/2022/11/deadlock-1/</guid>
+			</item>
+		
+			<item>
 				<title>browser storage 와 token 공유</title>
 				<description>&lt;h3 id=&quot;browser-session-storage와-local-storage&quot;&gt;browser session storage와 local storage&lt;/h3&gt;
 
@@ -323,8 +484,6 @@
   &lt;li&gt;그러므로, 벌크연산시 영속성컨텍스트에 존재하는 엔티티의 값은 변경되지 않는다.&lt;/li&gt;
   &lt;li&gt;결론. 벌크 연산을 수행한 후에 refresh를 하여 재조회하거나, 벌크 연산을 트랜잭션 가정 먼저 실행하거나, 벌크연산 후에 영속성 컨텍스트를 초기화(clear and flush) 해야한다.&lt;/li&gt;
 &lt;/ul&gt;
-
-&lt;p&gt;###&lt;/p&gt;
 </description>
 				<pubDate>Mon, 17 Oct 2022 20:00:00 +0900</pubDate>
 				<link>/2022/10/jpa-remind/</link>
@@ -627,151 +786,6 @@
 				<pubDate>Sat, 17 Sep 2022 11:30:00 +0900</pubDate>
 				<link>/2022/09/bean-inject/</link>
 				<guid isPermaLink="true">/2022/09/bean-inject/</guid>
-			</item>
-		
-			<item>
-				<title>object mapper 정리</title>
-				<description>&lt;h3 id=&quot;object-mapper-정리&quot;&gt;object mapper 정리&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;java spring을 사용하다 보니, 불가피하다.&lt;/li&gt;
-  &lt;li&gt;매번 구글링하기 귀찮아서 정리.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4 id=&quot;convertvalue&quot;&gt;convertValue&lt;/h4&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;object(map 포함) to object&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4 id=&quot;readvalue&quot;&gt;readValue&lt;/h4&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;jsonString to object&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4 id=&quot;typereference&quot;&gt;TypeReference&lt;/h4&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;objectMapper 의 변환 함수는 두번째 인자로 TypeReference를 받을 수 있다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;mapper&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;readValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;jsonStr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;CommonResponseDTO&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;// instead of&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;mapper&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;readValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;jsonStr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;TypeReference&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;CommonResponseDTO&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;TestDto&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{});&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Class 타입으로 받으면, mapper가 제네릭까지 알수 없기 때문에 TypeReference를 사용하여 convert 가능하다.&lt;/li&gt;
-  &lt;li&gt;컴파일 시점에 알수 없는 key, value에 대해서는 Map으로 convert 하는듯&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;spring-controller에서-json-convert&quot;&gt;spring controller에서 json convert&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;spring http message converter는 controller에서 응답을 줄때, 어떤 형태(json? xml?)로 줄지 결정한다.&lt;/li&gt;
-  &lt;li&gt;spring mvc는 spring 프로젝트 의존성에 따라 메시지 컨버터를 spring mvb에서 등록한다.
-    &lt;ul&gt;
-      &lt;li&gt;WebMvcConfigurationSupport 에서 필요한 라이브러리의 classPath가 있는지 확인하여 등록함.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;http contentType/ acceptType을 기본적으로 참고한다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4 id=&quot;spring-boot에서-json-converter&quot;&gt;spring boot에서 json converter&lt;/h4&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;spring boot를 사용하는 경우 기본적으로 jacksonJson2 의존성(objectMapper)이 들어있다. 즉, JSON용 http 메시지 컨버터가 잇는거임.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4 id=&quot;존재하지-않는-field-mapping&quot;&gt;존재하지 않는 field mapping&lt;/h4&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;FAIL_ON_UNKNOWN_PROPERTIES 설정이 기본적으로 켜져있다. 그렇기 때문에, 존재하지 않는 field를 dto로 변환하려고 하면 fail 됨.&lt;/li&gt;
-  &lt;li&gt;특히, 외부 연동을 할 경우, 아무 생각없이 json에 field 하나 추가해서 에러가 발생할 수도 있다. 이때 해당 설정을 disable 해야 문제가 없을것이다.&lt;/li&gt;
-  &lt;li&gt;상황에 맞게, 해당 설정을 disabled 하자.&lt;/li&gt;
-&lt;/ul&gt;
-</description>
-				<pubDate>Tue, 13 Sep 2022 14:30:00 +0900</pubDate>
-				<link>/2022/09/objectMapper/</link>
-				<guid isPermaLink="true">/2022/09/objectMapper/</guid>
-			</item>
-		
-			<item>
-				<title>소수점 몇자리 까지 지원할거냐</title>
-				<description>&lt;h3 id=&quot;화폐-계산에-대하여-처리할때&quot;&gt;화폐 계산에 대하여 처리할때,,&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;코인 관련 프로젝트를 하다 보니, 코인의 갯수를 메모리(변수)에 담아서 연산을 처리해야할때가 있다.&lt;/li&gt;
-  &lt;li&gt;그런데, fe(react) 에서도 그렇고, be(spring) 에서도 그렇고 js의 number, java double, mysql double 타입으로 커버되지 않는 문제가 생겼다.&lt;/li&gt;
-  &lt;li&gt;프로젝트 시작하기 전에 알았더라면…&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;부동소수점에-대하여&quot;&gt;부동소수점에 대하여&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;0.3을 부동소수점 표현식으로 표현하면, 무한 반복 이다. (https://youtu.be/8afbTaA-gOQ)&lt;/li&gt;
-  &lt;li&gt;그러다 보니, 소수점 연산하는 과정에서 정확하지 않은 값이 저장될수 있다.&lt;/li&gt;
-  &lt;li&gt;화폐가 아닌, 하나에 몇천만원하는 코인에 대해서 연산을 하다보면 소수점은 불가피한데, 연산할때마다 몇천원씩 차이가 난다면, 문제가 생길것이다.&lt;/li&gt;
-  &lt;li&gt;실제로 각 블록체인 내부 연산에서는 가장 작은 단위를 사용하여, 실수 연산이 아닌 단순 정수 연산을 진행한다고 한다.&lt;/li&gt;
-  &lt;li&gt;우리는 3rd party 클라이언트를 개발하고 있으니,, 여러 코인을 처리할수 있는 로직을 구현해야한다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;각-언어별-최대-크기&quot;&gt;각 언어별 최대 크기&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;js는 number type은 64bit&lt;/li&gt;
-  &lt;li&gt;java double도 64bit&lt;/li&gt;
-  &lt;li&gt;mysql doulbe(부동소수점) 방식은 64bit&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;half_evne&quot;&gt;HALF_EVNE&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;버그를 하나 받았는데, 내용은, 다음과 같다.
-    &lt;ul&gt;
-      &lt;li&gt;0.005 로 조회가 되는데, 화면에서 소수점 2번째 자리까지 반올림해서 보여주니깐, 0.01이여야 하는데, 0 이 나온다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;다음과 같이 되어있다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; &lt;span class=&quot;nc&quot;&gt;BigDecimal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;amount&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setScale&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;RoundingMode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;HALF_EVEN&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;HALF_EVEN을 살펴보니, 올림 대상 자리수가 5일 경우, 대상 수 앞이 짝수면 내림, 홀수면 올림을 한다.&lt;/li&gt;
-  &lt;li&gt;요구사항에 맞지 않게, 라운딩 방식을 잘못 사용하고 있던것이여서, HALF_UP 방식으로 변경하였다.&lt;/li&gt;
-  &lt;li&gt;은행권 친구에게 물어보니, 은행 코어 계산에서는 모두 HALF_EVEN 방식으로 계산한다고 한다.&lt;/li&gt;
-  &lt;li&gt;그 이유는, Banker`s rounding 때문. 아래 링크 참고
-    &lt;ul&gt;
-      &lt;li&gt;decimal HALF_EVEN : https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/math/RoundingMode.html#HALF_EVEN&lt;/li&gt;
-      &lt;li&gt;Banker`s rounding : https://www.freeism.co.kr/wp/archives/1792&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;결론&quot;&gt;결론&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;프로젝트 진행하기전에, 블록체인 별로, 소수점 몇자리까지 허용할것인지 정하는게 좋을거 같다.&lt;/li&gt;
-  &lt;li&gt;bigdecimal을 사용한다.&lt;/li&gt;
-  &lt;li&gt;bigdecimal은 IEEE 754-2008에 의해 표준화된 형식을 지원한다. 128bit&lt;/li&gt;
-  &lt;li&gt;fe에서는 js-big-decimal 혹은 bignumber.js , java에서는 BigDecimal, mysql은 decimal&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4 id=&quot;참고&quot;&gt;참고&lt;/h4&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;컴퓨터가 부동소수점으로 수를 표현하는 방식 : https://youtu.be/8afbTaA-gOQ&lt;/li&gt;
-  &lt;li&gt;코인 연산 관련 : https://steemit.com/kr/@modolee/floating-point&lt;/li&gt;
-  &lt;li&gt;bigdecimal의 maximum? : https://stackoverflow.com/questions/6791970/how-to-get-biggest-bigdecimal-value&lt;/li&gt;
-  &lt;li&gt;bigDecimal : https://jsonobject.tistory.com/466&lt;/li&gt;
-&lt;/ul&gt;
-</description>
-				<pubDate>Tue, 02 Aug 2022 20:00:00 +0900</pubDate>
-				<link>/2022/08/bigdecimal/</link>
-				<guid isPermaLink="true">/2022/08/bigdecimal/</guid>
 			</item>
 		
 	</channel>

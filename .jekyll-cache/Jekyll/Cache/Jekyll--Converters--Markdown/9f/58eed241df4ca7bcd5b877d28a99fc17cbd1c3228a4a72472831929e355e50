@@ -1,4 +1,4 @@
-I"Ú<div class="page-content wc-container">
+I"<div class="page-content wc-container">
 	<div class="post">
 		<h1>Tags</h1>  
 		<ul>
@@ -122,6 +122,18 @@
 			<li><a href="/tag/storage">storage</a></li>
 			
 			<li><a href="/tag/token">token</a></li>
+			
+			<li><a href="/tag/mysql">mysql</a></li>
+			
+			<li><a href="/tag/deadlock">deadlock</a></li>
+			
+			<li><a href="/tag/transaction">transaction</a></li>
+			
+			<li><a href="/tag/authorizaion">authorizaion</a></li>
+			
+			<li><a href="/tag/cognito">cognito</a></li>
+			
+			<li><a href="/tag/redis">redis</a></li>
 			
 		</ul>
 	</div>
