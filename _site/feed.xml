@@ -7,58 +7,6 @@
 		<atom:link href="/feed.xml" rel="self" type="application/rss+xml" />
 		
 			<item>
-				<title>auth 인증 프로세스</title>
-				<description>&lt;h3 id=&quot;인증-프로세스-개발&quot;&gt;인증 프로세스 개발&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;프로젝트 진행하면서, 기본적인 인증 프로세스는 아키텍쳐께서 잡아주셨다.&lt;/li&gt;
-  &lt;li&gt;하지만, 실제로 구현은 개발자가 해야했기때문에,, 인증 전반적인 프로세스와 중요 포인트를 정리한다.&lt;/li&gt;
-  &lt;li&gt;인증 프로세스 전반이 왜 이렇게 설계 되었는지 정확히 이해되진 않지만, 각 데이터들의 역할을 파악하여 정리하였다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4 id=&quot;wip-기본-인증-프로세스&quot;&gt;[WIP] 기본 인증 프로세스&lt;/h4&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;a href=&quot;https://drive.google.com/file/d/1V7keSAh4EyD0qE__YGn5g4t_ZBCqAgur/view?usp=sharing&quot;&gt;인증프로세스 다이어그램&lt;/a&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;cognito에서 생성된 accessToken, refreshToken은 client에 내려주지 않는다.&lt;/li&gt;
-  &lt;li&gt;cognito에서 생성된 accessToken과 refreshToken은 감춘채로, idToken을 accessToken처럼 관리하여, 인증프로세스를 구현한듯하다…&lt;/li&gt;
-  &lt;li&gt;redis에 (key : idToken, value : accessToken, refreshToken)을 관리하고, idToken과 refreshId라는 uuid를 생성하여 client에 전달하도록 설계 되어있다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4 id=&quot;재인증-관련&quot;&gt;재인증 관련&lt;/h4&gt;
-&lt;ul&gt;
-  &lt;li&gt;idToken을 accessToken으로 생각하자.&lt;/li&gt;
-  &lt;li&gt;redis에 accessToken을 key로 저장하지만, 이것만 저장하면 안된다.&lt;/li&gt;
-  &lt;li&gt;보통 보안을 위해, accessToken의 expired기간을 짧게 가져가고, 재인증을 위해 refreshToken을 사용하여, cognito에 accessToken을 재요청한다.&lt;/li&gt;
-  &lt;li&gt;이때 우리는 redis에 (key : accessToken, value : refreshToken) 으로 저장하도록 했기 때문에, 이 key/value가 만료되면, refreshToken까지 사라져 버린다.&lt;/li&gt;
-  &lt;li&gt;그렇다고 refreshToken까지 client에 내려주면, token 탈취자도 계속해서 재인증을 할 수 있기 때문에, 이것은 보안상 문제가 된다.&lt;/li&gt;
-  &lt;li&gt;그래서, redis에 accessToken과 refreshToken을 저장할때 다음과 같이 두개의 key/value를 저장하도록 설계 되었다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// redis key/value&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; 
-    &lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;accessToken&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;refreshToken, id 등등 변하지 않는 부가 정보&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-    &lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;re_accessToken&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;refreshToken, id 등등 변하지 않는 부가 정보&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;ul&gt;
-  &lt;li&gt;accessToken은 만료기간이 짧은 key 이고, re_accessToken 만료기간이 긴 key라면, accessToken이 만료되더라도, re_accessToken로 refreshToken을 가져와서 재인증 절차를 진행할 수 있다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;결론&quot;&gt;결론&lt;/h3&gt;
-&lt;ul&gt;
-  &lt;li&gt;인증 서버 구현은 어떻게 구성하고 개발할건지 정답이 없다. 설계하기 나름이다.&lt;/li&gt;
-  &lt;li&gt;아키텍처께서 먼저 프로젝트 철수하셔서, 정확히 왜 이렇게 설계 하셨는지 물어볼 수 없었다. 다음에는 꼭 물어봐야지…&lt;/li&gt;
-&lt;/ul&gt;
-</description>
-				<pubDate>Thu, 08 Dec 2022 13:30:00 +0900</pubDate>
-				<link>/2022/12/auth-process/</link>
-				<guid isPermaLink="true">/2022/12/auth-process/</guid>
-			</item>
-		
-			<item>
 				<title>deadlock 경험기</title>
 				<description>&lt;h3 id=&quot;프로젝트에서-deadlock-경험기&quot;&gt;프로젝트에서 deadlock 경험기.&lt;/h3&gt;
 
@@ -71,32 +19,31 @@
 
 &lt;h3 id=&quot;db말고-애플리케이션에서는&quot;&gt;DB말고, 애플리케이션에서는?&lt;/h3&gt;
 &lt;ul&gt;
-  &lt;li&gt;java의 synchronized를 이용하여, lock을 잡아, 멀티스레드 환경에서 deadlock 상황을 재현할 수 있다.&lt;br /&gt;
-```java&lt;br /&gt;
-…&lt;br /&gt;
-// 1번 스레드&lt;br /&gt;
-          synchronized (object1){&lt;br /&gt;
-              try {&lt;br /&gt;
-                  Thread.sleep(10);&lt;br /&gt;
-              } catch (InterruptedException e) {&lt;br /&gt;
-                  e.printStackTrace();&lt;br /&gt;
-              }&lt;br /&gt;
-              synchronized (object2){&lt;br /&gt;
-              }&lt;br /&gt;
-          }&lt;br /&gt;
-// 2번 쓰레드&lt;br /&gt;
-          synchronized (object2){&lt;br /&gt;
-              try {&lt;br /&gt;
-                  Thread.sleep(10);&lt;br /&gt;
-              } catch (InterruptedException e) {&lt;br /&gt;
-                  e.printStackTrace();&lt;br /&gt;
-              }&lt;br /&gt;
-              synchronized (object1){&lt;br /&gt;
-              }&lt;br /&gt;
-          }&lt;/li&gt;
+  &lt;li&gt;java의 synchronized를 이용하여, lock을 잡아, 멀티스레드 환경에서 deadlock 상황을 재현할 수 있다.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;```&lt;/p&gt;
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// 1번 스레드&lt;/span&gt;
+            &lt;span class=&quot;kd&quot;&gt;synchronized&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;object1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+                    &lt;span class=&quot;nc&quot;&gt;Thread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;sleep&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+                &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;InterruptedException&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+                    &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;printStackTrace&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+                &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+                &lt;span class=&quot;kd&quot;&gt;synchronized&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;object2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
+                &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// 2번 쓰레드&lt;/span&gt;
+            &lt;span class=&quot;kd&quot;&gt;synchronized&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;object2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+                    &lt;span class=&quot;nc&quot;&gt;Thread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;sleep&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+                &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;InterruptedException&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+                    &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;printStackTrace&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+                &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+                &lt;span class=&quot;kd&quot;&gt;synchronized&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;object1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
+                &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;ul&gt;
   &lt;li&gt;두 스레드를 실행시키면, object1과 object2를 lock을 획득하려고 하면서, deadlock상황이 발생한다.&lt;/li&gt;
   &lt;li&gt;사실, 애플리케이션 + db 상황에서도 트랜잭션과 db lock의 개념이 추가되는거지 크게는 이 예시와 다를게 없다.&lt;/li&gt;
@@ -786,6 +733,74 @@
 				<pubDate>Sat, 17 Sep 2022 11:30:00 +0900</pubDate>
 				<link>/2022/09/bean-inject/</link>
 				<guid isPermaLink="true">/2022/09/bean-inject/</guid>
+			</item>
+		
+			<item>
+				<title>object mapper 정리</title>
+				<description>&lt;h3 id=&quot;object-mapper-정리&quot;&gt;object mapper 정리&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;java spring을 사용하다 보니, 불가피하다.&lt;/li&gt;
+  &lt;li&gt;매번 구글링하기 귀찮아서 정리.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;convertvalue&quot;&gt;convertValue&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;object(map 포함) to object&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;readvalue&quot;&gt;readValue&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;jsonString to object&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;typereference&quot;&gt;TypeReference&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;objectMapper 의 변환 함수는 두번째 인자로 TypeReference를 받을 수 있다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;mapper&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;readValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;jsonStr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;CommonResponseDTO&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// instead of&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;mapper&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;readValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;jsonStr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;TypeReference&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;CommonResponseDTO&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;TestDto&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{});&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Class 타입으로 받으면, mapper가 제네릭까지 알수 없기 때문에 TypeReference를 사용하여 convert 가능하다.&lt;/li&gt;
+  &lt;li&gt;컴파일 시점에 알수 없는 key, value에 대해서는 Map으로 convert 하는듯&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;spring-controller에서-json-convert&quot;&gt;spring controller에서 json convert&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;spring http message converter는 controller에서 응답을 줄때, 어떤 형태(json? xml?)로 줄지 결정한다.&lt;/li&gt;
+  &lt;li&gt;spring mvc는 spring 프로젝트 의존성에 따라 메시지 컨버터를 spring mvb에서 등록한다.
+    &lt;ul&gt;
+      &lt;li&gt;WebMvcConfigurationSupport 에서 필요한 라이브러리의 classPath가 있는지 확인하여 등록함.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;http contentType/ acceptType을 기본적으로 참고한다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;spring-boot에서-json-converter&quot;&gt;spring boot에서 json converter&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;spring boot를 사용하는 경우 기본적으로 jacksonJson2 의존성(objectMapper)이 들어있다. 즉, JSON용 http 메시지 컨버터가 잇는거임.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;존재하지-않는-field-mapping&quot;&gt;존재하지 않는 field mapping&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;FAIL_ON_UNKNOWN_PROPERTIES 설정이 기본적으로 켜져있다. 그렇기 때문에, 존재하지 않는 field를 dto로 변환하려고 하면 fail 됨.&lt;/li&gt;
+  &lt;li&gt;특히, 외부 연동을 할 경우, 아무 생각없이 json에 field 하나 추가해서 에러가 발생할 수도 있다. 이때 해당 설정을 disable 해야 문제가 없을것이다.&lt;/li&gt;
+  &lt;li&gt;상황에 맞게, 해당 설정을 disabled 하자.&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+				<pubDate>Tue, 13 Sep 2022 14:30:00 +0900</pubDate>
+				<link>/2022/09/objectMapper/</link>
+				<guid isPermaLink="true">/2022/09/objectMapper/</guid>
 			</item>
 		
 	</channel>
